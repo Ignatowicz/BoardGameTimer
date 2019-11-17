@@ -23,16 +23,16 @@ public class Game {
     private String name;
 
     @Column(nullable = false, name = "time_round")
-    private int time_round;
+    private int timeRound;
 
     @Column(nullable = false, name = "time_game")
-    private int time_game;
+    private int timeGame;
 
     @Column(nullable = false, name = "min_players")
-    private int min_players;
+    private int minPlayers;
 
     @Column(nullable = false, name = "max_players")
-    private int max_players;
+    private int maxPlayers;
 
     @ManyToOne
     @JoinColumn(name = "player_id")
