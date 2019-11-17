@@ -18,7 +18,7 @@ public class Player {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "player_id")
+    @Column(name = "id")
     private Long id;
 
     @Column(nullable = false, name = "name")
@@ -36,8 +36,8 @@ public class Player {
 
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(name = "friends",
-            joinColumns = {@JoinColumn(name = "player_id")},
-            inverseJoinColumns = {@JoinColumn(name = "friend_id")})
+            joinColumns = {@JoinColumn(name = "friend1_id")},
+            inverseJoinColumns = {@JoinColumn(name = "friend2_id")})
     private Set<Player> friend1 = new HashSet<Player>();
 
     @ManyToMany(mappedBy = "friend1")
