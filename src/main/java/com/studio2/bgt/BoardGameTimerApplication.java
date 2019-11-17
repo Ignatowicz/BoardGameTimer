@@ -35,12 +35,12 @@ public class BoardGameTimerApplication {
 
             // init games
             Set<Game> games1 = new HashSet<>();
-            games1.add(Game.builder().name("Terraformacja Marsa").time_round(120).time_game(1800).min_players(1).max_players(5).build());
-            games1.add(Game.builder().name("Osadnicy").time_round(90).time_game(1200).min_players(2).max_players(4).build());
+            games1.add(Game.builder().name("Terraformacja Marsa").timeRound(120).timeGame(1800).minPlayers(1).maxPlayers(5).build());
+            games1.add(Game.builder().name("Osadnicy").timeRound(90).timeGame(1200).minPlayers(2).maxPlayers(4).build());
 
             Set<Game> games2 = new HashSet<>();
-            games2.add(Game.builder().name("Terra Mystica").time_round(120).time_game(1800).min_players(2).max_players(5).build());
-            games2.add(Game.builder().name("Osadnicy").time_round(90).time_game(1200).min_players(2).max_players(4).build());
+            games2.add(Game.builder().name("Terra Mystica").timeRound(120).timeGame(1800).minPlayers(2).maxPlayers(5).build());
+            games2.add(Game.builder().name("Osadnicy").timeRound(90).timeGame(1200).minPlayers(2).maxPlayers(4).build());
 
             // init players
             Player player1 = new Player("Jan", "jan.kowalski@gmail.com", "admin", games1);
