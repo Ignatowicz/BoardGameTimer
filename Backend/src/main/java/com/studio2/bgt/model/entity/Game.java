@@ -16,7 +16,7 @@ public class Game {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "game_id")
+    @Column(name = "id")
     private Long id;
 
     @Column(nullable = false, name = "name")
