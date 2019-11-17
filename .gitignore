@@ -1,13 +1,13 @@
 # Intellij
-*.idea/workspace.xml
-*.idea/tasks.xml
-*.idea/gradle.xml
-*.idea/assetWizardSettings.xml
-*.idea/dictionaries
-*.idea/libraries
-*.idea/caches
-*.iml
-*target/*
+Backend/.idea/workspace.xml
+Backend/.idea/tasks.xml
+Backend/.idea/gradle.xml
+Backend/.idea/assetWizardSettings.xml
+Backend/.idea/dictionaries
+Backend/.idea/libraries
+Bakcned/.idea/caches
+Backend/*.iml
+*/target/*
 
 # user
 *build/
