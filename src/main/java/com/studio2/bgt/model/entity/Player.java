@@ -66,6 +66,5 @@ public class Player {
 
     public void addFriend(Player player) {
         this.friend1.add(player);
-        this.friend1.forEach(friend -> friend.getFriend2().add(this));
     }
 }
