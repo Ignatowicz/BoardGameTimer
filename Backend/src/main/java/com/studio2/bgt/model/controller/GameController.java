@@ -55,6 +55,7 @@ public class GameController {
             game.setTimeGame(updatedGame.getTimeGame());
             game.setMinPlayers(updatedGame.getMinPlayers());
             game.setMaxPlayers(updatedGame.getMaxPlayers());
+            game.setPlayer(updatedGame.getPlayer());
             gameRepository.save(game);
             return ResponseEntity.ok().body(game);
         } else {
