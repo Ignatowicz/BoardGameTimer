@@ -31,6 +31,11 @@ public class PlayerController {
         return player;
     }
 
+    private Player clearResponse(Player player) {
+        clearInfiniteFriendsLoop(player);
+        return player;
+    }
+
     @GetMapping
     public Iterable findAll() {
         return playerRepository.findAll();
@@ -51,7 +56,7 @@ public class PlayerController {
     public ResponseEntity<?> findById(@PathVariable Long id) {
         Optional<Player> player = playerRepository.findById(id);
         if (player.isPresent()) {
-            clearInfiniteFriendsLoop(player.get());
+            clearResponse(player.get());
             return ResponseEntity.ok().body(player);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -62,7 +67,7 @@ public class PlayerController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Player> createPlayer(@Valid @RequestBody Player player) throws URISyntaxException {
         Player result = playerRepository.save(player);
-        clearInfiniteFriendsLoop(result);
+        clearResponse(result);
         return ResponseEntity.created(new URI("/api/players/" + result.getId()))
                 .body(result);
     }
@@ -79,7 +84,7 @@ public class PlayerController {
             player.setFriend1(updatedPlayer.getFriend1());
             player.setFriend2(updatedPlayer.getFriend2());
             playerRepository.save(player);
-            clearInfiniteFriendsLoop(player);
+            clearResponse(player);
             return ResponseEntity.ok().body(player);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
