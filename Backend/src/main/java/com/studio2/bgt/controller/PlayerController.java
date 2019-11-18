@@ -1,4 +1,4 @@
-package com.studio2.bgt.model.controller;
+package com.studio2.bgt.controller;
 
 import com.studio2.bgt.model.entity.Player;
 import com.studio2.bgt.model.repository.PlayerRepository;
