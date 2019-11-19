@@ -8,10 +8,10 @@ import com.studio2.bgt.model.repository.PlayHelperRepository;
 import com.studio2.bgt.model.repository.PlayerRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -22,14 +22,20 @@ import java.util.Set;
 @CrossOrigin
 public class PlayController {
 
+    private Long playId = 0L;
+
     @Autowired
     private PlayerRepository playerRepository;
 
     @Autowired
     private GameRepository gameRepository;
 
-    @Autowired
-    PlayHelperRepository playHelperRepository;
+    @Resource(name = "playHelperRepository")
+    private PlayHelperRepository playHelperRepository;
+
+    private Long getNextPlayId() {
+        return ++playId;
+    }
 
     @GetMapping("/{gameId}")
     public ResponseEntity<?> play(@PathVariable Long gameId) {
@@ -43,6 +49,7 @@ public class PlayController {
             player.getFriend2().forEach(f -> friends.add(f.getId()));
 
             PlayHelper play = PlayHelper.builder()
+                    .playId(getNextPlayId())
                     .gameId(gameId)
                     .playerId(game.getId())
                     .gameName(game.getName())
@@ -53,7 +60,7 @@ public class PlayController {
                     .friends(friends)
                     .build();
 
-            playHelperRepository.save(play);
+            playHelperRepository.create(play);
             return ResponseEntity.ok().body(play);
         }
         return ResponseEntity.notFound().eTag("GAME NOT FOUND").build();
@@ -61,18 +68,14 @@ public class PlayController {
 
     @GetMapping("/startGame/{id}")
     public ResponseEntity<?> startGame(@PathVariable Long id) {
-        Optional<PlayHelper> playHelperOptional = playHelperRepository.findById(id);
-        if (playHelperOptional.isPresent()) {
-            PlayHelper play = playHelperOptional.get();
+        PlayHelper play = playHelperRepository.findPlayById(id);
 
-            Set<Player> friends = new HashSet<>();
-            play.getFriends().forEach(f -> friends.add(playerRepository.findPlayerById(f)));
+        Set<Player> friends = new HashSet<>();
+        play.getFriends().forEach(f -> friends.add(playerRepository.findPlayerById(f)));
 
-//            friends.forEach();  // TODO: sent requests to all friends
+//        friends.forEach();  // TODO: sent requests to all friends
 
-            return ResponseEntity.ok().body("Start game requests sent to your friends!");
-        }
-        return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
+
+        return ResponseEntity.ok().body("Start game requests sent to your friends!");
     }
-
 }
