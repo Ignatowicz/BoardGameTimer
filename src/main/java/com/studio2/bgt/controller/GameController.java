@@ -17,7 +17,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/games")
 @CrossOrigin
-public class GameController {
+public class GameController extends AbstractController {
 
     @Autowired
     private GameRepository gameRepository;
