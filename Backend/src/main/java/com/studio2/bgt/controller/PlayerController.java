@@ -1,4 +1,4 @@
-package com.studio2.bgt.model.controller;
+package com.studio2.bgt.controller;
 
 import com.studio2.bgt.model.entity.Player;
 import com.studio2.bgt.model.repository.PlayerRepository;
@@ -11,33 +11,19 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.HashSet;
 import java.util.Optional;
 
 @Slf4j
 @RestController
 @RequestMapping("/api/players")
 @CrossOrigin
-public class PlayerController {
+public class PlayerController extends AbstractController {
 
     @Autowired
     private PlayerRepository playerRepository;
 
-    private Player clearInfiniteFriendsLoop(Player player) {
-        player.getFriend1().forEach(f -> f.setFriend1(new HashSet<>()));
-        player.getFriend1().forEach(f -> f.setFriend2(new HashSet<>()));
-        player.getFriend2().forEach(f -> f.setFriend1(new HashSet<>()));
-        player.getFriend2().forEach(f -> f.setFriend2(new HashSet<>()));
-        return player;
-    }
-
-    @GetMapping
-    public Iterable findAll() {
-        return playerRepository.findAll();
-    }
-
-    @GetMapping("/init")
-    public ResponseEntity<?> init() {
+    @GetMapping("/initFriends")
+    public ResponseEntity<?> initFriends() {
         Player player1 = playerRepository.findPlayerById(1L);
         Player player2 = playerRepository.findPlayerById(4L);
         Player player3 = playerRepository.findPlayerById(7L);
@@ -47,11 +33,16 @@ public class PlayerController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping
+    public Iterable findAll() {
+        return playerRepository.findAll();
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
         Optional<Player> player = playerRepository.findById(id);
         if (player.isPresent()) {
-            clearInfiniteFriendsLoop(player.get());
+            clearResponse(player.get());
             return ResponseEntity.ok().body(player);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -62,7 +53,7 @@ public class PlayerController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Player> createPlayer(@Valid @RequestBody Player player) throws URISyntaxException {
         Player result = playerRepository.save(player);
-        clearInfiniteFriendsLoop(result);
+        clearResponse(result);
         return ResponseEntity.created(new URI("/api/players/" + result.getId()))
                 .body(result);
     }
@@ -79,7 +70,7 @@ public class PlayerController {
             player.setFriend1(updatedPlayer.getFriend1());
             player.setFriend2(updatedPlayer.getFriend2());
             playerRepository.save(player);
-            clearInfiniteFriendsLoop(player);
+            clearResponse(player);
             return ResponseEntity.ok().body(player);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
