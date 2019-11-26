@@ -3,6 +3,7 @@ package com.example.boardgametimer.ui.main;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.boardgametimer.ui.friends.FriendsActivity;
 import com.example.boardgametimer.ui.newgame.NewGameActivity;
 import com.example.boardgametimer.ui.settings.SettingsActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.ItemCli
         friendsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                Intent intent = new Intent(MainActivity.this, FriendsActivity.class);
                 startActivity(intent);
             }
         });
