@@ -8,6 +8,7 @@
 */.idea/caches
 */*.iml
 */target/*
+Backend/src/main/resources/google/boardgametimer*
 
 # user
 */build/
