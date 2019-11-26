@@ -89,6 +89,7 @@
 */.externalNativeBuild
 
 # Google Services (e.g. APIs or Firebase)
+Frontend/app/google-services.json
 */google-services.json
 
 # Freeline
