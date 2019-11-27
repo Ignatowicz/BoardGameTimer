@@ -2,10 +2,10 @@ package com.studio2.bgt.controller;
 
 import com.studio2.bgt.model.entity.Game;
 import com.studio2.bgt.model.entity.Player;
-import com.studio2.bgt.model.enums.SendType;
+import com.studio2.bgt.model.enums.SendTo;
 import com.studio2.bgt.model.helpers.PlayHelper;
 import com.studio2.bgt.model.helpers.StartGameHelper;
-import com.studio2.bgt.model.helpers.StartGameNotificationHelper;
+import com.studio2.bgt.model.helpers.NotificationHelper;
 import com.studio2.bgt.model.repository.GameRepository;
 import com.studio2.bgt.model.repository.PlayRepository;
 import com.studio2.bgt.model.repository.PlayerRepository;
@@ -102,15 +102,13 @@ public class PlayController extends AbstractController {
         // save
         playRepository.findPlayById(startGame.getPlayId()).setFriends(play.getFriends());
 
-        // prepare
-        StartGameNotificationHelper startGameNotification = preparePlayersToWhomNotificationWillBeSent(play, SendType.FRIENDS);
-
-        // send request to all friends-players
+        // send request for game to all friends (players in near future)
+        NotificationHelper notificationHelper = preparePlayersToWhomNotificationWillBeSent(play, SendTo.FRIENDS);
         List<String> notification = notificationManager
-                .sendNotification(startGameNotification.getTopics(),
-                        "Game starting",
-                        "Wait for other players to join the game!",
-                        startGameNotification.getPlayers());
+                .sendNotification(notificationHelper.getTopics(),
+                        "Invitation to game " + play.getGameName(),
+                        "Open the app and accept the invitation!",
+                        notificationHelper.getPlayers());
         log.info(String.valueOf(notification));
 
         return ResponseEntity.ok().body("Start game requests sent to your friends!");
@@ -126,16 +124,34 @@ public class PlayController extends AbstractController {
 
         play.getAccepted().add(playerRepository.findPlayerById(playerId));
 
+        // clear friends' friends
+        clearResponse(play);
+
         // save
         playRepository.findPlayById(playId).setAccepted(play.getAccepted());
 
-        if (play.getAccepted().equals(play.getFriends())) {
+        if (play.getAccepted().size() == play.getFriends().size()) {
 
             // set player for tour A & save
             play.getFriends().forEach(f -> playRepository.findPlayById(playId).getPlayersTourA().add(f));
 
-            // TODO: broadcast to all about game start
-            // TODO: send message to first player in queue playerTourA
+            // send notification to all players about game start
+            NotificationHelper notificationHelper = preparePlayersToWhomNotificationWillBeSent(play, SendTo.PLAYERS_TOUR_A);
+            List<String> notification = notificationManager
+                    .sendNotification(notificationHelper.getTopics(),
+                            "Game has started!",
+                            "All the players have accepted the invitation.\nIt's " + play.getPlayersTourA().peek().getName() + " turn!",
+                            notificationHelper.getPlayers());
+            log.info(String.valueOf(notification));
+
+            // notify first player about his turn
+            NotificationHelper notificationHelper1 = preparePlayersToWhomNotificationWillBeSent(play, SendTo.FIRST_PLAYER_TOUR_A);
+            List<String> notification1 = notificationManager
+                    .sendNotification(notificationHelper1.getTopics(),
+                            "It's your turn!",
+                            "Your round time has just begun!",
+                            notificationHelper1.getPlayers());
+            log.info(String.valueOf(notification1));
 
             return ResponseEntity.ok().body("All players have accepted the game!");
         }
@@ -152,7 +168,14 @@ public class PlayController extends AbstractController {
 
         playRepository.deletePlay(playId);
 
-        //TODO: notification to game starter about game rejection (playerStarterGameId)
+        // notify about cancel game start
+        NotificationHelper notificationHelper = preparePlayersToWhomNotificationWillBeSent(play, SendTo.FRIENDS);
+        List<String> notification = notificationManager
+                .sendNotification(notificationHelper.getTopics(),
+                        "Game " + play.getGameName() + " canceled.",
+                        playerRepository.findPlayerById(playerId).getName() + " rejected to play.",
+                        notificationHelper.getPlayers());
+        log.info(String.valueOf(notification));
 
         return ResponseEntity.ok().body("Player: " + playerRepository.findPlayerById(playerId).getName() + " has rejected the game!");
     }

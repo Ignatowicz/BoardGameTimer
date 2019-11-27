@@ -1,8 +1,9 @@
 package com.studio2.bgt.model.enums;
 
-public enum SendType {
+public enum SendTo {
     FRIENDS,
     ACCEPTED,
     PLAYERS_TOUR_A,
-    PLAYERS_TOUR_B
+    PLAYERS_TOUR_B,
+    FIRST_PLAYER_TOUR_A
 }

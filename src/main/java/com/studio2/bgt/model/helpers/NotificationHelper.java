@@ -10,7 +10,7 @@ import java.util.Set;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class StartGameNotificationHelper {
+public class NotificationHelper {
 
     Map<String, String> players;
     Set<String> topics;
