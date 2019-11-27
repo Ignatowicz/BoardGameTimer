@@ -71,10 +71,16 @@ public abstract class AbstractController {
                 play.getPlayersTourB().forEach(f -> players.put(String.valueOf(f.getId()), f.getName()));
                 play.getPlayersTourB().forEach(f -> topics.add("Player_" + f.getId()));
             case FIRST_PLAYER_TOUR_A:
-                Player firstPlayer = play.getPlayersTourA().peek();
-                if (firstPlayer != null) {
-                    players.put(String.valueOf(firstPlayer.getId()), firstPlayer.getName());
-                    topics.add("Player_" + firstPlayer.getId());
+                Player firstPlayerA = play.getPlayersTourA().peek();
+                if (firstPlayerA != null) {
+                    players.put(String.valueOf(firstPlayerA.getId()), firstPlayerA.getName());
+                    topics.add("Player_" + firstPlayerA.getId());
+                }
+            case FIRST_PLAYER_TOUR_B:
+                Player firstPlayerB = play.getPlayersTourB().peek();
+                if (firstPlayerB != null) {
+                    players.put(String.valueOf(firstPlayerB.getId()), firstPlayerB.getName());
+                    topics.add("Player_" + firstPlayerB.getId());
                 }
         }
 

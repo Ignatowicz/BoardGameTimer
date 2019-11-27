@@ -5,5 +5,6 @@ public enum SendTo {
     ACCEPTED,
     PLAYERS_TOUR_A,
     PLAYERS_TOUR_B,
-    FIRST_PLAYER_TOUR_A
+    FIRST_PLAYER_TOUR_A,
+    FIRST_PLAYER_TOUR_B
 }
