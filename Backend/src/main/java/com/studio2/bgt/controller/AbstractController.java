@@ -1,10 +1,43 @@
 package com.studio2.bgt.controller;
 
 import com.studio2.bgt.model.entity.Player;
+import com.studio2.bgt.model.helpers.PlayHelper;
 
 import java.util.HashSet;
+import java.util.Queue;
+import java.util.Set;
 
 public abstract class AbstractController {
+
+    protected PlayHelper clearResponse(PlayHelper play) {
+        if (!play.getFriends().isEmpty()) {
+            clearResponse(play.getFriends());
+        }
+
+        if (!play.getAccepted().isEmpty()) {
+            clearResponse(play.getAccepted());
+        }
+
+        if (!play.getPlayersTourA().isEmpty()) {
+            clearResponse(play.getPlayersTourA());
+        }
+
+        if (!play.getPlayersTourB().isEmpty()) {
+            clearResponse(play.getPlayersTourB());
+        }
+
+        return play;
+    }
+
+    protected Queue<Player> clearResponse(Queue<Player> players) {
+        players.forEach(this::clearResponse);
+        return players;
+    }
+
+    protected Set<Player> clearResponse(Set<Player> players) {
+        players.forEach(this::clearResponse);
+        return players;
+    }
 
     protected Player clearResponse(Player player) {
         clearInfiniteFriendsLoop(player);

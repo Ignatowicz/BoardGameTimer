@@ -3,6 +3,7 @@ package com.studio2.bgt.controller;
 import com.studio2.bgt.model.entity.Game;
 import com.studio2.bgt.model.entity.Player;
 import com.studio2.bgt.model.helpers.PlayHelper;
+import com.studio2.bgt.model.helpers.StartGame;
 import com.studio2.bgt.model.repository.GameRepository;
 import com.studio2.bgt.model.repository.PlayRepository;
 import com.studio2.bgt.model.repository.PlayerRepository;
@@ -33,7 +34,7 @@ public class PlayController extends AbstractController {
     @Resource(name = "playRepository")
     private PlayRepository playRepository;
 
-    private NotificationManager notificationManager;
+    private NotificationManager notificationManager = new NotificationManager();
 
     private Long getNextPlayId() {
         return ++playRepository.playId;
@@ -55,13 +56,22 @@ public class PlayController extends AbstractController {
                     .playId(getNextPlayId())
                     .gameId(gameId)
                     .playerId(game.getId())
+                    .playerGameStarterId(null)
+                    .isTourA(true)
                     .gameName(game.getName())
                     .timeRound(game.getTimeRound())
                     .timeGame(game.getTimeGame())
                     .minPlayers(game.getMinPlayers())
                     .maxPlayers(game.getMaxPlayers())
                     .friends(friends)
+                    .accepted(new HashSet<>())
+                    .playersTourA(new LinkedList<>())
+                    .playersTourB(new LinkedList<>())
                     .build();
+
+
+            // clear friends' friends
+            clearResponse(play);
 
             // save
             playRepository.createPlay(play);
@@ -73,17 +83,22 @@ public class PlayController extends AbstractController {
     // button -> start game, send invitations to friends
     @PostMapping("/startGame")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public ResponseEntity<?> startGame(@Valid @RequestBody Long playId, HashSet<Long> playersId) {
-        PlayHelper play = playRepository.findPlayById(playId);
+    public ResponseEntity<?> startGame(@Valid @RequestBody StartGame startGame) {
+        PlayHelper play = playRepository.findPlayById(startGame.getPlayId());
         if (play == null) {
             return ResponseEntity.notFound().build();
         }
 
-        Set<Player> friends = (HashSet<Player>) playerRepository.findAll();
-        play.setFriends(friends.stream().filter(p -> playersId.contains(p.getId())).collect(Collectors.toSet()));
+        // set players from provided friend ids
+        Set<Player> friends = new HashSet<>();
+        playerRepository.findAll().forEach(friends::add);
+        play.setFriends(friends.stream().filter(p -> startGame.getPlayersId().contains(p.getId())).collect(Collectors.toSet()));
+
+        // clear friends' friends
+        clearResponse(play);
 
         // save
-        playRepository.findPlayById(playId).setFriends(play.getFriends());
+        playRepository.findPlayById(startGame.getPlayId()).setFriends(play.getFriends());
 
         Map<String, String> friends2 = new HashMap<>();
         friends2.put("Player1", "Rafatus");
