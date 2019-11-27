@@ -2,6 +2,7 @@ package com.studio2.bgt;
 
 import com.studio2.bgt.model.entity.Game;
 import com.studio2.bgt.model.entity.Player;
+import com.studio2.bgt.model.repository.PlayRepository;
 import com.studio2.bgt.model.repository.PlayerRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -11,12 +12,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
 import java.util.HashSet;
 import java.util.Set;
 
 @Controller
 @SpringBootApplication
 public class BoardGameTimerApplication {
+
+    @Resource(name = "playRepository")
+    private PlayRepository playRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(BoardGameTimerApplication.class, args);
@@ -32,6 +37,8 @@ public class BoardGameTimerApplication {
     @Bean
     public CommandLineRunner demo(PlayerRepository playerRepository) {
         return (args) -> {
+
+            playRepository.playId = 0L;
 
             // init games
             Set<Game> games1 = new HashSet<>();
