@@ -118,12 +118,12 @@ public class PlayController extends AbstractController {
 
     // button in notification box -> change to text "Wait for others players to start a game"
     @GetMapping("/{playId}/acceptGame/{playerId}")
-    public ResponseEntity<?> acceptGame(@PathVariable Long playId, Long playerId) {
+    public ResponseEntity<?> acceptGame(@PathVariable Long playId, @PathVariable Long playerId) {
         PlayHelper play = playRepository.findPlayById(playId);
         if (play == null) {
             return ResponseEntity.notFound().build();
         }
-        
+
         play.getAccepted().add(playerRepository.findPlayerById(playerId));
 
         // save
@@ -144,7 +144,7 @@ public class PlayController extends AbstractController {
     }
 
     @GetMapping("/{playId}/rejectGame/{playerId}")
-    public ResponseEntity<?> rejectGame(@PathVariable Long playId, Long playerId) {
+    public ResponseEntity<?> rejectGame(@PathVariable Long playId, @PathVariable Long playerId) {
         PlayHelper play = playRepository.findPlayById(playId);
         if (play == null) {
             return ResponseEntity.notFound().build();
@@ -158,7 +158,7 @@ public class PlayController extends AbstractController {
     }
 
     @GetMapping("/{playId}/tour/{isTourA}/endRound/{playerId}")
-    public ResponseEntity<?> endRound(@PathVariable Long playId, Boolean isTourA, Long playerId) {
+    public ResponseEntity<?> endRound(@PathVariable Long playId, @PathVariable Boolean isTourA, @PathVariable Long playerId) {
         PlayHelper play = playRepository.findPlayById(playId);
         if (play == null) {
             return ResponseEntity.notFound().build();
