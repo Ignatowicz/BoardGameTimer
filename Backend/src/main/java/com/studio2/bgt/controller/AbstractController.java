@@ -1,9 +1,9 @@
 package com.studio2.bgt.controller;
 
 import com.studio2.bgt.model.entity.Player;
-import com.studio2.bgt.model.enums.SendType;
+import com.studio2.bgt.model.enums.SendTo;
 import com.studio2.bgt.model.helpers.PlayHelper;
-import com.studio2.bgt.model.helpers.StartGameNotificationHelper;
+import com.studio2.bgt.model.helpers.NotificationHelper;
 
 import java.util.*;
 
@@ -52,12 +52,12 @@ public abstract class AbstractController {
         return player;
     }
 
-    protected StartGameNotificationHelper preparePlayersToWhomNotificationWillBeSent(PlayHelper play, SendType sendType) {
-        StartGameNotificationHelper startGameNotification = new StartGameNotificationHelper();
+    protected NotificationHelper preparePlayersToWhomNotificationWillBeSent(PlayHelper play, SendTo sendTo) {
+        NotificationHelper startGameNotification = new NotificationHelper();
         Map<String, String> players = new HashMap<>();
         Set<String> topics = new HashSet<>();
 
-        switch (sendType) {
+        switch (sendTo) {
             case FRIENDS:
                 play.getFriends().forEach(f -> players.put(String.valueOf(f.getId()), f.getName()));
                 play.getFriends().forEach(f -> topics.add("Player_" + f.getId()));
@@ -70,6 +70,12 @@ public abstract class AbstractController {
             case PLAYERS_TOUR_B:
                 play.getPlayersTourB().forEach(f -> players.put(String.valueOf(f.getId()), f.getName()));
                 play.getPlayersTourB().forEach(f -> topics.add("Player_" + f.getId()));
+            case FIRST_PLAYER_TOUR_A:
+                Player firstPlayer = play.getPlayersTourA().peek();
+                if (firstPlayer != null) {
+                    players.put(String.valueOf(firstPlayer.getId()), firstPlayer.getName());
+                    topics.add("Player_" + firstPlayer.getId());
+                }
         }
 
         startGameNotification.setPlayers(players);
