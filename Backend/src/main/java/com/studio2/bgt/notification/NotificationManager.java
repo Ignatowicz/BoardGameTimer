@@ -5,60 +5,64 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.http.HttpEntity;
 
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 @Slf4j
 public class NotificationManager {
 
-    private final String TOPIC = "BoardGameTimerTopic";
-
     private AndroidPushNotificationsService androidPushNotificationsService = new AndroidPushNotificationsService();
 
     public String prepareNotification(String topic, String title, String description, Map<String, String> friends) {
+
+        // body
         JSONObject body = new JSONObject();
         body.put("to", "/topics/" + topic);
         body.put("priority", "high");
 
+        // notification
         JSONObject notification = new JSONObject();
         notification.put("title", title);
         notification.put("body", description);
+        body.put("notification", notification);
 
+        // data
         JSONObject data = new JSONObject();
-
         for (Map.Entry<String, String> entry : friends.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
             data.put(key, value);
         }
-
-        body.put("notification", notification);
         body.put("data", data);
 
         return body.toString();
     }
 
-    public String sendNotification(String topic, String title, String description, Map<String, String> friends) throws JSONException {
+    public List<String> sendNotification(Set<String> topics, String title, String description, Map<String, String> friends) throws JSONException {
 
-        String bodyJson = prepareNotification(topic, title, description, friends);
+        List<String> firebaseResponse = new ArrayList<>();
 
-        HttpEntity<String> request = new HttpEntity<>(bodyJson);
+        for (String topic : topics) {
+            String bodyJson = prepareNotification(topic, title, description, friends);
 
-        CompletableFuture<String> pushNotification = androidPushNotificationsService.send(request);
-        CompletableFuture.allOf(pushNotification).join();
+            HttpEntity<String> request = new HttpEntity<>(bodyJson);
 
-        try {
-            String firebaseResponse = pushNotification.get();
+            CompletableFuture<String> pushNotification = androidPushNotificationsService.send(request);
+            CompletableFuture.allOf(pushNotification).join();
 
-            return firebaseResponse;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+            try {
+                firebaseResponse.add(pushNotification.get());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
         }
-
-        return "Push Notification ERROR! BAD REQUEST!";
+        if (firebaseResponse.isEmpty()) {
+            return Collections.singletonList("Push Notification ERROR! BAD REQUEST!");
+        }
+        return firebaseResponse;
     }
 
 }

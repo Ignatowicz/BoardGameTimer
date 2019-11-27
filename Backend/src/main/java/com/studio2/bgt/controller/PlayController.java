@@ -103,11 +103,11 @@ public class PlayController extends AbstractController {
         // prepare players to whom notification will be sent
         Map<String, String> players = new HashMap<>(play.getFriends().size());
         play.getFriends().forEach(f -> players.put(String.valueOf(f.getId()), f.getName()));
+        Set<String> topics = new HashSet<>();
+        play.getFriends().forEach(f -> topics.add("Player_" + f.getId()));
 
-//        playersId.forEach(p -> friends2.put("Player1", playerRepository.findPlayerById(p).getName()));
-        notificationManager.sendNotification("BoardGameTimerTopic", "Game starting", "Wait for other players to join the game!", players);
-
-//        play.getFriend().forEach();  // TODO: sent requests to all friends
+        // send request to all friends-players
+        log.info(String.valueOf(notificationManager.sendNotification(topics, "Game starting", "Wait for other players to join the game!", players)));
 
         return ResponseEntity.ok().body("Start game requests sent to your friends!");
     }
