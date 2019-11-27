@@ -1,32 +1,20 @@
 package com.studio2.bgt.notification;
 
-import com.studio2.bgt.notification.AndroidPushNotificationsService;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 @Slf4j
-@Service
 public class NotificationManager {
 
     private final String TOPIC = "BoardGameTimerTopic";
 
-    @Autowired
-    AndroidPushNotificationsService androidPushNotificationsService;
+    private AndroidPushNotificationsService androidPushNotificationsService = new AndroidPushNotificationsService();
 
     public String prepareNotification(String topic, String title, String description, Map<String, String> friends) {
         JSONObject body = new JSONObject();
@@ -73,4 +61,5 @@ public class NotificationManager {
 
         return "Push Notification ERROR! BAD REQUEST!";
     }
+
 }
