@@ -2,29 +2,30 @@ package com.example.boardgametimer.ui.main;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import com.example.boardgametimer.ui.newgame.NewGameActivity;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.view.View;
-import android.widget.Button;
-
 import com.example.boardgametimer.R;
+import com.example.boardgametimer.ui.newgame.NewGameActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainActivity extends AppCompatActivity {
 
-
-
+    private final String TOPIC = "BoardGameTimerTopic";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
+
+        // subscribe to topic in firebase!!
+        FirebaseMessaging.getInstance().subscribeToTopic(TOPIC);
 
         final Button newGameButton = findViewById(R.id.new_game_button);
 
@@ -47,5 +48,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 }

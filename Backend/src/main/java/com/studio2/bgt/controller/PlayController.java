@@ -6,6 +6,7 @@ import com.studio2.bgt.model.helpers.PlayHelper;
 import com.studio2.bgt.model.repository.GameRepository;
 import com.studio2.bgt.model.repository.PlayRepository;
 import com.studio2.bgt.model.repository.PlayerRepository;
+import com.studio2.bgt.notification.NotificationManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,9 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -33,6 +32,8 @@ public class PlayController extends AbstractController {
 
     @Resource(name = "playRepository")
     private PlayRepository playRepository;
+
+    private NotificationManager notificationManager;
 
     private Long getNextPlayId() {
         return ++playRepository.playId;
@@ -70,7 +71,7 @@ public class PlayController extends AbstractController {
     }
 
     // button -> start game, send invitations to friends
-    @PostMapping("/{playId}/startGame")
+    @PostMapping("/startGame")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public ResponseEntity<?> startGame(@Valid @RequestBody Long playId, HashSet<Long> playersId) {
         PlayHelper play = playRepository.findPlayById(playId);
@@ -83,6 +84,11 @@ public class PlayController extends AbstractController {
 
         // save
         playRepository.findPlayById(playId).setFriends(play.getFriends());
+
+        Map<String, String> friends2 = new HashMap<>();
+        friends2.put("Player1", "Rafatus");
+//        playersId.forEach(p -> friends2.put("Player1", playerRepository.findPlayerById(p).getName()));
+        notificationManager.sendNotification("BoardGameTimerTopic", "Game starting", "Wait for other players to join the game!", friends2);
 
 //        play.getFriend().forEach();  // TODO: sent requests to all friends
 
