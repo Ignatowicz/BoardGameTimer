@@ -105,7 +105,7 @@ public class PlayController extends AbstractController {
         // send request for game to all friends (players in near future)
         NotificationHelper notificationHelper = preparePlayersToWhomNotificationWillBeSent(play, SendTo.FRIENDS);
         List<String> notification = notificationManager
-                .sendNotification(notificationHelper.getTopics(),
+                .sendNotification(1L, notificationHelper.getTopics(),
                         "Invitation to game " + play.getGameName(),
                         "Open the app and accept the invitation!",
                         notificationHelper.getPlayers());
@@ -138,7 +138,7 @@ public class PlayController extends AbstractController {
             // send notification to all players about game start
             NotificationHelper notificationHelper = preparePlayersToWhomNotificationWillBeSent(play, SendTo.PLAYERS_TOUR_A);
             List<String> notification = notificationManager
-                    .sendNotification(notificationHelper.getTopics(),
+                    .sendNotification(2L, notificationHelper.getTopics(),
                             "The game has started!",
                             "All the players have accepted the invitation.\nIt's " + play.getPlayersTourA().peek().getName() + " turn!",
                             notificationHelper.getPlayers());
@@ -156,7 +156,7 @@ public class PlayController extends AbstractController {
 
     private void notifyFirstPlayerAboutTurnStart(NotificationHelper notificationHelper) {
         List<String> notification = notificationManager
-                .sendNotification(notificationHelper.getTopics(),
+                .sendNotification(3L, notificationHelper.getTopics(),
                         "It's your turn!",
                         "Your round time has just begun!",
                         notificationHelper.getPlayers());
@@ -175,7 +175,7 @@ public class PlayController extends AbstractController {
         // notify about cancel game start
         NotificationHelper notificationHelper = preparePlayersToWhomNotificationWillBeSent(play, SendTo.FRIENDS);
         List<String> notification = notificationManager
-                .sendNotification(notificationHelper.getTopics(),
+                .sendNotification(4L, notificationHelper.getTopics(),
                         "The game " + play.getGameName() + " canceled.",
                         playerRepository.findPlayerById(playerId).getName() + " rejected to play.",
                         notificationHelper.getPlayers());
@@ -312,7 +312,7 @@ public class PlayController extends AbstractController {
         // notify about game pause
         NotificationHelper notificationHelper = preparePlayersToWhomNotificationWillBeSent(play, SendTo.FRIENDS);
         List<String> notification = notificationManager
-                .sendNotification(notificationHelper.getTopics(),
+                .sendNotification(5L, notificationHelper.getTopics(),
                         "The game " + play.getGameName() + " has been paused",
                         "Wait to the game resume.",
                         notificationHelper.getPlayers());
@@ -331,7 +331,7 @@ public class PlayController extends AbstractController {
         // notify about game resume
         NotificationHelper notificationHelper = preparePlayersToWhomNotificationWillBeSent(play, SendTo.FRIENDS);
         List<String> notification = notificationManager
-                .sendNotification(notificationHelper.getTopics(),
+                .sendNotification(6L, notificationHelper.getTopics(),
                         "The game " + play.getGameName() + " has been resumed",
                         "Actual player has started his resumed the round.",
                         notificationHelper.getPlayers());
@@ -351,7 +351,7 @@ public class PlayController extends AbstractController {
         // notify about game end
         NotificationHelper notificationHelper = preparePlayersToWhomNotificationWillBeSent(play, SendTo.FRIENDS);
         List<String> notification = notificationManager
-                .sendNotification(notificationHelper.getTopics(),
+                .sendNotification(7L, notificationHelper.getTopics(),
                         "The game " + play.getGameName() + " is over",
                         "Hope You enjoyed the game!",
                         notificationHelper.getPlayers());
