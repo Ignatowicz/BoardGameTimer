@@ -2,8 +2,10 @@ package com.studio2.bgt.controller;
 
 import com.studio2.bgt.model.entity.Game;
 import com.studio2.bgt.model.entity.Player;
+import com.studio2.bgt.model.enums.SendType;
 import com.studio2.bgt.model.helpers.PlayHelper;
-import com.studio2.bgt.model.helpers.StartGame;
+import com.studio2.bgt.model.helpers.StartGameHelper;
+import com.studio2.bgt.model.helpers.StartGameNotificationHelper;
 import com.studio2.bgt.model.repository.GameRepository;
 import com.studio2.bgt.model.repository.PlayRepository;
 import com.studio2.bgt.model.repository.PlayerRepository;
@@ -83,7 +85,7 @@ public class PlayController extends AbstractController {
     // button -> start game, send invitations to friends
     @PostMapping("/startGame")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public ResponseEntity<?> startGame(@Valid @RequestBody StartGame startGame) {
+    public ResponseEntity<?> startGame(@Valid @RequestBody StartGameHelper startGame) {
         PlayHelper play = playRepository.findPlayById(startGame.getPlayId());
         if (play == null) {
             return ResponseEntity.notFound().build();
@@ -100,14 +102,16 @@ public class PlayController extends AbstractController {
         // save
         playRepository.findPlayById(startGame.getPlayId()).setFriends(play.getFriends());
 
-        // prepare players to whom notification will be sent
-        Map<String, String> players = new HashMap<>(play.getFriends().size());
-        play.getFriends().forEach(f -> players.put(String.valueOf(f.getId()), f.getName()));
-        Set<String> topics = new HashSet<>();
-        play.getFriends().forEach(f -> topics.add("Player_" + f.getId()));
+        // prepare
+        StartGameNotificationHelper startGameNotification = preparePlayersToWhomNotificationWillBeSent(play, SendType.FRIENDS);
 
         // send request to all friends-players
-        log.info(String.valueOf(notificationManager.sendNotification(topics, "Game starting", "Wait for other players to join the game!", players)));
+        List<String> notification = notificationManager
+                .sendNotification(startGameNotification.getTopics(),
+                        "Game starting",
+                        "Wait for other players to join the game!",
+                        startGameNotification.getPlayers());
+        log.info(String.valueOf(notification));
 
         return ResponseEntity.ok().body("Start game requests sent to your friends!");
     }
@@ -119,7 +123,7 @@ public class PlayController extends AbstractController {
         if (play == null) {
             return ResponseEntity.notFound().build();
         }
-
+        
         play.getAccepted().add(playerRepository.findPlayerById(playerId));
 
         // save

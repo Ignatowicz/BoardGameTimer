@@ -2,6 +2,7 @@ package com.studio2.bgt.model.helpers;
 
 import lombok.*;
 
+import java.util.Map;
 import java.util.Set;
 
 @Getter
@@ -9,9 +10,9 @@ import java.util.Set;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class StartGame {
+public class StartGameNotificationHelper {
 
-    private Long playId;
-    private Set<Long> playersId;
+    Map<String, String> players;
+    Set<String> topics;
 
 }
