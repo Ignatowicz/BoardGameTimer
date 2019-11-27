@@ -15,7 +15,7 @@ public class PlayRepository {
 
     @Bean
     public Long playId() {
-        return playId;
+        return Long.parseLong("0");
     }
 
     @Resource(name = "playId")
