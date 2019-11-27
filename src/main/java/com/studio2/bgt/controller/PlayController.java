@@ -40,7 +40,7 @@ public class PlayController extends AbstractController {
         return ++playRepository.playId;
     }
 
-    // main screen, on tap the row with game
+    // main screen, request onTap the row with game name
     @GetMapping("/{gameId}")
     public ResponseEntity<?> play(@PathVariable Long gameId) {
         Optional<Game> gameOptional = gameRepository.findById(gameId);
@@ -100,10 +100,12 @@ public class PlayController extends AbstractController {
         // save
         playRepository.findPlayById(startGame.getPlayId()).setFriends(play.getFriends());
 
-        Map<String, String> friends2 = new HashMap<>();
-        friends2.put("Player1", "Rafatus");
+        // prepare players to whom notification will be sent
+        Map<String, String> players = new HashMap<>(play.getFriends().size());
+        play.getFriends().forEach(f -> players.put(String.valueOf(f.getId()), f.getName()));
+
 //        playersId.forEach(p -> friends2.put("Player1", playerRepository.findPlayerById(p).getName()));
-        notificationManager.sendNotification("BoardGameTimerTopic", "Game starting", "Wait for other players to join the game!", friends2);
+        notificationManager.sendNotification("BoardGameTimerTopic", "Game starting", "Wait for other players to join the game!", players);
 
 //        play.getFriend().forEach();  // TODO: sent requests to all friends
 
