@@ -25,14 +25,13 @@ public class NotificationManager {
         notification.put("title", title);
         notification.put("body", description);
 
-
-        Map.Entry<String, String> entry = friends.entrySet().iterator().next();
-        String key = entry.getKey();
-        String value = entry.getValue();
-
         JSONObject data = new JSONObject();
-        data.put(key, value);
 
+        for (Map.Entry<String, String> entry : friends.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            data.put(key, value);
+        }
 
         body.put("notification", notification);
         body.put("data", data);
