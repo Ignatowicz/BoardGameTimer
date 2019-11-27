@@ -14,7 +14,7 @@ public class NotificationManager {
 
     private AndroidPushNotificationsService androidPushNotificationsService = new AndroidPushNotificationsService();
 
-    public String prepareNotification(String topic, String title, String description, Map<String, String> friends) {
+    public String prepareNotification(Long notificationId, String topic, String title, String description, Map<String, String> friends) {
 
         // body
         JSONObject body = new JSONObject();
@@ -29,6 +29,7 @@ public class NotificationManager {
 
         // data
         JSONObject data = new JSONObject();
+        data.put("notificationId", notificationId);
         for (Map.Entry<String, String> entry : friends.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
@@ -39,12 +40,12 @@ public class NotificationManager {
         return body.toString();
     }
 
-    public List<String> sendNotification(Set<String> topics, String title, String description, Map<String, String> friends) throws JSONException {
+    public List<String> sendNotification(Long notificationId, Set<String> topics, String title, String description, Map<String, String> friends) throws JSONException {
 
         List<String> firebaseResponse = new ArrayList<>();
 
         for (String topic : topics) {
-            String bodyJson = prepareNotification(topic, title, description, friends);
+            String bodyJson = prepareNotification(notificationId, topic, title, description, friends);
 
             HttpEntity<String> request = new HttpEntity<>(bodyJson);
 
