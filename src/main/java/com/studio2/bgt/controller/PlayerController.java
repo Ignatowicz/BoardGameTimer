@@ -1,5 +1,6 @@
 package com.studio2.bgt.controller;
 
+import com.studio2.bgt.model.entity.Credentials;
 import com.studio2.bgt.model.entity.Player;
 import com.studio2.bgt.model.repository.PlayerRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -83,4 +84,15 @@ public class PlayerController extends AbstractController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/login")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<?> login(@Valid @RequestBody Credentials credentials) throws URISyntaxException {
+        System.out.println(credentials);
+        Optional<Player> result = playerRepository.findPlayerByEmailAndPassword(credentials.getEmail(), credentials.getPassword());
+        if(result.isPresent())
+            {
+                return ResponseEntity.ok().body(result.get());
+            }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("unauthorized");
+    }
 }
