@@ -19,7 +19,6 @@ import cz.msebera.android.httpclient.entity.StringEntity;
 public class LoginDataSource {
 
     public Result<LoggedInUser> login(Context context, String username, String password) {
-        AsyncHttpClient client = new AsyncHttpClient();
 
         try {
             JSONObject jsonParams = new JSONObject();
@@ -27,15 +26,16 @@ public class LoginDataSource {
             jsonParams.put("password", "admin");
             StringEntity entity = new StringEntity(jsonParams.toString());
 
-//        RequestParams params = new RequestParams();
-//        params.put("email", "jan.kowalski@gmail.com");
-//        params.put("password", "admin");
-
-
-            client.post(context, "http://secret-falls-72080.herokuapp.com/api/players/login", entity,"application/json", new JsonHttpResponseHandler() {
+            HttpUtils.post(context, "players/login", entity,"application/json", new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 System.out.println("w1");
+//                LoggedInUser fakeUser =
+//                        new LoggedInUser(
+//                                java.util.UUID.randomUUID().toString(),
+//                                "Jane Doe");
+//                return new Result.Success<>(fakeUser);
+
             }
         });
 
