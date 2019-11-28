@@ -1,4 +1,4 @@
-package com.studio2.bgt.model.controller;
+package com.studio2.bgt.controller;
 
 import com.studio2.bgt.model.entity.Game;
 import com.studio2.bgt.model.repository.GameRepository;
@@ -17,7 +17,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/games")
 @CrossOrigin
-public class GameController {
+public class GameController extends AbstractController {
 
     @Autowired
     private GameRepository gameRepository;
@@ -55,6 +55,7 @@ public class GameController {
             game.setTimeGame(updatedGame.getTimeGame());
             game.setMinPlayers(updatedGame.getMinPlayers());
             game.setMaxPlayers(updatedGame.getMaxPlayers());
+            game.setPlayer(updatedGame.getPlayer());
             gameRepository.save(game);
             return ResponseEntity.ok().body(game);
         } else {
