@@ -35,12 +35,7 @@ public class LoginDataSource {
             client.post(context, "http://secret-falls-72080.herokuapp.com/api/players/login", entity,"application/json", new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                System.out.println(response);
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                System.out.println(response);
+                System.out.println("w1");
             }
         });
 
