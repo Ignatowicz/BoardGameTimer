@@ -26,6 +26,13 @@ public class LoginDataSource {
             jsonParams.put("password", "admin");
             StringEntity entity = new StringEntity(jsonParams.toString());
 
+            //        RequestParams params = new RequestParams();
+            //        params.put("email", "jan.kowalski@gmail.com");
+            //        params.put("password", "admin");
+
+
+//            HttpUtils.get("players/login", entity, new JsonHttpResponseHandler() { override onsuccess}
+
             HttpUtils.post(context, "players/login", entity,"application/json", new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
