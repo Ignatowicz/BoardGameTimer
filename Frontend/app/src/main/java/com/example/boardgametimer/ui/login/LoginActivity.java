@@ -73,11 +73,12 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 if (loginResult.getSuccess() != null) {
                     updateUiWithUser(loginResult.getSuccess());
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
                 }
                 setResult(Activity.RESULT_OK);
 
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
+
             }
         });
 
