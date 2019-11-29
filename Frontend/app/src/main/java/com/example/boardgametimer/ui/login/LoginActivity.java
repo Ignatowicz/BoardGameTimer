@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.boardgametimer.R;
+import com.example.boardgametimer.data.model.LoggedInUser;
 import com.example.boardgametimer.ui.main.MainActivity;
 
 public class LoginActivity extends AppCompatActivity {
@@ -73,7 +74,9 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 if (loginResult.getSuccess() != null) {
                     updateUiWithUser(loginResult.getSuccess());
+                    LoggedInUser user = loginResult.getSuccess().getUser();
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    intent.putExtra("user",user);
                     startActivity(intent);
                 }
                 setResult(Activity.RESULT_OK);

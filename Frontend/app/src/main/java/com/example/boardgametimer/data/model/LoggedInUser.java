@@ -1,11 +1,12 @@
 package com.example.boardgametimer.data.model;
 
+import java.io.Serializable;
 import java.util.Set;
 
 /**
  * Data class that captures user information for logged in users retrieved from LoginRepository
  */
-public class LoggedInUser {
+public class LoggedInUser implements Serializable {
     private int id;
 
     private String name;

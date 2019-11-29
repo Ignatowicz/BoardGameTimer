@@ -9,17 +9,18 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.boardgametimer.R;
+import com.example.boardgametimer.data.model.Game;
 
 import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
-    private List<String> mData;
+    private List<Game> mData;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    MyAdapter(Context context, List<String> data) {
+    MyAdapter(Context context, List<Game> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
     }
@@ -34,7 +35,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String animal = mData.get(position);
+        String animal = mData.get(position).getName();
         holder.myTextView.setText(animal);
     }
 
@@ -62,7 +63,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     }
 
     // convenience method for getting data at click position
-    String getItem(int id) {
+    Game getItem(int id) {
         return mData.get(id);
     }
 

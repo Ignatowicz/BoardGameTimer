@@ -3,6 +3,8 @@ package com.example.boardgametimer.ui.main;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.boardgametimer.data.model.Game;
+import com.example.boardgametimer.data.model.LoggedInUser;
 import com.example.boardgametimer.ui.friends.FriendsActivity;
 import com.example.boardgametimer.ui.newgame.NewGameActivity;
 import com.example.boardgametimer.ui.settings.SettingsActivity;
@@ -14,6 +16,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -32,12 +35,11 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.ItemCli
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
 
-        ArrayList<String> animalNames = new ArrayList<>();
-        animalNames.add("Horse");
-        animalNames.add("Cow");
-        animalNames.add("Camel");
-        animalNames.add("Sheep");
-        animalNames.add("Goat");
+        LoggedInUser user = (LoggedInUser) getIntent().getSerializableExtra("user");
+        System.out.println(user);
+
+        ArrayList<Game> animalNames = new ArrayList<>();
+        animalNames.addAll(user.getGames());
 
         // set up the RecyclerView
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
