@@ -1,6 +1,6 @@
 package com.studio2.bgt.controller;
 
-import com.studio2.bgt.model.entity.Credentials;
+import com.studio2.bgt.model.helpers.Credentials;
 import com.studio2.bgt.model.entity.Player;
 import com.studio2.bgt.model.repository.PlayerRepository;
 import lombok.extern.slf4j.Slf4j;
