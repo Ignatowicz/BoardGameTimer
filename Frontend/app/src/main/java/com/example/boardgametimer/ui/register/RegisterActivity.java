@@ -4,17 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.boardgametimer.R;
 import com.example.boardgametimer.api.HttpUtils;
-import com.example.boardgametimer.data.model.Game;
 import com.example.boardgametimer.data.model.LoggedInUser;
 import com.example.boardgametimer.ui.main.MainActivity;
-import com.example.boardgametimer.ui.startgame.StartgameActivity;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -42,7 +39,11 @@ public class RegisterActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LoggedInUser user = new LoggedInUser(nameEditText.getText().toString(), emailEditText.getText().toString(), passwordEditText.getText().toString());
+                String name = nameEditText.getText().toString();
+                String email = emailEditText.getText().toString();
+                String password = passwordEditText.getText().toString();
+
+                LoggedInUser user = new LoggedInUser(name, email, password);
                 createUser(user);
             }
         });
@@ -57,12 +58,11 @@ public class RegisterActivity extends AppCompatActivity {
             HttpUtils.post(getApplicationContext(), "players/add", entity[0], "application/json", new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    Gson gson = new Gson();
                     JsonElement element = gson.fromJson(response.toString(), JsonElement.class);
                     LoggedInUser addedUser = gson.fromJson(element, LoggedInUser.class);
 
                     Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                    intent.putExtra("user",addedUser);
+                    intent.putExtra("user", addedUser);
                     startActivity(intent);
                 }
 
