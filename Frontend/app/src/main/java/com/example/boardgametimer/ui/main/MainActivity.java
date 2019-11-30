@@ -8,6 +8,7 @@ import com.example.boardgametimer.data.model.LoggedInUser;
 import com.example.boardgametimer.ui.friends.FriendsActivity;
 import com.example.boardgametimer.ui.newgame.NewGameActivity;
 import com.example.boardgametimer.ui.settings.SettingsActivity;
+import com.example.boardgametimer.ui.startgame.StartgameActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements MyAdapter.ItemClickListener {
     MyAdapter adapter;
     LoggedInUser user;
+    ArrayList<Game> animalNames = new ArrayList<>();
 
 
     @Override
@@ -38,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.ItemCli
 
         this.user = (LoggedInUser) getIntent().getSerializableExtra("user");
 
-        ArrayList<Game> animalNames = new ArrayList<>();
+
         animalNames.addAll(user.getGames());
 
         // set up the RecyclerView
@@ -84,8 +86,11 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.ItemCli
     }
         @Override
         public void onItemClick(View view, int position) {
-            Intent intent = new Intent(MainActivity.this, NewGameActivity.class);
+            Intent intent = new Intent(MainActivity.this, StartgameActivity.class);
             intent.putExtra("user", user);
+            intent.putExtra("position", position);
+            intent.putExtra("gamesList", animalNames);
+
             startActivity(intent);
         }
 }
