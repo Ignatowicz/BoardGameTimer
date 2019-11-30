@@ -17,6 +17,8 @@ show grants for 'admin'@'localhost';
 	- project base
 - BGT-001
 	- .gitignore
+- BGT-002
+	- project logic
 - BND-000
 	- backend base
 - BND-001

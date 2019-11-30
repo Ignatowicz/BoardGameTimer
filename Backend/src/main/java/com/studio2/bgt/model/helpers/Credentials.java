@@ -1,7 +1,6 @@
-package com.studio2.bgt.model.entity;
+package com.studio2.bgt.model.helpers;
 
 import lombok.*;
-
 
 @Getter
 @Setter
@@ -10,8 +9,8 @@ import lombok.*;
 @Builder
 @ToString
 public class Credentials {
+
     private String email;
     private String password;
-
 
 }

@@ -12,7 +12,6 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
 @Entity
 public class Player {
 
