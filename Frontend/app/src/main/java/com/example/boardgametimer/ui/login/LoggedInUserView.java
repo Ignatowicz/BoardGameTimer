@@ -1,17 +1,21 @@
 package com.example.boardgametimer.ui.login;
 
+import com.example.boardgametimer.data.model.LoggedInUser;
+
 /**
  * Class exposing authenticated user details to the UI.
  */
 class LoggedInUserView {
-    private String displayName;
+    private LoggedInUser user;
     //... other data fields that may be accessible to the UI
 
-    LoggedInUserView(String displayName) {
-        this.displayName = displayName;
+    LoggedInUserView(LoggedInUser displayName) {
+        this.user = displayName;
     }
 
     String getDisplayName() {
-        return displayName;
+        return user.getDisplayName();
     }
+
+    LoggedInUser getUser() { return  user;}
 }

@@ -50,9 +50,9 @@ public class BoardGameTimerApplication {
             games2.add(Game.builder().name("Osadnicy").timeRound(90).timeGame(1200).minPlayers(2).maxPlayers(4).build());
 
             // init players
-            Player player1 = new Player("Jan", "jan.kowalski@gmail.com", "admin", games1);
-            Player player2 = new Player("Bartosz", "bartosz.nowak@gmail.com", "admin", games2);
-            Player player3 = new Player("Kamil", "kamil.wieckowski@gmail.com", "admin", null);
+            Player player1 = new Player("Jan", "jan.kowalski@gmail.com", "admin123", games1);
+            Player player2 = new Player("Bartosz", "bartosz.nowak@gmail.com", "admin123", games2);
+            Player player3 = new Player("Kamil", "kamil.wieckowski@gmail.com", "admin123", null);
             playerRepository.save(player1);
             playerRepository.save(player2);
             playerRepository.save(player3);
