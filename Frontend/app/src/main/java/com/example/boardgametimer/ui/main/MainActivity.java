@@ -41,7 +41,9 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.ItemCli
         this.user = (LoggedInUser) getIntent().getSerializableExtra("user");
 
 
-        animalNames.addAll(user.getGames());
+        if (user.getGames() != null) {
+            animalNames.addAll(user.getGames());
+        }
 
         // set up the RecyclerView
         RecyclerView recyclerView = findViewById(R.id.recycler_view);

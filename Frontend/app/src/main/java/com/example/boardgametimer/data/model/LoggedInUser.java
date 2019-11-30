@@ -1,6 +1,7 @@
 package com.example.boardgametimer.data.model;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -66,6 +67,13 @@ public class LoggedInUser implements Serializable {
         this.games = games;
         this.friend1 = friend1;
         this.friend2 = friend2;
+    }
+    public LoggedInUser(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.games = new HashSet<>();
+
     }
 
 
