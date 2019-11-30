@@ -6,6 +6,8 @@
 */.idea/dictionaries
 */.idea/libraries
 */.idea/caches
+*/.idea/encodings.xml
+*/.idea/vcs.xml
 */*.iml
 */target/*
 
