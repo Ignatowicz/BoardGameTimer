@@ -10,27 +10,23 @@ import com.example.boardgametimer.ui.newgame.NewGameActivity;
 import com.example.boardgametimer.ui.settings.SettingsActivity;
 import com.example.boardgametimer.ui.startgame.StartgameActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.example.boardgametimer.R;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements MyAdapter.ItemClickListener {
-    MyAdapter adapter;
+public class MainActivity extends AppCompatActivity implements Adapter.ItemClickListener {
+    Adapter adapter;
     LoggedInUser user;
     ArrayList<Game> animalNames = new ArrayList<>();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.ItemCli
         // set up the RecyclerView
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MyAdapter(this, animalNames);
+        adapter = new Adapter(this, animalNames);
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
 

@@ -13,14 +13,14 @@ import com.example.boardgametimer.data.model.Game;
 
 import java.util.List;
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
     private List<Game> mData;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    MyAdapter(Context context, List<Game> data) {
+    Adapter(Context context, List<Game> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
     }
