@@ -4,7 +4,9 @@ import android.content.Context;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestHandle;
 import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.ResponseHandlerInterface;
 
 import cz.msebera.android.httpclient.HttpEntity;
 
@@ -33,7 +35,11 @@ public class HttpUtils {
         client.post(url, params, responseHandler);
     }
 
-    private static String getAbsoluteUrl(String relativeUrl) {
+    public static void put(Context context, String url, HttpEntity entity, String contentType, ResponseHandlerInterface responseHandler) {
+        client.put(context,  getAbsoluteUrl(url),  entity,  contentType,  responseHandler);
+    }
+
+        private static String getAbsoluteUrl(String relativeUrl) {
         return BASE_URL + relativeUrl;
     }
 }

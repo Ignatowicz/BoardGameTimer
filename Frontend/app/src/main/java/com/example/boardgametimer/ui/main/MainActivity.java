@@ -27,6 +27,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements MyAdapter.ItemClickListener {
     MyAdapter adapter;
+    LoggedInUser user;
 
 
     @Override
@@ -35,8 +36,7 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.ItemCli
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
 
-        LoggedInUser user = (LoggedInUser) getIntent().getSerializableExtra("user");
-        System.out.println(user);
+        this.user = (LoggedInUser) getIntent().getSerializableExtra("user");
 
         ArrayList<Game> animalNames = new ArrayList<>();
         animalNames.addAll(user.getGames());
@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.ItemCli
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, NewGameActivity.class);
+                intent.putExtra("user",user);
                 startActivity(intent);
             }
         });
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.ItemCli
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                intent.putExtra("user",user);
                 startActivity(intent);
             }
         });
@@ -75,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.ItemCli
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, FriendsActivity.class);
+                intent.putExtra("user",user);
                 startActivity(intent);
             }
         });
@@ -82,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.ItemCli
         @Override
         public void onItemClick(View view, int position) {
             Intent intent = new Intent(MainActivity.this, NewGameActivity.class);
+            intent.putExtra("user", user);
             startActivity(intent);
         }
 }

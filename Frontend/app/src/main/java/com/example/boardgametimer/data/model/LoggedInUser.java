@@ -46,6 +46,16 @@ public class LoggedInUser implements Serializable {
         this.games = games;
     }
 
+    public void addGame(Game game){ this.games.add(game);}
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     private Set<LoggedInUser> friend1;
     private Set<LoggedInUser> friend2;
     public LoggedInUser(int id, String name, String email, String password, Set<Game> games, Set<LoggedInUser> friend1, Set<LoggedInUser> friend2) {

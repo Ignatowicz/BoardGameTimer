@@ -10,6 +10,14 @@ public class Game implements Serializable {
     private int minPlayers;
     private int maxPlayers;
 
+    public Game(String name, Integer minPlayers, Integer maxPlayers, Integer timeRound, Integer timeGame) {
+        this.name = name;
+        this.minPlayers = minPlayers;
+        this.maxPlayers = maxPlayers;
+        this.timeRound = timeRound;
+        this.timeGame = timeGame;
+    }
+
     public Long getId() {
         return id;
     }
@@ -56,5 +64,17 @@ public class Game implements Serializable {
 
     public void setMaxPlayers(int maxPlayers) {
         this.maxPlayers = maxPlayers;
+    }
+
+    @Override
+    public String toString() {
+        return "Game{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", timeRound=" + timeRound +
+                ", timeGame=" + timeGame +
+                ", minPlayers=" + minPlayers +
+                ", maxPlayers=" + maxPlayers +
+                '}';
     }
 }
