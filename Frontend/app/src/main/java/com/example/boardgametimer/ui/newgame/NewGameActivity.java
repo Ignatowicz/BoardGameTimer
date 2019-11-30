@@ -55,54 +55,30 @@ public class NewGameActivity extends AppCompatActivity {
                 Integer timeRound = Integer.valueOf(timeRoundEditText.getText().toString());
                 Integer timeGame = Integer.valueOf(timeGameEditText.getText().toString());
 
-                Game game = new Game(name, minPlayers,maxPlayers,timeRound,timeGame);
-                Gson gson = new Gson();
-                String jsonParams = gson.toJson(game);
-                final StringEntity[] entity;
-                try {
-                    entity = new StringEntity[]{new StringEntity(jsonParams)};
-                HttpUtils.post(getApplicationContext(), "games/add", entity[0],"application/json", new JsonHttpResponseHandler() {
+                Game game = new Game(name, minPlayers, maxPlayers, timeRound, timeGame);
+                addGame(game);
+
+            }
+        });
+    }
+
+        public void addUser(){
+            Gson gson = new Gson();
+            String jsonParams = gson.toJson(user);
+            final StringEntity[] entity;
+            try {
+                entity = new StringEntity[]{new StringEntity(jsonParams)};
+                HttpUtils.put(getApplicationContext(), "players/" + user.getId(), entity[0],"application/json", new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         Gson gson = new Gson();
                         JsonElement element =  gson.fromJson(response.toString(), JsonElement.class);
-                        Game addedGame = gson.fromJson(element, Game.class);
-                        user.addGame(addedGame);
+                        LoggedInUser addedUser = gson.fromJson(element, LoggedInUser.class);
 
-                        //USER USER USER USER
-                        String jsonParams = gson.toJson(user);
-                        final StringEntity[] entity;
-                        try {
-                            entity = new StringEntity[]{new StringEntity(jsonParams)};
-                            HttpUtils.put(getApplicationContext(), "players/" + user.getId(), entity[0],"application/json", new JsonHttpResponseHandler() {
-                                @Override
-                                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                                    Gson gson = new Gson();
-                                    JsonElement element =  gson.fromJson(response.toString(), JsonElement.class);
-                                    LoggedInUser addedUser = gson.fromJson(element, LoggedInUser.class);
+                        Intent intent = new Intent(NewGameActivity.this, MainActivity.class);
+                        intent.putExtra("user",user);
+                        startActivity(intent);
 
-                                    Intent intent = new Intent(NewGameActivity.this, MainActivity.class);
-                                    intent.putExtra("user",user);
-                                    startActivity(intent);
-
-
-                                }
-
-                                @Override
-                                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                                    System.out.println(statusCode + responseString);
-                                }
-
-                                @Override
-                                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                                    System.out.println(errorResponse.toString());
-                                }
-                            });
-
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                        }
-                        //USER USER USER USER
 
                     }
 
@@ -110,15 +86,43 @@ public class NewGameActivity extends AppCompatActivity {
                     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                         System.out.println(statusCode + responseString);
                     }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        System.out.println(errorResponse.toString());
+                    }
                 });
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
 
-
-
-
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
             }
-        });
+        }
+
+        public void addGame(Game game){
+            Gson gson = new Gson();
+            String jsonParams = gson.toJson(game);
+            final StringEntity[] entity;
+            try {
+                entity = new StringEntity[]{new StringEntity(jsonParams)};
+                HttpUtils.post(getApplicationContext(), "games/add", entity[0], "application/json", new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        Gson gson = new Gson();
+                        JsonElement element = gson.fromJson(response.toString(), JsonElement.class);
+                        Game addedGame = gson.fromJson(element, Game.class);
+                        user.addGame(addedGame);
+                        addUser();
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                        System.out.println(statusCode + responseString);
+                    }
+                });
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+
+        }
     }
-}
+
