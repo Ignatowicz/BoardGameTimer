@@ -26,10 +26,8 @@ import android.widget.Toast;
 
 import com.example.boardgametimer.R;
 import com.example.boardgametimer.data.model.LoggedInUser;
-import com.example.boardgametimer.ui.game.GameActivity;
 import com.example.boardgametimer.ui.main.MainActivity;
 import com.example.boardgametimer.ui.register.RegisterActivity;
-import com.example.boardgametimer.ui.startgame.StartgameActivity;
 
 public class LoginActivity extends AppCompatActivity {
 

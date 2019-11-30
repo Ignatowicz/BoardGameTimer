@@ -48,13 +48,8 @@ public class LoginRepository {
         // @see https://developer.android.com/training/articles/keystore
     }
 
-    public Result<LoggedInUser> login(Context context, String username, String password, LoginViewModel callback) {
+    public void login(Context context, String username, String password, LoginViewModel callback) {
         // handle login
         dataSource.login(context, username, password, callback);
-        Result<LoggedInUser> result = dataSource.result[0];
-        if (result instanceof Result.Success) {
-            setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());
-        }
-        return result;
     }
 }

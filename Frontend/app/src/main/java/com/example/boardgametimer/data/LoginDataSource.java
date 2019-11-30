@@ -7,7 +7,6 @@ import com.example.boardgametimer.data.model.LoggedInUser;
 import com.example.boardgametimer.ui.login.LoginViewModel;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import com.loopj.android.http.*;
 import org.json.*;
 
@@ -21,7 +20,6 @@ import cz.msebera.android.httpclient.entity.StringEntity;
  * Class that handles authentication w/ login credentials and retrieves user information.
  */
 public class LoginDataSource {
-    public final Result<LoggedInUser>[] result = new Result[]{null};
 
     public Result<LoggedInUser> login(Context context, String username, String password, LoginViewModel callback) {
         try {
