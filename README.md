@@ -39,3 +39,14 @@ show grants for 'admin'@'localhost';
 - 6 - resume the game
 - 7 - end the game
 
+4. Heroku
+- install heroku client: 
+	$ sudo snap install --classic heroku
+- $ heroku login
+	'enter credentials'
+- see actual logs
+	$ heroku logs -a secret-falls-72080
+- add remote repository
+	$ git remote add heroku https://git.heroku.com/secret-falls-72080.git
+- deploy changes:
+	$ git subtree push --prefix Backend/ heroku master
