@@ -45,4 +45,5 @@ public class Result<T> {
             return this.error;
         }
     }
+
 }

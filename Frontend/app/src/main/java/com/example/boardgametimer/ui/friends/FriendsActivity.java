@@ -1,8 +1,8 @@
 package com.example.boardgametimer.ui.friends;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.boardgametimer.R;
 
@@ -13,4 +13,5 @@ public class FriendsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
     }
+
 }

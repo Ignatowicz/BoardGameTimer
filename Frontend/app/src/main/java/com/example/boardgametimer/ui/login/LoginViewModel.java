@@ -1,16 +1,16 @@
 package com.example.boardgametimer.ui.login;
 
+import android.content.Context;
+import android.util.Patterns;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import android.content.Context;
-import android.util.Patterns;
-
+import com.example.boardgametimer.R;
 import com.example.boardgametimer.data.LoginRepository;
 import com.example.boardgametimer.data.Result;
 import com.example.boardgametimer.data.model.LoggedInUser;
-import com.example.boardgametimer.R;
 
 public class LoginViewModel extends ViewModel {
 
@@ -32,10 +32,10 @@ public class LoginViewModel extends ViewModel {
 
     public void login(Context context, String username, String password) {
         // can be launched in a separate asynchronous job
-        loginRepository.login(context, username, password, this );
+        loginRepository.login(context, username, password, this);
     }
 
-    public void callback(Result<LoggedInUser> result){
+    public void callback(Result<LoggedInUser> result) {
         if (result instanceof Result.Success) {
             LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
             loginResult.setValue(new LoginResult(new LoggedInUserView(data)));
@@ -44,7 +44,7 @@ public class LoginViewModel extends ViewModel {
         }
     }
 
-    public void loginDataChanged(String username, String password) {
+    void loginDataChanged(String username, String password) {
         if (!isUserNameValid(username)) {
             loginFormState.setValue(new LoginFormState(R.string.invalid_username, null));
         } else if (!isPasswordValid(password)) {

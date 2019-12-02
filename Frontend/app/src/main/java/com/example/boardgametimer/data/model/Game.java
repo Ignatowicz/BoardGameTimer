@@ -3,6 +3,7 @@ package com.example.boardgametimer.data.model;
 import java.io.Serializable;
 
 public class Game implements Serializable {
+
     private Long id;
     private String name;
     private int timeRound;
@@ -77,4 +78,5 @@ public class Game implements Serializable {
                 ", maxPlayers=" + maxPlayers +
                 '}';
     }
+
 }

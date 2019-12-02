@@ -5,8 +5,6 @@ import android.content.Context;
 import com.example.boardgametimer.data.model.LoggedInUser;
 import com.example.boardgametimer.ui.login.LoginViewModel;
 
-import java.util.concurrent.Callable;
-
 /**
  * Class that requests authentication and user information from the remote data source and
  * maintains an in-memory cache of login status and user credentials information.
@@ -52,4 +50,5 @@ public class LoginRepository {
         // handle login
         dataSource.login(context, username, password, callback);
     }
+
 }

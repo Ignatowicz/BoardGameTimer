@@ -38,8 +38,8 @@
 
                 <TextView
                     android:id="@+id/gameTimeTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="46dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="TextView" />
 
@@ -60,7 +60,7 @@
 
                 <TextView
                     android:id="@+id/textView9"
-                    android:layout_width="wrap_content"
+                    android:layout_width="48dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Czas Rundy" />

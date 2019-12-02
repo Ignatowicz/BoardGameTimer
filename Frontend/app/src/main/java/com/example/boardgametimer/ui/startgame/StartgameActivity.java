@@ -1,23 +1,22 @@
 package com.example.boardgametimer.ui.startgame;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.boardgametimer.R;
 import com.example.boardgametimer.data.model.Game;
 import com.example.boardgametimer.data.model.LoggedInUser;
 import com.example.boardgametimer.ui.game.GameActivity;
-import com.example.boardgametimer.ui.main.MainActivity;
-import com.example.boardgametimer.ui.newgame.NewGameActivity;
 
 import java.util.ArrayList;
 
 public class StartgameActivity extends AppCompatActivity {
+
     LoggedInUser user;
     ArrayList<Game> gamesList;
 
@@ -34,7 +33,7 @@ public class StartgameActivity extends AppCompatActivity {
 
         this.user = (LoggedInUser) getIntent().getSerializableExtra("user");
         this.gamesList = (ArrayList<Game>) getIntent().getSerializableExtra("gamesList");
-        int position = getIntent().getIntExtra("position",0);
+        int position = getIntent().getIntExtra("position", 0);
 
         Game currentGame = gamesList.get(position);
 
@@ -48,10 +47,11 @@ public class StartgameActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(StartgameActivity.this, GameActivity.class);
-                intent.putExtra("user",user);
-                intent.putExtra("game",gamesList.get(position));
+                intent.putExtra("user", user);
+                intent.putExtra("game", gamesList.get(position));
                 startActivity(intent);
             }
         });
     }
+
 }

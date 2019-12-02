@@ -29,6 +29,8 @@ show grants for 'admin'@'localhost';
 	- backend api
 - BND-004
 	- backend notification
+- FND-001
+	- login
 
 3. Notification id:
 - 1 - start the game

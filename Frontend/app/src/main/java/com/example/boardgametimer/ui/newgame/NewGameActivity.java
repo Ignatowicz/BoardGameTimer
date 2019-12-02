@@ -1,13 +1,12 @@
 package com.example.boardgametimer.ui.newgame;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.boardgametimer.R;
 import com.example.boardgametimer.api.HttpUtils;
@@ -57,48 +56,48 @@ public class NewGameActivity extends AppCompatActivity {
         });
     }
 
-        public void addGame(Game game){
-            Gson gson = new Gson();
-            String jsonParams = gson.toJson(game);
-            final StringEntity[] entity;
-            try {
-                entity = new StringEntity[]{new StringEntity(jsonParams)};
-                HttpUtils.post(getApplicationContext(), "games/add", entity[0], "application/json", new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                        Gson gson = new Gson();
-                        JsonElement element = gson.fromJson(response.toString(), JsonElement.class);
-                        Game addedGame = gson.fromJson(element, Game.class);
-                        user.addGame(addedGame);
-                        addUser();
-                    }
+    public void addGame(Game game) {
+        Gson gson = new Gson();
+        String jsonParams = gson.toJson(game);
+        final StringEntity[] entity;
+        try {
+            entity = new StringEntity[]{new StringEntity(jsonParams)};
+            HttpUtils.post(getApplicationContext(), "games/add", entity[0], "application/json", new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    Gson gson = new Gson();
+                    JsonElement element = gson.fromJson(response.toString(), JsonElement.class);
+                    Game addedGame = gson.fromJson(element, Game.class);
+                    user.addGame(addedGame);
+                    addUser();
+                }
 
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                        System.out.println(statusCode + responseString);
-                    }
-                });
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    System.out.println(statusCode + responseString);
+                }
+            });
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
 
-    public void addUser(){
+    }
+
+    public void addUser() {
         Gson gson = new Gson();
         String jsonParams = gson.toJson(user);
         final StringEntity[] entity;
         try {
             entity = new StringEntity[]{new StringEntity(jsonParams)};
-            HttpUtils.put(getApplicationContext(), "players/" + user.getId(), entity[0],"application/json", new JsonHttpResponseHandler() {
+            HttpUtils.put(getApplicationContext(), "players/" + user.getId(), entity[0], "application/json", new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     Gson gson = new Gson();
-                    JsonElement element =  gson.fromJson(response.toString(), JsonElement.class);
+                    JsonElement element = gson.fromJson(response.toString(), JsonElement.class);
                     LoggedInUser addedUser = gson.fromJson(element, LoggedInUser.class);
 
                     Intent intent = new Intent(NewGameActivity.this, MainActivity.class);
-                    intent.putExtra("user",user);
+                    intent.putExtra("user", user);
                     startActivity(intent);
                 }
 
@@ -117,5 +116,6 @@ public class NewGameActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
 }
 

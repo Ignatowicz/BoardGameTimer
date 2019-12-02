@@ -1,27 +1,25 @@
 package com.example.boardgametimer.ui.game;
 
 import android.annotation.SuppressLint;
-
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.boardgametimer.R;
 import com.example.boardgametimer.data.model.Game;
 import com.example.boardgametimer.data.model.LoggedInUser;
-
-import java.util.ArrayList;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
 public class GameActivity extends AppCompatActivity {
+
     LoggedInUser user;
     Game game;
 
@@ -105,7 +103,6 @@ public class GameActivity extends AppCompatActivity {
         this.game = (Game) getIntent().getSerializableExtra("game");
 
 
-
         mVisible = true;
         mControlsView = findViewById(R.id.fullscreen_content_controls);
         mContentView = (TextView) findViewById(R.id.fullscreen_content);
@@ -177,4 +174,5 @@ public class GameActivity extends AppCompatActivity {
         mHideHandler.removeCallbacks(mHideRunnable);
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
     }
+
 }

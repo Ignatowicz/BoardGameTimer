@@ -4,14 +4,15 @@ import android.content.Context;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestHandle;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.ResponseHandlerInterface;
 
 import cz.msebera.android.httpclient.HttpEntity;
 
 public class HttpUtils {
-    private static final String BASE_URL = "http://secret-falls-72080.herokuapp.com/api/";
+
+    //    private static final String BASE_URL = "http://secret-falls-72080.herokuapp.com/api/";
+    private static final String BASE_URL = "http://192.168.0.227:8080/api/";
 
     private static AsyncHttpClient client = new AsyncHttpClient();
 
@@ -24,7 +25,7 @@ public class HttpUtils {
     }
 
     public static void post(Context context, String url, HttpEntity entity, String contentType, AsyncHttpResponseHandler responseHandler) {
-        client.post(context, getAbsoluteUrl(url), entity, contentType,responseHandler);
+        client.post(context, getAbsoluteUrl(url), entity, contentType, responseHandler);
     }
 
     public static void getByUrl(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
@@ -36,10 +37,11 @@ public class HttpUtils {
     }
 
     public static void put(Context context, String url, HttpEntity entity, String contentType, ResponseHandlerInterface responseHandler) {
-        client.put(context,  getAbsoluteUrl(url),  entity,  contentType,  responseHandler);
+        client.put(context, getAbsoluteUrl(url), entity, contentType, responseHandler);
     }
 
-        private static String getAbsoluteUrl(String relativeUrl) {
+    private static String getAbsoluteUrl(String relativeUrl) {
         return BASE_URL + relativeUrl;
     }
+
 }

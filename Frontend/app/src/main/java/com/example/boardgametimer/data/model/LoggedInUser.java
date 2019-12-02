@@ -8,8 +8,8 @@ import java.util.Set;
  * Data class that captures user information for logged in users retrieved from LoginRepository
  */
 public class LoggedInUser implements Serializable {
-    private int id;
 
+    private int id;
     private String name;
     private String email;
     private String password;
@@ -47,7 +47,9 @@ public class LoggedInUser implements Serializable {
         this.games = games;
     }
 
-    public void addGame(Game game){ this.games.add(game);}
+    public void addGame(Game game) {
+        this.games.add(game);
+    }
 
     public int getId() {
         return id;
@@ -59,6 +61,7 @@ public class LoggedInUser implements Serializable {
 
     private Set<LoggedInUser> friend1;
     private Set<LoggedInUser> friend2;
+
     public LoggedInUser(int id, String name, String email, String password, Set<Game> games, Set<LoggedInUser> friend1, Set<LoggedInUser> friend2) {
         this.id = id;
         this.name = name;
@@ -68,6 +71,7 @@ public class LoggedInUser implements Serializable {
         this.friend1 = friend1;
         this.friend2 = friend2;
     }
+
     public LoggedInUser(String name, String email, String password) {
         this.name = name;
         this.email = email;
@@ -93,4 +97,5 @@ public class LoggedInUser implements Serializable {
                 ", friend2=" + friend2 +
                 '}';
     }
+
 }
