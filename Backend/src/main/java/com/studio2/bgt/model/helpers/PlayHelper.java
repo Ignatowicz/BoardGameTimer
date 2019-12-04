@@ -26,7 +26,7 @@ public class PlayHelper {
     private int timeGame;
     private int minPlayers;
     private int maxPlayers;
-    private Set<Player> friends;
+    private Set<Player> friends = new HashSet<>();
     private Set<Player> accepted = new HashSet<>();
     private Queue<Player> playersTourA = new LinkedList<>();
     private Queue<Player> playersTourB = new LinkedList<>();

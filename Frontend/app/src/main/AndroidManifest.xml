@@ -70,9 +70,8 @@
             android:parentActivityName=".ui.main.MainActivity" />
         <activity
             android:name=".ui.game.GameActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_game"
-            android:theme="@style/FullscreenTheme" />
+            android:parentActivityName=".ui.startgame.StartgameActivity" />
     </application>
 
 </manifest>

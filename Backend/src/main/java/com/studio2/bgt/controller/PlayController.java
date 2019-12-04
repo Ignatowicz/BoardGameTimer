@@ -11,6 +11,7 @@ import com.studio2.bgt.model.repository.PlayRepository;
 import com.studio2.bgt.model.repository.PlayerRepository;
 import com.studio2.bgt.notification.NotificationManager;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,11 +54,12 @@ public class PlayController extends AbstractController {
             Player player = game.getPlayer();
             friends.addAll(player.getFriend1());
             friends.addAll(player.getFriend2());
+            friends.add(game.getPlayer());
 
             PlayHelper play = PlayHelper.builder()
                     .playId(getNextPlayId())
                     .gameId(gameId)
-                    .playerId(game.getId())
+                    .playerId(game.getPlayer().getId())
                     .playerGameStarterId(null)
                     .isTourA(true)
                     .gameName(game.getName())
@@ -111,7 +113,9 @@ public class PlayController extends AbstractController {
                         notificationHelper.getPlayers());
         log.info(String.valueOf(notification));
 
-        return ResponseEntity.ok().body("Start game requests sent to your friends!");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("respone", "Start game requests sent to your friends!");
+        return ResponseEntity.ok().body(jsonObject);
     }
 
     // button in notification box -> change to text "Wait for others players to start a game"

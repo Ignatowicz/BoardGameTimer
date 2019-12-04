@@ -2,6 +2,7 @@ package com.studio2.bgt.model.helpers;
 
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -12,6 +13,6 @@ import java.util.Set;
 public class StartGameHelper {
 
     private Long playId;
-    private Set<Long> playersId;
+    private Set<Long> playersId = new HashSet<>();
 
 }
