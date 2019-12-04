@@ -49,11 +49,15 @@ public class BoardGameTimerApplication {
             games2.add(Game.builder().name("Terra Mystica").timeRound(120).timeGame(1800).minPlayers(2).maxPlayers(5).build());
             games2.add(Game.builder().name("Osadnicy").timeRound(90).timeGame(1200).minPlayers(2).maxPlayers(4).build());
 
+            Set<Game> games3 = new HashSet<>();
+            games3.add(Game.builder().name("Terra Mystica").timeRound(120).timeGame(1800).minPlayers(2).maxPlayers(5).build());
+            games3.add(Game.builder().name("Terraformacja Marsa").timeRound(120).timeGame(1800).minPlayers(1).maxPlayers(5).build());
+
             // init players
             Player player1 = new Player("Jan", "jan.kowalski@gmail.com", "admin123", games1);
             Player player2 = new Player("Bartosz", "bartosz.nowak@gmail.com", "admin123", games2);
             Player player3 = new Player("Kamil", "kamil.wieckowski@gmail.com", "admin123", null);
-            Player player4 = new Player("Jan", "a", "a", null);
+            Player player4 = new Player("Test", "a", "a", games3);
             playerRepository.save(player1);
             playerRepository.save(player2);
             playerRepository.save(player3);
