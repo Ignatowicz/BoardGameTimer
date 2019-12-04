@@ -58,7 +58,6 @@ public class NewGameActivity extends AppCompatActivity {
 
                 Game game = new Game(name, minPlayers, maxPlayers, timeRound, timeGame);
                 addGame(game);
-
             }
         });
     }
@@ -104,8 +103,9 @@ public class NewGameActivity extends AppCompatActivity {
                     LoggedInUser addedUser = gson.fromJson(element, LoggedInUser.class);
 
                     Intent intent = new Intent(NewGameActivity.this, MainActivity.class);
-                    intent.putExtra("user", user);
-                    startActivity(intent);
+                    intent.putExtra("user", addedUser);
+                    setResult(RESULT_OK, intent);
+                    finish();
                 }
 
                 @Override
@@ -122,6 +122,15 @@ public class NewGameActivity extends AppCompatActivity {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        Intent intent = new Intent();
+        intent.putExtra("user", user);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
 }

@@ -64,27 +64,6 @@ public class FriendsActivity extends AppCompatActivity implements Adapter.ItemCl
         });
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
-                this.user = (LoggedInUser) data.getSerializableExtra("user");
-                friends.addAll(user.getFriend1());
-                friends.addAll(user.getFriend2());
-                updateRecyclerView();
-            }
-        }
-    }
-
-    private void updateRecyclerView() {
-        // set up the RecyclerView
-        RecyclerView recyclerView = findViewById(R.id.friends_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new Adapter(this, friends);
-        adapter.setClickListener(this);
-        recyclerView.setAdapter(adapter);
-    }
-
     // unfriend selected player
     @Override
     public void onItemClick(View view, int position) {
@@ -109,7 +88,7 @@ public class FriendsActivity extends AppCompatActivity implements Adapter.ItemCl
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     Gson gson = new Gson();
                     JsonElement element = gson.fromJson(response.toString(), JsonElement.class);
-                    LoggedInUser addedUser = gson.fromJson(element, LoggedInUser.class);
+//                    LoggedInUser addedUser = gson.fromJson(element, LoggedInUser.class);
 
                     friends.remove(adapter.getItem(position));
                     updateRecyclerView();
@@ -129,6 +108,28 @@ public class FriendsActivity extends AppCompatActivity implements Adapter.ItemCl
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+    }
+
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                this.user = (LoggedInUser) data.getSerializableExtra("user");
+                friends.addAll(user.getFriend1());
+                friends.addAll(user.getFriend2());
+                updateRecyclerView();
+            }
+        }
+    }
+
+    private void updateRecyclerView() {
+        // set up the RecyclerView
+        RecyclerView recyclerView = findViewById(R.id.friends_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new Adapter(this, friends);
+        adapter.setClickListener(this);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override

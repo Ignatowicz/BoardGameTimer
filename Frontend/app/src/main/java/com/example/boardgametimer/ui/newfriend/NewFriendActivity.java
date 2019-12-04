@@ -53,7 +53,6 @@ public class NewFriendActivity extends AppCompatActivity implements Adapter.Item
 
     private void getPlayers() {
         HttpUtils.get("players", null, new JsonHttpResponseHandler() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 Gson gson = new Gson();
@@ -65,19 +64,19 @@ public class NewFriendActivity extends AppCompatActivity implements Adapter.Item
                         LoggedInUser foundPlayer = gson.fromJson(element, LoggedInUser.class);
 
                         // do not display actual player and his actual friends
-                        if (user.getId() == foundPlayer.getId()) {
+                        if (user.getId().equals(foundPlayer.getId())) {
                             continue;
                         }
 
                         boolean flag = false;
                         for (LoggedInUser friend : user.getFriend1()) {
-                            if (friend.getId() == foundPlayer.getId()) {
+                            if (friend.getId().equals(foundPlayer.getId())) {
                                 flag = true;
                             }
                         }
 
                         for (LoggedInUser friend : user.getFriend2()) {
-                            if (friend.getId() == foundPlayer.getId()) {
+                            if (friend.getId().equals(foundPlayer.getId())) {
                                 flag = true;
                             }
                         }
@@ -124,7 +123,7 @@ public class NewFriendActivity extends AppCompatActivity implements Adapter.Item
 
     public void addFriend(int position) {
         NewFriendActivity.this.user.getFriend1().add(adapter.getItem(position));
-        NewFriendActivity.this.user = ClearResponseFriends.clearResponse(user);
+        ClearResponseFriends.clearResponse(user);
 
         Gson gson = new Gson();
         String jsonParams = gson.toJson(user);

@@ -40,6 +40,10 @@ public class HttpUtils {
         client.put(context, getAbsoluteUrl(url), entity, contentType, responseHandler);
     }
 
+    public static void delete(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+        client.delete(getAbsoluteUrl(url), params, responseHandler);
+    }
+
     private static String getAbsoluteUrl(String relativeUrl) {
         return BASE_URL + relativeUrl;
     }

@@ -25,7 +25,7 @@
                 android:layout_width="146dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Nazwa" />
+                android:text="Nazwa:" />
 
             <EditText
                 android:id="@+id/nameEditText"
@@ -48,7 +48,7 @@
                 android:layout_width="149dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Min ilość graczy" />
+                android:text="Min ilość graczy:" />
 
             <EditText
                 android:id="@+id/minPlayersEditText"
@@ -70,7 +70,7 @@
                 android:layout_width="148dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Max ilość graczy" />
+                android:text="Max ilość graczy:" />
 
             <EditText
                 android:id="@+id/maxPlayersEditText"
@@ -92,7 +92,7 @@
                 android:layout_width="148dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Czas rundy" />
+                android:text="Czas rundy(s):" />
 
             <EditText
                 android:id="@+id/timeRoundEditText"
@@ -114,7 +114,7 @@
                 android:layout_width="149dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Czas gry" />
+                android:text="Czas gry(s):" />
 
             <EditText
                 android:id="@+id/timeGameEditText"

@@ -9,16 +9,30 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.boardgametimer.R;
+import com.example.boardgametimer.api.HttpUtils;
 import com.example.boardgametimer.data.model.Game;
 import com.example.boardgametimer.data.model.LoggedInUser;
 import com.example.boardgametimer.ui.game.GameActivity;
+import com.example.boardgametimer.ui.main.MainActivity;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.entity.StringEntity;
 
 public class StartgameActivity extends AppCompatActivity {
 
     LoggedInUser user;
-    ArrayList<Game> gamesList;
+    List<Game> games = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +51,10 @@ public class StartgameActivity extends AppCompatActivity {
         Button startGameButton = findViewById(R.id.startGameButton);
 
         this.user = (LoggedInUser) getIntent().getSerializableExtra("user");
-        this.gamesList = (ArrayList<Game>) getIntent().getSerializableExtra("gamesList");
+        this.games = (ArrayList<Game>) getIntent().getSerializableExtra("games");
         int position = getIntent().getIntExtra("position", 0);
 
-        Game currentGame = gamesList.get(position);
+        Game currentGame = games.get(position);
 
         nameTextView.setText(currentGame.getName());
         playersNumberTextView.setText(Integer.toString(currentGame.getMinPlayers()));
@@ -53,10 +67,18 @@ public class StartgameActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(StartgameActivity.this, GameActivity.class);
                 intent.putExtra("user", user);
-                intent.putExtra("game", gamesList.get(position));
+                intent.putExtra("game", games.get(position));
                 startActivity(intent);
             }
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        Intent intent = new Intent();
+        intent.putExtra("user", user);
+        setResult(RESULT_OK, intent);
+        finish();
+    }
 }

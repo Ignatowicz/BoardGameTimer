@@ -10,7 +10,7 @@ import java.util.Set;
  */
 public class LoggedInUser implements Serializable {
 
-    private int id;
+    private Long id;
     private String name;
     private String email;
     private String password;
@@ -23,7 +23,7 @@ public class LoggedInUser implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LoggedInUser that = (LoggedInUser) o;
-        return id == that.id;
+        return id.equals(that.id);
     }
 
     @Override
@@ -31,7 +31,7 @@ public class LoggedInUser implements Serializable {
         return Objects.hash(id);
     }
 
-    public LoggedInUser(int id, String name, String email, String password, Set<Game> games, Set<LoggedInUser> friend1, Set<LoggedInUser> friend2) {
+    public LoggedInUser(Long id, String name, String email, String password, Set<Game> games, Set<LoggedInUser> friend1, Set<LoggedInUser> friend2) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -54,14 +54,13 @@ public class LoggedInUser implements Serializable {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.games = new HashSet<>();
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

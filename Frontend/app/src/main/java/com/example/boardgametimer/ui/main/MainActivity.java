@@ -1,16 +1,19 @@
 package com.example.boardgametimer.ui.main;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.boardgametimer.R;
+import com.example.boardgametimer.api.HttpUtils;
 import com.example.boardgametimer.data.model.Game;
 import com.example.boardgametimer.data.model.LoggedInUser;
 import com.example.boardgametimer.ui.friends.FriendsActivity;
@@ -19,23 +22,31 @@ import com.example.boardgametimer.ui.settings.SettingsActivity;
 import com.example.boardgametimer.ui.startgame.StartgameActivity;
 import com.example.boardgametimer.utils.ClearResponseFriends;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.entity.StringEntity;
 
 public class MainActivity extends AppCompatActivity implements Adapter.ItemClickListener {
 
     Adapter adapter;
     LoggedInUser user;
-    ArrayList<Game> games = new ArrayList<>();
+    Set<Game> games = new HashSet<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         Toolbar toolbar = findViewById(R.id.toolbar);
-
 
         this.user = (LoggedInUser) getIntent().getSerializableExtra("user");
         this.user = ClearResponseFriends.clearResponse(user);
@@ -81,6 +92,74 @@ public class MainActivity extends AppCompatActivity implements Adapter.ItemClick
         });
     }
 
+    @Override
+    public void onItemClick(View view, int position) {
+        Intent intent = new Intent(MainActivity.this, StartgameActivity.class);
+        intent.putExtra("user", user);
+        intent.putExtra("position", position);
+        intent.putExtra("games", new ArrayList<>(games));
+
+        startActivityForResult(intent, 1);
+    }
+
+    @Override
+    public void onLongItemClick(View view, int position) {
+        removeGame(position);
+    }
+
+    private void removeGame(int position) {
+        if (MainActivity.this.user.getGames().contains(adapter.getItem(position))) {
+            MainActivity.this.user.getGames().remove(adapter.getItem(position));
+        }
+
+        Gson gson = new Gson();
+        String jsonParams = gson.toJson(user);
+        final StringEntity[] entity;
+        try {
+            entity = new StringEntity[]{new StringEntity(jsonParams)};
+            HttpUtils.put(getApplicationContext(), "players/" + user.getId(), entity[0], "application/json", new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    games.remove(adapter.getItem(position));
+                    deleteGame(adapter.getItem(position));
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    System.out.println(statusCode + responseString);
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    System.out.println(errorResponse.toString());
+                }
+            });
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void deleteGame(Game game) {
+        HttpUtils.delete("games/" + game.getId(), null, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                System.out.println(statusCode + responseString);
+                updateRecyclerView();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                System.out.println(statusCode + responseString);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                System.out.println(errorResponse.toString());
+            }
+        });
+    }
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
@@ -99,16 +178,6 @@ public class MainActivity extends AppCompatActivity implements Adapter.ItemClick
         adapter = new Adapter(this, games);
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
-    }
-
-    @Override
-    public void onItemClick(View view, int position) {
-        Intent intent = new Intent(MainActivity.this, StartgameActivity.class);
-        intent.putExtra("user", user);
-        intent.putExtra("position", position);
-        intent.putExtra("gamesList", games);
-
-        startActivity(intent);
     }
 
 }

@@ -38,17 +38,17 @@
 
                 <TextView
                     android:id="@+id/textView10"
-                    android:layout_width="6dp"
+                    android:layout_width="31dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Czas Gry(s):" />
 
                 <TextView
                     android:id="@+id/gameTimeTextView"
-                    android:layout_width="139dp"
+                    android:layout_width="88dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="TextView" />
+                    android:text="Czas gry" />
             </LinearLayout>
 
             <LinearLayout
@@ -60,17 +60,17 @@
 
                 <TextView
                     android:id="@+id/textView9"
-                    android:layout_width="62dp"
-                    android:layout_height="match_parent"
+                    android:layout_width="48dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Czas Rundy(s):" />
 
                 <TextView
                     android:id="@+id/roundTimeTextView"
-                    android:layout_width="193dp"
+                    android:layout_width="105dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="TextView" />
+                    android:text="Czas rundy" />
             </LinearLayout>
 
             <LinearLayout
@@ -82,17 +82,17 @@
 
                 <TextView
                     android:id="@+id/textView8"
-                    android:layout_width="65dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Ilość graczy:" />
 
                 <TextView
                     android:id="@+id/playersNumberTextView"
-                    android:layout_width="196dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="138dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="TextView" />
+                    android:text="Ilość graczy" />
             </LinearLayout>
         </LinearLayout>
 
@@ -118,19 +118,11 @@
         android:id="@+id/startGameButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="436dp"
+        android:layout_marginTop="40dp"
         android:text="Rozpocznij grę"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
-
-    <Button
-        android:id="@+id/deleteGameButton"
-        android:layout_width="110dp"
-        android:layout_height="52dp"
-        android:text="Usuń grę"
-        tools:layout_editor_absoluteX="2dp"
-        tools:layout_editor_absoluteY="645dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

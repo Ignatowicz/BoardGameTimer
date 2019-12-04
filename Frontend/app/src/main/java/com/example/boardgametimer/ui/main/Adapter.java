@@ -11,18 +11,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.boardgametimer.R;
 import com.example.boardgametimer.data.model.Game;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
-    private List<Game> mData;
+    private List<Game> mData = new ArrayList<>();
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    Adapter(Context context, List<Game> data) {
+    Adapter(Context context, Set<Game> data) {
         this.mInflater = LayoutInflater.from(context);
-        this.mData = data;
+        this.mData.addAll(data);
     }
 
     // inflates the row layout from xml when needed
@@ -47,19 +49,32 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
 
     // stores and recycles views as they are scrolled off screen
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         TextView myTextView;
 
         ViewHolder(View itemView) {
             super(itemView);
+
             myTextView = itemView.findViewById(R.id.recycler_row);
-            itemView.setOnClickListener(this);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+                }
+            });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    if (mClickListener != null) mClickListener.onLongItemClick(view, getAdapterPosition());
+
+                    return true;
+                }
+            });
         }
 
-        @Override
-        public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
-        }
+
     }
 
     // convenience method for getting data at click position
@@ -75,6 +90,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
         void onItemClick(View view, int position);
+        void onLongItemClick(View view, int position);
     }
 
 }

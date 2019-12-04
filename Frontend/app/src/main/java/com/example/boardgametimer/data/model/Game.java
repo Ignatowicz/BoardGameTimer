@@ -1,6 +1,7 @@
 package com.example.boardgametimer.data.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Game implements Serializable {
 
@@ -10,6 +11,19 @@ public class Game implements Serializable {
     private int timeGame;
     private int minPlayers;
     private int maxPlayers;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Game that = (Game) o;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 
     public Game(Long id, String name, int timeRound, int timeGame, int minPlayers, int maxPlayers) {
         this.id = id;
