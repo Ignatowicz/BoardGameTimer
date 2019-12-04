@@ -18,11 +18,11 @@ import com.example.boardgametimer.ui.newgame.NewGameActivity;
 import com.example.boardgametimer.ui.settings.SettingsActivity;
 import com.example.boardgametimer.ui.startgame.StartgameActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements Adapter.ItemClickListener {
+
     Adapter adapter;
     LoggedInUser user;
     ArrayList<Game> games = new ArrayList<>();
@@ -31,9 +31,9 @@ public class MainActivity extends AppCompatActivity implements Adapter.ItemClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
         Toolbar toolbar = findViewById(R.id.toolbar);
-
-
 
 
         this.user = (LoggedInUser) getIntent().getSerializableExtra("user");
@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements Adapter.ItemClick
         }
 
         // set up the RecyclerView
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        RecyclerView recyclerView = findViewById(R.id.main_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new Adapter(this, games);
         adapter.setClickListener(this);

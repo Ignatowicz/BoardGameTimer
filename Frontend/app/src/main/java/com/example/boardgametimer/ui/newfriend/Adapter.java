@@ -1,4 +1,4 @@
-package com.example.boardgametimer.ui.main;
+package com.example.boardgametimer.ui.newfriend;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,20 +9,22 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.boardgametimer.R;
-import com.example.boardgametimer.data.model.Game;
+import com.example.boardgametimer.data.model.LoggedInUser;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
-    private List<Game> mData;
+    private List<LoggedInUser> mData = new ArrayList<>();
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    Adapter(Context context, List<Game> data) {
+    Adapter(Context context, Set<LoggedInUser> data) {
         this.mInflater = LayoutInflater.from(context);
-        this.mData = data;
+        this.mData.addAll(data);
     }
 
     // inflates the row layout from xml when needed
@@ -45,7 +47,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         return mData.size();
     }
 
-
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView myTextView;
@@ -63,7 +64,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     }
 
     // convenience method for getting data at click position
-    Game getItem(int position) {
+    LoggedInUser getItem(int position) {
         return mData.get(position);
     }
 

@@ -31,6 +31,8 @@ show grants for 'admin'@'localhost';
 	- backend notification
 - FND-001
 	- login
+- FND-002
+	- logic
 
 3. Notification id:
 - 1 - start the game

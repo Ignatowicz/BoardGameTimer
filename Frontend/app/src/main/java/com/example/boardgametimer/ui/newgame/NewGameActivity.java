@@ -25,6 +25,7 @@ import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
 
 public class NewGameActivity extends AppCompatActivity {
+
     LoggedInUser user;
 
     @Override

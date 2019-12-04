@@ -11,6 +11,15 @@ public class Game implements Serializable {
     private int minPlayers;
     private int maxPlayers;
 
+    public Game(Long id, String name, int timeRound, int timeGame, int minPlayers, int maxPlayers) {
+        this.id = id;
+        this.name = name;
+        this.timeRound = timeRound;
+        this.timeGame = timeGame;
+        this.minPlayers = minPlayers;
+        this.maxPlayers = maxPlayers;
+    }
+
     public Game(String name, Integer minPlayers, Integer maxPlayers, Integer timeRound, Integer timeGame) {
         this.name = name;
         this.minPlayers = minPlayers;

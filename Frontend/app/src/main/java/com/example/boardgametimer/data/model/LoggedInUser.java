@@ -14,6 +14,42 @@ public class LoggedInUser implements Serializable {
     private String email;
     private String password;
     private Set<Game> games;
+    private Set<LoggedInUser> friend1;
+    private Set<LoggedInUser> friend2;
+
+    public LoggedInUser(int id, String name, String email, String password, Set<Game> games, Set<LoggedInUser> friend1, Set<LoggedInUser> friend2) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.games = games;
+        this.friend1 = friend1;
+        this.friend2 = friend2;
+    }
+
+    public LoggedInUser(String name, String email, String password, Set<Game> games, Set<LoggedInUser> friend1, Set<LoggedInUser> friend2) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.games = games;
+        this.friend1 = friend1;
+        this.friend2 = friend2;
+    }
+
+    public LoggedInUser(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.games = new HashSet<>();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -47,39 +83,25 @@ public class LoggedInUser implements Serializable {
         this.games = games;
     }
 
-    public void addGame(Game game) {
-        this.games.add(game);
+    public Set<LoggedInUser> getFriend1() {
+        return friend1;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    private Set<LoggedInUser> friend1;
-    private Set<LoggedInUser> friend2;
-
-    public LoggedInUser(int id, String name, String email, String password, Set<Game> games, Set<LoggedInUser> friend1, Set<LoggedInUser> friend2) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.games = games;
+    public void setFriend1(Set<LoggedInUser> friend1) {
         this.friend1 = friend1;
+    }
+
+    public Set<LoggedInUser> getFriend2() {
+        return friend2;
+    }
+
+    public void setFriend2(Set<LoggedInUser> friend2) {
         this.friend2 = friend2;
     }
 
-    public LoggedInUser(String name, String email, String password) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.games = new HashSet<>();
-
+    public void addGame(Game game) {
+        this.games.add(game);
     }
-
 
     public String getDisplayName() {
         return name;
