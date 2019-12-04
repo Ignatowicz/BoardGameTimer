@@ -36,6 +36,7 @@ public class PlayerController extends AbstractController {
 
     @GetMapping
     public Iterable findAll() {
+        playerRepository.findAll().forEach(this::clearResponse);
         return playerRepository.findAll();
     }
 
@@ -88,10 +89,12 @@ public class PlayerController extends AbstractController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> login(@Valid @RequestBody Credentials credentials) throws URISyntaxException {
         System.out.println(credentials);
-        Optional<Player> result = playerRepository.findPlayerByEmailAndPassword(credentials.getEmail(), credentials.getPassword());
-        if(result.isPresent())
+        Optional<Player> playerOptional = playerRepository.findPlayerByEmailAndPassword(credentials.getEmail(), credentials.getPassword());
+        if(playerOptional.isPresent())
             {
-                return ResponseEntity.ok().body(result.get());
+                Player player = playerOptional.get();
+                clearResponse(player);
+                return ResponseEntity.ok().body(player);
             }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("unauthorized");
     }

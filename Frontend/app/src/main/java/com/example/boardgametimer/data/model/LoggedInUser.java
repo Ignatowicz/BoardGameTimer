@@ -2,6 +2,7 @@ package com.example.boardgametimer.data.model;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -13,9 +14,22 @@ public class LoggedInUser implements Serializable {
     private String name;
     private String email;
     private String password;
-    private Set<Game> games;
-    private Set<LoggedInUser> friend1;
-    private Set<LoggedInUser> friend2;
+    private Set<Game> games = new HashSet<>();
+    private Set<LoggedInUser> friend1 = new HashSet<>();
+    private Set<LoggedInUser> friend2 = new HashSet<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LoggedInUser that = (LoggedInUser) o;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 
     public LoggedInUser(int id, String name, String email, String password, Set<Game> games, Set<LoggedInUser> friend1, Set<LoggedInUser> friend2) {
         this.id = id;

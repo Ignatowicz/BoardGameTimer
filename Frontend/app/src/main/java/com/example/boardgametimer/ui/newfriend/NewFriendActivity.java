@@ -14,6 +14,7 @@ import com.example.boardgametimer.R;
 import com.example.boardgametimer.api.HttpUtils;
 import com.example.boardgametimer.data.model.LoggedInUser;
 import com.example.boardgametimer.ui.main.MainActivity;
+import com.example.boardgametimer.utils.ClearResponseFriends;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -57,6 +58,30 @@ public class NewFriendActivity extends AppCompatActivity implements Adapter.Item
                         JSONObject object = response.getJSONObject(i);
                         JsonElement element = gson.fromJson(object.toString(), JsonElement.class);
                         LoggedInUser foundPlayer = gson.fromJson(element, LoggedInUser.class);
+
+                        // do not display actual player and his actual friends
+                        if (user.getId() == foundPlayer.getId()) {
+                            continue;
+                        }
+
+                        boolean flag = false;
+                        for (LoggedInUser friend: user.getFriend1()) {
+                            if (friend.getId() == foundPlayer.getId()) {
+                                flag = true;
+                            }
+                        }
+
+                        for (LoggedInUser friend: user.getFriend2()) {
+                            if (friend.getId() == foundPlayer.getId()) {
+                                flag = true;
+                            }
+                        }
+
+                        if (flag) {
+                            continue;
+                        }
+                        // do not display actual player and his actual friends
+
                         friends.add(foundPlayer);
 
                         updateRecyclerView();
@@ -94,6 +119,7 @@ public class NewFriendActivity extends AppCompatActivity implements Adapter.Item
 
     public void addFriend(int position) {
         NewFriendActivity.this.user.getFriend1().add(adapter.getItem(position));
+        NewFriendActivity.this.user = ClearResponseFriends.clearResponse(user);
 
         Gson gson = new Gson();
         String jsonParams = gson.toJson(user);
@@ -108,17 +134,20 @@ public class NewFriendActivity extends AppCompatActivity implements Adapter.Item
                     LoggedInUser addedUser = gson.fromJson(element, LoggedInUser.class);
 
                     Intent intent = new Intent(NewFriendActivity.this, MainActivity.class);
-                    intent.putExtra("user", user);
-                    startActivity(intent);
+                    intent.putExtra("user", addedUser);
+                    setResult(RESULT_OK, intent);
+                    finish();
                 }
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    NewFriendActivity.this.user.getFriend1().remove(adapter.getItem(position));
                     System.out.println(statusCode + responseString);
                 }
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    NewFriendActivity.this.user.getFriend1().remove(adapter.getItem(position));
                     System.out.println(errorResponse.toString());
                 }
             });
@@ -126,6 +155,15 @@ public class NewFriendActivity extends AppCompatActivity implements Adapter.Item
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        Intent intent = new Intent();
+        intent.putExtra("user", user);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
 }

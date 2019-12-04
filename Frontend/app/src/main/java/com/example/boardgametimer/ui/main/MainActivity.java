@@ -17,6 +17,7 @@ import com.example.boardgametimer.ui.friends.FriendsActivity;
 import com.example.boardgametimer.ui.newgame.NewGameActivity;
 import com.example.boardgametimer.ui.settings.SettingsActivity;
 import com.example.boardgametimer.ui.startgame.StartgameActivity;
+import com.example.boardgametimer.utils.ClearResponseFriends;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -37,19 +38,14 @@ public class MainActivity extends AppCompatActivity implements Adapter.ItemClick
 
 
         this.user = (LoggedInUser) getIntent().getSerializableExtra("user");
+        this.user = ClearResponseFriends.clearResponse(user);
 
 
         if (user.getGames() != null) {
             games.addAll(user.getGames());
         }
 
-        // set up the RecyclerView
-        RecyclerView recyclerView = findViewById(R.id.main_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new Adapter(this, games);
-        adapter.setClickListener(this);
-        recyclerView.setAdapter(adapter);
-
+        updateRecyclerView();
 
         final Button settingsButton = findViewById(R.id.settings_button);
         final Button friendsButton = findViewById(R.id.friends_button);
@@ -62,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements Adapter.ItemClick
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, NewGameActivity.class);
                 intent.putExtra("user", user);
-                startActivity(intent);
+                startActivityForResult(intent, 1);
             }
         });
 
@@ -71,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements Adapter.ItemClick
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
                 intent.putExtra("user", user);
-                startActivity(intent);
+                startActivityForResult(intent, 1);
             }
         });
 
@@ -80,9 +76,29 @@ public class MainActivity extends AppCompatActivity implements Adapter.ItemClick
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, FriendsActivity.class);
                 intent.putExtra("user", user);
-                startActivity(intent);
+                startActivityForResult(intent, 1);
             }
         });
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK) {
+                this.user = (LoggedInUser) data.getSerializableExtra("user");
+                games.addAll(user.getGames());
+                updateRecyclerView();
+            }
+        }
+    }
+
+    private void updateRecyclerView() {
+        // set up the RecyclerView
+        RecyclerView recyclerView = findViewById(R.id.main_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new Adapter(this, games);
+        adapter.setClickListener(this);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
