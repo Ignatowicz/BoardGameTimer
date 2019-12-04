@@ -121,7 +121,8 @@ public class MainActivity extends AppCompatActivity implements Adapter.ItemClick
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     games.remove(adapter.getItem(position));
-                    deleteGame(adapter.getItem(position));
+//                    deleteGame(adapter.getItem(position));
+                    updateRecyclerView();
                 }
 
                 @Override
