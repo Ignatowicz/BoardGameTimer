@@ -37,8 +37,12 @@ public class FriendsActivity extends AppCompatActivity implements Adapter.ItemCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
 
-        this.user = (LoggedInUser) getIntent().getSerializableExtra("user");
+        // hide return home button
+        getSupportActionBar().setDisplayShowHomeEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setHomeButtonEnabled(false);
 
+        this.user = (LoggedInUser) getIntent().getSerializableExtra("user");
 
         if (user.getFriend1() != null) {
             friends.addAll(user.getFriend1());

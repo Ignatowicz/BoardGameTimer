@@ -32,6 +32,12 @@ public class NewGameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_game);
+
+        // hide return home button
+        getSupportActionBar().setDisplayShowHomeEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setHomeButtonEnabled(false);
+
         this.user = (LoggedInUser) getIntent().getSerializableExtra("user");
 
         final Button startGameButton = findViewById(R.id.start_game_button);

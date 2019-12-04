@@ -25,6 +25,11 @@ public class StartgameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_startgame);
 
+        // hide return home button
+        getSupportActionBar().setDisplayShowHomeEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setHomeButtonEnabled(false);
+
         TextView nameTextView = findViewById(R.id.gameNameTextView);
         TextView playersNumberTextView = findViewById(R.id.playersNumberTextView);
         TextView roundTimeTextView = findViewById(R.id.roundTimeTextView);

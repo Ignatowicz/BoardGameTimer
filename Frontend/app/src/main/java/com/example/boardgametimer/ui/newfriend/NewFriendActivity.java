@@ -41,6 +41,11 @@ public class NewFriendActivity extends AppCompatActivity implements Adapter.Item
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_friend);
 
+        // hide return home button
+        getSupportActionBar().setDisplayShowHomeEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setHomeButtonEnabled(false);
+
         this.user = (LoggedInUser) getIntent().getSerializableExtra("user");
 
         getPlayers();
