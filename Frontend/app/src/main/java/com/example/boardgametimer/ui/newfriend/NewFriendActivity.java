@@ -70,13 +70,13 @@ public class NewFriendActivity extends AppCompatActivity implements Adapter.Item
                         }
 
                         boolean flag = false;
-                        for (LoggedInUser friend: user.getFriend1()) {
+                        for (LoggedInUser friend : user.getFriend1()) {
                             if (friend.getId() == foundPlayer.getId()) {
                                 flag = true;
                             }
                         }
 
-                        for (LoggedInUser friend: user.getFriend2()) {
+                        for (LoggedInUser friend : user.getFriend2()) {
                             if (friend.getId() == foundPlayer.getId()) {
                                 flag = true;
                             }

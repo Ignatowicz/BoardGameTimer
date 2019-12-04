@@ -53,7 +53,7 @@ public class BoardGameTimerApplication {
             Player player1 = new Player("Jan", "jan.kowalski@gmail.com", "admin123", games1);
             Player player2 = new Player("Bartosz", "bartosz.nowak@gmail.com", "admin123", games2);
             Player player3 = new Player("Kamil", "kamil.wieckowski@gmail.com", "admin123", null);
-            Player player4 = new Player("Jan", "aaa", "admin123", null);
+            Player player4 = new Player("Jan", "a", "a", null);
             playerRepository.save(player1);
             playerRepository.save(player2);
             playerRepository.save(player3);

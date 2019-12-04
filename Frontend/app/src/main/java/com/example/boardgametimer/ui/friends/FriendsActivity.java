@@ -67,7 +67,7 @@ public class FriendsActivity extends AppCompatActivity implements Adapter.ItemCl
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
-            if(resultCode == RESULT_OK) {
+            if (resultCode == RESULT_OK) {
                 this.user = (LoggedInUser) data.getSerializableExtra("user");
                 friends.addAll(user.getFriend1());
                 friends.addAll(user.getFriend2());
