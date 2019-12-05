@@ -12,6 +12,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class NotificationHelper {
 
+    Long playId;
     Map<String, String> players;
     Set<String> topics;
 

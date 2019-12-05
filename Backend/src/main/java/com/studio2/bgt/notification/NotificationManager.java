@@ -14,7 +14,7 @@ public class NotificationManager {
 
     private AndroidPushNotificationsService androidPushNotificationsService = new AndroidPushNotificationsService();
 
-    public String prepareNotification(Long notificationId, String topic, String title, String description, Map<String, String> friends) {
+    public String prepareNotification(Long notificationId, String topic, String title, String description, Map<String, String> friends, String playId) {
 
         // body
         JSONObject body = new JSONObject();
@@ -25,11 +25,13 @@ public class NotificationManager {
         JSONObject notification = new JSONObject();
         notification.put("title", title);
         notification.put("body", description);
+        notification.put("click_action", notificationId);
+        notification.put("tag", topic.substring(7)); // get player id
+        notification.put("color", playId);
         body.put("notification", notification);
 
         // data
         JSONObject data = new JSONObject();
-        data.put("notificationId", notificationId);
         for (Map.Entry<String, String> entry : friends.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
@@ -40,12 +42,12 @@ public class NotificationManager {
         return body.toString();
     }
 
-    public List<String> sendNotification(Long notificationId, Set<String> topics, String title, String description, Map<String, String> friends) throws JSONException {
+    public List<String> sendNotification(Long notificationId, Set<String> topics, String title, String description, Map<String, String> friends, String playId) throws JSONException {
 
         List<String> firebaseResponse = new ArrayList<>();
 
         for (String topic : topics) {
-            String bodyJson = prepareNotification(notificationId, topic, title, description, friends);
+            String bodyJson = prepareNotification(notificationId, topic, title, description, friends, playId);
 
             HttpEntity<String> request = new HttpEntity<>(bodyJson);
 

@@ -106,6 +106,7 @@ public class StartgameActivity extends AppCompatActivity implements AdapterPlaye
     private void startGame(PlayHelper play, Game currentGame) {
         StartGameHelper startGameHelper = new StartGameHelper();
         startGameHelper.setPlayId(play.getPlayId());
+        players.add(user);
         players.forEach(p -> startGameHelper.getPlayersId().add(p.getId()));
 
         Gson gson = new Gson();

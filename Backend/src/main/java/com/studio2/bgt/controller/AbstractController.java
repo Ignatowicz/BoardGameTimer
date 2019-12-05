@@ -84,6 +84,7 @@ public abstract class AbstractController {
                 }
         }
 
+        startGameNotification.setPlayId(play.getPlayId());
         startGameNotification.setPlayers(players);
         startGameNotification.setTopics(topics);
 

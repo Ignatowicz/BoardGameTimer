@@ -110,11 +110,13 @@ public class PlayController extends AbstractController {
                 .sendNotification(1L, notificationHelper.getTopics(),
                         "Invitation to game " + play.getGameName(),
                         "Open the app and accept the invitation!",
-                        notificationHelper.getPlayers());
+                        notificationHelper.getPlayers(),
+                        play.getPlayId().toString()
+                        );
         log.info(String.valueOf(notification));
 
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("respone", "Start game requests sent to your friends!");
+        jsonObject.put("response", "Start game requests sent to your friends!");
         return ResponseEntity.ok().body(jsonObject);
     }
 
@@ -145,17 +147,23 @@ public class PlayController extends AbstractController {
                     .sendNotification(2L, notificationHelper.getTopics(),
                             "The game has started!",
                             "All the players have accepted the invitation.\nIt's " + play.getPlayersTourA().peek().getName() + " turn!",
-                            notificationHelper.getPlayers());
+                            notificationHelper.getPlayers(),
+                            play.getPlayId().toString()
+                    );
             log.info(String.valueOf(notification));
 
             // notify first player about his turn
             NotificationHelper notificationHelper1 = preparePlayersToWhomNotificationWillBeSent(play, SendTo.FIRST_PLAYER_TOUR_A);
             notifyFirstPlayerAboutTurnStart(notificationHelper1);
 
-            return ResponseEntity.ok().body("All players have accepted the game!");
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("response", "All players have accepted the game!");
+            return ResponseEntity.ok().body(jsonObject);
         }
 
-        return ResponseEntity.ok().body("Player: " + playerRepository.findPlayerById(playerId).getName() + " has accepted the game!");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("response", "Player: " + playerRepository.findPlayerById(playerId).getName() + " has accepted the game!");
+        return ResponseEntity.ok().body(jsonObject);
     }
 
     private void notifyFirstPlayerAboutTurnStart(NotificationHelper notificationHelper) {
@@ -163,7 +171,9 @@ public class PlayController extends AbstractController {
                 .sendNotification(3L, notificationHelper.getTopics(),
                         "It's your turn!",
                         "Your round time has just begun!",
-                        notificationHelper.getPlayers());
+                        notificationHelper.getPlayers(),
+                        notificationHelper.getPlayId().toString()
+                );
         log.info(String.valueOf(notification));
     }
 
@@ -182,10 +192,15 @@ public class PlayController extends AbstractController {
                 .sendNotification(4L, notificationHelper.getTopics(),
                         "The game " + play.getGameName() + " canceled.",
                         playerRepository.findPlayerById(playerId).getName() + " rejected to play.",
-                        notificationHelper.getPlayers());
+                        notificationHelper.getPlayers(),
+                        play.getPlayId().toString()
+                );
         log.info(String.valueOf(notification));
 
-        return ResponseEntity.ok().body("Player: " + playerRepository.findPlayerById(playerId).getName() + " has rejected the game!");
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("response", "Player: " + playerRepository.findPlayerById(playerId).getName() + " has rejected the game!");
+        return ResponseEntity.ok().body(jsonObject);
     }
 
     @GetMapping("/{playId}/tour/{isTourA}/endRound")
@@ -319,7 +334,9 @@ public class PlayController extends AbstractController {
                 .sendNotification(5L, notificationHelper.getTopics(),
                         "The game " + play.getGameName() + " has been paused",
                         "Wait to the game resume.",
-                        notificationHelper.getPlayers());
+                        notificationHelper.getPlayers(),
+                        play.getPlayId().toString()
+                );
         log.info(String.valueOf(notification));
 
         return ResponseEntity.ok().body("The game paused");
@@ -338,7 +355,9 @@ public class PlayController extends AbstractController {
                 .sendNotification(6L, notificationHelper.getTopics(),
                         "The game " + play.getGameName() + " has been resumed",
                         "Actual player has started his resumed the round.",
-                        notificationHelper.getPlayers());
+                        notificationHelper.getPlayers(),
+                        play.getPlayId().toString()
+                );
         log.info(String.valueOf(notification));
 
         return ResponseEntity.ok().body("The game resumed");
@@ -358,7 +377,9 @@ public class PlayController extends AbstractController {
                 .sendNotification(7L, notificationHelper.getTopics(),
                         "The game " + play.getGameName() + " is over",
                         "Hope You enjoyed the game!",
-                        notificationHelper.getPlayers());
+                        notificationHelper.getPlayers(),
+                        play.getPlayId().toString()
+                );
         log.info(String.valueOf(notification));
 
         playRepository.deletePlay(playId);
