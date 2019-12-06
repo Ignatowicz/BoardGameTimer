@@ -1,8 +1,10 @@
 package com.example.boardgametimer.data.model;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Queue;
 import java.util.Set;
@@ -23,6 +25,8 @@ public class PlayHelper implements Serializable {
     private Set<LoggedInUser> accepted = new HashSet<>();
     private Queue<LoggedInUser> playersTourA = new LinkedList<>();
     private Queue<LoggedInUser> playersTourB = new LinkedList<>();
+    private Map<Long, Long> roundTimePlayers = new HashMap<>();
+    private Map<Long, Long> gameTimePlayers = new HashMap<>();
 
     @Override
     public boolean equals(Object o) {
@@ -40,7 +44,7 @@ public class PlayHelper implements Serializable {
     public PlayHelper() {
     }
 
-    public PlayHelper(Long playId, Long gameId, Long playerId, Long playerGameStarterId, boolean isTourA, String gameName, int timeRound, int timeGame, int minPlayers, int maxPlayers, Set<LoggedInUser> friends, Set<LoggedInUser> accepted, Queue<LoggedInUser> playersTourA, Queue<LoggedInUser> playersTourB) {
+    public PlayHelper(Long playId, Long gameId, Long playerId, Long playerGameStarterId, boolean isTourA, String gameName, int timeRound, int timeGame, int minPlayers, int maxPlayers, Set<LoggedInUser> friends, Set<LoggedInUser> accepted, Queue<LoggedInUser> playersTourA, Queue<LoggedInUser> playersTourB, Map<Long, Long> roundTimePlayers, Map<Long, Long> gameTimePlayers) {
         this.playId = playId;
         this.gameId = gameId;
         this.playerId = playerId;
@@ -55,6 +59,8 @@ public class PlayHelper implements Serializable {
         this.accepted = accepted;
         this.playersTourA = playersTourA;
         this.playersTourB = playersTourB;
+        this.roundTimePlayers = roundTimePlayers;
+        this.gameTimePlayers = gameTimePlayers;
     }
 
     public Long getPlayId() {
@@ -169,6 +175,22 @@ public class PlayHelper implements Serializable {
         this.playersTourB = playersTourB;
     }
 
+    public Map<Long, Long> getRoundTimePlayers() {
+        return roundTimePlayers;
+    }
+
+    public void setRoundTimePlayers(Map<Long, Long> roundTimePlayers) {
+        this.roundTimePlayers = roundTimePlayers;
+    }
+
+    public Map<Long, Long> getGameTimePlayers() {
+        return gameTimePlayers;
+    }
+
+    public void setGameTimePlayers(Map<Long, Long> gameTimePlayers) {
+        this.gameTimePlayers = gameTimePlayers;
+    }
+
     @Override
     public String toString() {
         return "PlayHelper{" +
@@ -186,6 +208,8 @@ public class PlayHelper implements Serializable {
                 ", accepted=" + accepted +
                 ", playersTourA=" + playersTourA +
                 ", playersTourB=" + playersTourB +
+                ", roundTimePlayers=" + roundTimePlayers +
+                ", gameTimePlayers=" + gameTimePlayers +
                 '}';
     }
 

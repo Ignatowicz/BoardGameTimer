@@ -86,9 +86,7 @@ public class FriendsActivity extends AppCompatActivity implements Adapter.ItemCl
             HttpUtils.put(getApplicationContext(), "players/" + user.getId(), entity[0], "application/json", new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    Gson gson = new Gson();
-                    JsonElement element = gson.fromJson(response.toString(), JsonElement.class);
-//                    LoggedInUser addedUser = gson.fromJson(element, LoggedInUser.class);
+                    System.out.println(statusCode + response.toString());
 
                     friends.remove(adapter.getItem(position));
                     updateRecyclerView();

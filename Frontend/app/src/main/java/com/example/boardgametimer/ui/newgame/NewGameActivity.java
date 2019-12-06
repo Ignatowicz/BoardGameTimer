@@ -71,6 +71,8 @@ public class NewGameActivity extends AppCompatActivity {
             HttpUtils.post(getApplicationContext(), "games/add", entity[0], "application/json", new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    System.out.println(statusCode + response.toString());
+
                     Gson gson = new Gson();
                     JsonElement element = gson.fromJson(response.toString(), JsonElement.class);
                     Game addedGame = gson.fromJson(element, Game.class);
@@ -98,6 +100,8 @@ public class NewGameActivity extends AppCompatActivity {
             HttpUtils.put(getApplicationContext(), "players/" + user.getId(), entity[0], "application/json", new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    System.out.println(statusCode + response.toString());
+
                     Gson gson = new Gson();
                     JsonElement element = gson.fromJson(response.toString(), JsonElement.class);
                     LoggedInUser addedUser = gson.fromJson(element, LoggedInUser.class);

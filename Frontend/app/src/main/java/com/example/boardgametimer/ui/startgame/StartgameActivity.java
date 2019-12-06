@@ -16,7 +16,6 @@ import com.example.boardgametimer.data.model.Game;
 import com.example.boardgametimer.data.model.LoggedInUser;
 import com.example.boardgametimer.data.model.PlayHelper;
 import com.example.boardgametimer.data.model.StartGameHelper;
-import com.example.boardgametimer.ui.game.GameActivity;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -82,9 +81,11 @@ public class StartgameActivity extends AppCompatActivity implements AdapterPlaye
     }
 
     private void play(Game currentGame) {
-        HttpUtils.get("play/" + currentGame.getId(), null, new JsonHttpResponseHandler() {
+        HttpUtils.get("play/game/" + currentGame.getId(), null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                System.out.println(statusCode + response.toString());
+
                 Gson gson = new Gson();
                 JsonElement element = gson.fromJson(response.toString(), JsonElement.class);
                 PlayHelper play = gson.fromJson(element, PlayHelper.class);
@@ -114,15 +115,15 @@ public class StartgameActivity extends AppCompatActivity implements AdapterPlaye
         final StringEntity[] entity;
         try {
             entity = new StringEntity[]{new StringEntity(jsonParams)};
-            HttpUtils.post(getApplicationContext(), "play/startGame", entity[0], "application/json", new JsonHttpResponseHandler() {
+            HttpUtils.post(getApplicationContext(), "play/startGame/" + user.getId(), entity[0], "application/json", new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     System.out.println(statusCode + response.toString());
-                    Intent intent = new Intent(StartgameActivity.this, GameActivity.class);
+
+                    Intent intent = new Intent();
                     intent.putExtra("user", user);
-                    intent.putExtra("game", currentGame);
-                    intent.putExtra("play", play);
-                    startActivity(intent);
+                    setResult(RESULT_OK, intent);
+                    finish();
                 }
 
                 @Override

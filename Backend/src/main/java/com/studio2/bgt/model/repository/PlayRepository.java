@@ -47,6 +47,7 @@ public class PlayRepository {
                 .playId(updatedPlay.getPlayId())
                 .gameId(updatedPlay.getGameId())
                 .playerId(updatedPlay.getPlayerId())
+                .isTourA(updatedPlay.isTourA())
                 .playerGameStarterId(updatedPlay.getPlayerGameStarterId())
                 .gameName(updatedPlay.getGameName())
                 .timeRound(updatedPlay.getTimeRound())
@@ -54,6 +55,11 @@ public class PlayRepository {
                 .minPlayers(updatedPlay.getMinPlayers())
                 .maxPlayers(updatedPlay.getMaxPlayers())
                 .friends(updatedPlay.getFriends())
+                .accepted(updatedPlay.getAccepted())
+                .playersTourA(updatedPlay.getPlayersTourA())
+                .playersTourB(updatedPlay.getPlayersTourB())
+                .roundTimePlayers(updatedPlay.getRoundTimePlayers())
+                .gameTimePlayers(updatedPlay.getGameTimePlayers())
                 .build();
         playRepository.remove(findPlayById(updatedPlay.getPlayId()));
         playRepository.add(play);

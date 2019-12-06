@@ -3,10 +3,7 @@ package com.studio2.bgt.model.helpers;
 import com.studio2.bgt.model.entity.Player;
 import lombok.*;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -30,5 +27,7 @@ public class PlayHelper {
     private Set<Player> accepted = new HashSet<>();
     private Queue<Player> playersTourA = new LinkedList<>();
     private Queue<Player> playersTourB = new LinkedList<>();
+    private Map<Long, Long> roundTimePlayers = new HashMap<>();
+    private Map<Long, Long> gameTimePlayers = new HashMap<>();
 
 }

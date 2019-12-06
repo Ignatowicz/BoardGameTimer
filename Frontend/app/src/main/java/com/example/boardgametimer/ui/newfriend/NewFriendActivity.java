@@ -1,11 +1,9 @@
 package com.example.boardgametimer.ui.newfriend;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -55,8 +53,9 @@ public class NewFriendActivity extends AppCompatActivity implements Adapter.Item
         HttpUtils.get("players", null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                Gson gson = new Gson();
+                System.out.println(statusCode + response.toString());
 
+                Gson gson = new Gson();
                 for (int i = 0; i < response.length(); i++) {
                     try {
                         JSONObject object = response.getJSONObject(i);
@@ -133,6 +132,8 @@ public class NewFriendActivity extends AppCompatActivity implements Adapter.Item
             HttpUtils.put(getApplicationContext(), "players/" + user.getId(), entity[0], "application/json", new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    System.out.println(statusCode + response.toString());
+
                     Gson gson = new Gson();
                     JsonElement element = gson.fromJson(response.toString(), JsonElement.class);
                     LoggedInUser addedUser = gson.fromJson(element, LoggedInUser.class);

@@ -43,8 +43,40 @@ public class PlayController extends AbstractController {
         return ++playRepository.playId;
     }
 
+    @GetMapping("/{playId}")
+    public ResponseEntity<?> getActualPlay(@PathVariable Long playId) {
+        PlayHelper play = playRepository.findPlayById(playId);
+        return ResponseEntity.ok().body(play);
+    }
+
+    @PutMapping("/{playId}")
+    public ResponseEntity<PlayHelper> updatePlay(@PathVariable Long playId, @Valid @RequestBody PlayHelper updatedPlay) {
+        PlayHelper play = playRepository.findPlayById(playId);
+        play.setPlayId(updatedPlay.getPlayId());
+        play.setGameId(updatedPlay.getGameId());
+        play.setPlayerId(updatedPlay.getPlayerId());
+        play.setPlayerGameStarterId(updatedPlay.getPlayerGameStarterId());
+        play.setTourA(updatedPlay.isTourA());
+        play.setGameName(updatedPlay.getGameName());
+        play.setTimeRound(updatedPlay.getTimeRound());
+        play.setTimeGame(updatedPlay.getTimeGame());
+        play.setMinPlayers(updatedPlay.getMinPlayers());
+        play.setMaxPlayers(updatedPlay.getMaxPlayers());
+        play.setFriends(updatedPlay.getFriends());
+        play.setAccepted(updatedPlay.getAccepted());
+        play.setPlayersTourA(updatedPlay.getPlayersTourA());
+        play.setPlayersTourB(updatedPlay.getPlayersTourB());
+        play.setRoundTimePlayers(updatedPlay.getRoundTimePlayers());
+        play.setGameTimePlayers(updatedPlay.getGameTimePlayers());
+
+        // save
+        playRepository.updatePlay(play);
+
+        return ResponseEntity.ok().body(play);
+    }
+
     // main screen, request onTap the row with game name
-    @GetMapping("/{gameId}")
+    @GetMapping("/game/{gameId}")
     public ResponseEntity<?> play(@PathVariable Long gameId) {
         Optional<Game> gameOptional = gameRepository.findById(gameId);
         if (gameOptional.isPresent()) {
@@ -55,6 +87,12 @@ public class PlayController extends AbstractController {
             friends.addAll(player.getFriend1());
             friends.addAll(player.getFriend2());
             friends.add(game.getPlayer());
+
+            Map<Long, Long> roundTimePlayers = new HashMap<>();
+            Map<Long, Long> gameTimePlayers = new HashMap<>();
+
+            friends.forEach(f -> roundTimePlayers.put(f.getId(), (long) game.getTimeRound()));
+            friends.forEach(f -> gameTimePlayers.put(f.getId(), (long) game.getTimeGame()));
 
             PlayHelper play = PlayHelper.builder()
                     .playId(getNextPlayId())
@@ -71,8 +109,9 @@ public class PlayController extends AbstractController {
                     .accepted(new HashSet<>())
                     .playersTourA(new LinkedList<>())
                     .playersTourB(new LinkedList<>())
+                    .roundTimePlayers(roundTimePlayers)
+                    .gameTimePlayers(gameTimePlayers)
                     .build();
-
 
             // clear friends' friends
             clearResponse(play);
@@ -85,9 +124,9 @@ public class PlayController extends AbstractController {
     }
 
     // button -> start game, send invitations to friends
-    @PostMapping("/startGame")
+    @PostMapping("/startGame/{playerId}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public ResponseEntity<?> startGame(@Valid @RequestBody StartGameHelper startGame) {
+    public ResponseEntity<?> startGame(@Valid @PathVariable Long playerId, @RequestBody StartGameHelper startGame) {
         PlayHelper play = playRepository.findPlayById(startGame.getPlayId());
         if (play == null) {
             return ResponseEntity.notFound().build();
@@ -105,14 +144,14 @@ public class PlayController extends AbstractController {
         playRepository.findPlayById(startGame.getPlayId()).setFriends(play.getFriends());
 
         // send request for game to all friends (players in near future)
-        NotificationHelper notificationHelper = preparePlayersToWhomNotificationWillBeSent(play, SendTo.FRIENDS);
+        NotificationHelper notificationHelper = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.FRIENDS);
         List<String> notification = notificationManager
                 .sendNotification(1L, notificationHelper.getTopics(),
                         "Invitation to game " + play.getGameName(),
                         "Open the app and accept the invitation!",
                         notificationHelper.getPlayers(),
                         play.getPlayId().toString()
-                        );
+                );
         log.info(String.valueOf(notification));
 
         JSONObject jsonObject = new JSONObject();
@@ -142,19 +181,23 @@ public class PlayController extends AbstractController {
             play.getFriends().forEach(f -> playRepository.findPlayById(playId).getPlayersTourA().add(f));
 
             // send notification to all players about game start
-            NotificationHelper notificationHelper = preparePlayersToWhomNotificationWillBeSent(play, SendTo.PLAYERS_TOUR_A);
-            List<String> notification = notificationManager
-                    .sendNotification(2L, notificationHelper.getTopics(),
-                            "The game has started!",
-                            "All the players have accepted the invitation.\nIt's " + play.getPlayersTourA().peek().getName() + " turn!",
-                            notificationHelper.getPlayers(),
-                            play.getPlayId().toString()
-                    );
-            log.info(String.valueOf(notification));
+//            NotificationHelper notificationHelper = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.PLAYERS_TOUR_A);
+//            List<String> notification = notificationManager
+//                    .sendNotification(2L, notificationHelper.getTopics(),
+//                            "The game has started!",
+//                            "All the players have accepted the invitation.\nIt's " + play.getPlayersTourA().peek().getName() + " turn!",
+//                            notificationHelper.getPlayers(),
+//                            play.getPlayId().toString()
+//                    );
+//            log.info(String.valueOf(notification));
 
             // notify first player about his turn
-            NotificationHelper notificationHelper1 = preparePlayersToWhomNotificationWillBeSent(play, SendTo.FIRST_PLAYER_TOUR_A);
-            notifyFirstPlayerAboutTurnStart(notificationHelper1);
+            NotificationHelper notificationHelperFirstPlayer = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.FIRST_PLAYER_TOUR_A);
+            notifyFirstPlayerAboutTurnStart(notificationHelperFirstPlayer);
+
+//            // notify other players about next player turn
+//            NotificationHelper notificationHelperAllExceptFirstPlayer = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.ALL_EXCEPT_FIRST_PLAYER_A);
+//            notifyOtherPlayersAboutFirstPlayerTurnStart(notificationHelperAllExceptFirstPlayer);
 
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("response", "All players have accepted the game!");
@@ -168,11 +211,22 @@ public class PlayController extends AbstractController {
 
     private void notifyFirstPlayerAboutTurnStart(NotificationHelper notificationHelper) {
         List<String> notification = notificationManager
-                .sendNotification(3L, notificationHelper.getTopics(),
+                .sendNotification(4L, notificationHelper.getTopics(),
                         "It's your turn!",
                         "Your round time has just begun!",
                         notificationHelper.getPlayers(),
-                        notificationHelper.getPlayId().toString()
+                        notificationHelper.getPlay().getPlayId().toString()
+                );
+        log.info(String.valueOf(notification));
+    }
+
+    private void notifyOtherPlayersAboutFirstPlayerTurnStart(NotificationHelper notificationHelper) {
+        List<String> notification = notificationManager
+                .sendNotification(5L, notificationHelper.getTopics(),
+                        "It's " + notificationHelper.getPlayer().getName() + " turn!",
+                        "His round time has just begun!",
+                        notificationHelper.getPlayers(),
+                        notificationHelper.getPlay().getPlayId().toString()
                 );
         log.info(String.valueOf(notification));
     }
@@ -187,9 +241,9 @@ public class PlayController extends AbstractController {
         playRepository.deletePlay(playId);
 
         // notify about cancel game start
-        NotificationHelper notificationHelper = preparePlayersToWhomNotificationWillBeSent(play, SendTo.FRIENDS);
+        NotificationHelper notificationHelper = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.FRIENDS);
         List<String> notification = notificationManager
-                .sendNotification(4L, notificationHelper.getTopics(),
+                .sendNotification(3L, notificationHelper.getTopics(),
                         "The game " + play.getGameName() + " canceled.",
                         playerRepository.findPlayerById(playerId).getName() + " rejected to play.",
                         notificationHelper.getPlayers(),
@@ -197,14 +251,13 @@ public class PlayController extends AbstractController {
                 );
         log.info(String.valueOf(notification));
 
-
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("response", "Player: " + playerRepository.findPlayerById(playerId).getName() + " has rejected the game!");
         return ResponseEntity.ok().body(jsonObject);
     }
 
-    @GetMapping("/{playId}/tour/{isTourA}/endRound")
-    public ResponseEntity<?> endRound(@PathVariable Long playId, @PathVariable Boolean isTourA) {
+    @GetMapping("/{playId}/tour/{isTourA}/endRound/{playerId}")
+    public ResponseEntity<?> endRound(@PathVariable Long playId, @PathVariable Boolean isTourA, @PathVariable Long playerId) {
         PlayHelper play = playRepository.findPlayById(playId);
         if (play == null) {
             return ResponseEntity.notFound().build();
@@ -214,11 +267,6 @@ public class PlayController extends AbstractController {
 
         if (isTourA) {
             actualPlayer = play.getPlayersTourA().remove();
-
-            // notify next player about his turn
-            NotificationHelper notificationHelper = preparePlayersToWhomNotificationWillBeSent(play, SendTo.FIRST_PLAYER_TOUR_A);
-            notifyFirstPlayerAboutTurnStart(notificationHelper);
-
             play.getPlayersTourA().add(actualPlayer);
 
             // clear friends' friends
@@ -226,13 +274,16 @@ public class PlayController extends AbstractController {
 
             // save
             playRepository.updatePlay(play);
-        } else {
-            actualPlayer = play.getPlayersTourB().remove();
 
             // notify next player about his turn
-            NotificationHelper notificationHelper = preparePlayersToWhomNotificationWillBeSent(play, SendTo.FIRST_PLAYER_TOUR_B);
-            notifyFirstPlayerAboutTurnStart(notificationHelper);
+            NotificationHelper notificationHelperFirstPlayer = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.FIRST_PLAYER_TOUR_A);
+            notifyFirstPlayerAboutTurnStart(notificationHelperFirstPlayer);
 
+            // notify other players about next player turn
+//            NotificationHelper notificationHelperAllExceptFirstPlayer = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.ALL_EXCEPT_FIRST_PLAYER_A);
+//            notifyOtherPlayersAboutFirstPlayerTurnStart(notificationHelperAllExceptFirstPlayer);
+        } else {
+            actualPlayer = play.getPlayersTourB().remove();
             play.getPlayersTourB().add(actualPlayer);
 
             // clear friends' friends
@@ -240,13 +291,23 @@ public class PlayController extends AbstractController {
 
             // save
             playRepository.updatePlay(play);
+
+            // notify next player about his turn
+            NotificationHelper notificationHelperFirstPlayer = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.FIRST_PLAYER_TOUR_B);
+            notifyFirstPlayerAboutTurnStart(notificationHelperFirstPlayer);
+
+            // notify other players about next player turn
+//            NotificationHelper notificationHelperAllExceptFirstPlayer = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.ALL_EXCEPT_FIRST_PLAYER_B);
+//            notifyOtherPlayersAboutFirstPlayerTurnStart(notificationHelperAllExceptFirstPlayer);
         }
 
-        return ResponseEntity.ok().body("Player: " + actualPlayer.getName() + " has ended the round!");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("response", "Player: " + actualPlayer.getName() + " has ended the round!");
+        return ResponseEntity.ok().body(jsonObject);
     }
 
-    @GetMapping("/{playId}/tour/{isTourA}/endTour")
-    public ResponseEntity<?> endTour(@PathVariable Long playId, @PathVariable Boolean isTourA) {
+    @GetMapping("/{playId}/tour/{isTourA}/endTour/{playerId}")
+    public ResponseEntity<?> endTour(@PathVariable Long playId, @PathVariable Boolean isTourA, @PathVariable Long playerId) {
         PlayHelper play = playRepository.findPlayById(playId);
         if (play == null) {
             return ResponseEntity.notFound().build();
@@ -256,10 +317,6 @@ public class PlayController extends AbstractController {
 
         if (isTourA) {
             actualPlayer = play.getPlayersTourA().remove();
-
-            // notify next player about his turn
-            NotificationHelper notificationHelper = preparePlayersToWhomNotificationWillBeSent(play, SendTo.FIRST_PLAYER_TOUR_A);
-            notifyFirstPlayerAboutTurnStart(notificationHelper);
 
             play.getPlayersTourB().add(actualPlayer);
 
@@ -271,14 +328,14 @@ public class PlayController extends AbstractController {
 
             // end tour if all players ended their round
             if (play.getPlayersTourA().isEmpty()) {
-                return nextTour(play, isTourA);  // finishing tour A
+                return nextTour(play, isTourA, playerId);  // finishing tour A
             }
-        } else {
-            actualPlayer = play.getPlayersTourB().remove();
 
             // notify next player about his turn
-            NotificationHelper notificationHelper = preparePlayersToWhomNotificationWillBeSent(play, SendTo.FIRST_PLAYER_TOUR_B);
+            NotificationHelper notificationHelper = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.FIRST_PLAYER_TOUR_A);
             notifyFirstPlayerAboutTurnStart(notificationHelper);
+        } else {
+            actualPlayer = play.getPlayersTourB().remove();
 
             play.getPlayersTourA().add(actualPlayer);
 
@@ -290,91 +347,105 @@ public class PlayController extends AbstractController {
 
             // end tour if all players ended their round
             if (play.getPlayersTourB().isEmpty()) {
-                return nextTour(play, isTourA);  // finishing tour B
+                return nextTour(play, isTourA, playerId);  // finishing tour B
             }
+
+            // notify next player about his turn
+            NotificationHelper notificationHelper = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.FIRST_PLAYER_TOUR_B);
+            notifyFirstPlayerAboutTurnStart(notificationHelper);
         }
 
-        return ResponseEntity.ok().body("Player: " + actualPlayer.getName() + " has ended the tour!");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("response", "Player: " + actualPlayer.getName() + " has ended the tour!");
+        return ResponseEntity.ok().body(jsonObject);
     }
 
-    private ResponseEntity<?> nextTour(PlayHelper play, Boolean isTourA) {
+    private ResponseEntity<?> nextTour(PlayHelper play, Boolean isTourA, Long playerId) {
 
         // change tour
         isTourA = !isTourA;
 
         play.setTourA(isTourA);
 
-        // notify first player about his turn
-        if (isTourA) {
-            NotificationHelper notificationHelper = preparePlayersToWhomNotificationWillBeSent(play, SendTo.FIRST_PLAYER_TOUR_A);
-            notifyFirstPlayerAboutTurnStart(notificationHelper);
-        } else {
-            NotificationHelper notificationHelper = preparePlayersToWhomNotificationWillBeSent(play, SendTo.FIRST_PLAYER_TOUR_B);
-            notifyFirstPlayerAboutTurnStart(notificationHelper);
-        }
-
         // clear friends' friends
         clearResponse(play);
 
         playRepository.updatePlay(play);
 
-        return ResponseEntity.ok().body("Starting new tour.");
+        // notify first player about his turn
+        if (isTourA) {
+            NotificationHelper notificationHelper = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.FIRST_PLAYER_TOUR_A);
+            notifyFirstPlayerAboutTurnStart(notificationHelper);
+        } else {
+            NotificationHelper notificationHelper = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.FIRST_PLAYER_TOUR_B);
+            notifyFirstPlayerAboutTurnStart(notificationHelper);
+        }
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("response", "Starting new tour.");
+        return ResponseEntity.ok().body(jsonObject);
     }
 
-    @GetMapping("/{playId}/pause")
-    public ResponseEntity<?> pause(@PathVariable Long playId) {
+    @GetMapping("/{playId}/pause/{playerId}")
+    public ResponseEntity<?> pause(@PathVariable Long playId, @PathVariable Long playerId) {
         PlayHelper play = playRepository.findPlayById(playId);
         if (play == null) {
             return ResponseEntity.notFound().build();
         }
 
         // notify about game pause
-        NotificationHelper notificationHelper = preparePlayersToWhomNotificationWillBeSent(play, SendTo.FRIENDS);
-        List<String> notification = notificationManager
-                .sendNotification(5L, notificationHelper.getTopics(),
-                        "The game " + play.getGameName() + " has been paused",
-                        "Wait to the game resume.",
-                        notificationHelper.getPlayers(),
-                        play.getPlayId().toString()
-                );
-        log.info(String.valueOf(notification));
+//        NotificationHelper notificationHelper = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.FRIENDS);
+//        List<String> notification = notificationManager
+//                .sendNotification(6L, notificationHelper.getTopics(),
+//                        "The game " + play.getGameName() + " has been paused",
+//                        "Wait to the game resume.",
+//                        notificationHelper.getPlayers(),
+//                        play.getPlayId().toString()
+//                );
+//        log.info(String.valueOf(notification));
 
-        return ResponseEntity.ok().body("The game paused");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("response", "The game paused");
+        return ResponseEntity.ok().body(jsonObject);
     }
 
-    @GetMapping("/{playId}/resume")
-    public ResponseEntity<?> resume(@PathVariable Long playId) {
+    @GetMapping("/{playId}/resume/{playerId}")
+    public ResponseEntity<?> resume(@PathVariable Long playId, @PathVariable Long playerId) {
         PlayHelper play = playRepository.findPlayById(playId);
         if (play == null) {
             return ResponseEntity.notFound().build();
         }
 
         // notify about game resume
-        NotificationHelper notificationHelper = preparePlayersToWhomNotificationWillBeSent(play, SendTo.FRIENDS);
-        List<String> notification = notificationManager
-                .sendNotification(6L, notificationHelper.getTopics(),
-                        "The game " + play.getGameName() + " has been resumed",
-                        "Actual player has started his resumed the round.",
-                        notificationHelper.getPlayers(),
-                        play.getPlayId().toString()
-                );
-        log.info(String.valueOf(notification));
+//        NotificationHelper notificationHelper = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.FRIENDS);
+//        List<String> notification = notificationManager
+//                .sendNotification(7L, notificationHelper.getTopics(),
+//                        "The game " + play.getGameName() + " has been resumed",
+//                        "Actual player has started his resumed the round.",
+//                        notificationHelper.getPlayers(),
+//                        play.getPlayId().toString()
+//                );
+//        log.info(String.valueOf(notification));
 
-        return ResponseEntity.ok().body("The game resumed");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("response", "The game resumed");
+        return ResponseEntity.ok().body(jsonObject);
     }
 
     // only actual player has a button to end the game
-    @GetMapping("/{playId}/endGame")
-    public ResponseEntity<?> endGame(@PathVariable Long playId) {
+    @GetMapping("/{playId}/endGame/{playerId}")
+    public ResponseEntity<?> endGame(@PathVariable Long playId, @PathVariable Long playerId) {
         PlayHelper play = playRepository.findPlayById(playId);
         if (play == null) {
             return ResponseEntity.notFound().build();
         }
 
+        playRepository.deletePlay(playId);
+
         // notify about game end
-        NotificationHelper notificationHelper = preparePlayersToWhomNotificationWillBeSent(play, SendTo.FRIENDS);
+        NotificationHelper notificationHelper = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.FRIENDS);
         List<String> notification = notificationManager
-                .sendNotification(7L, notificationHelper.getTopics(),
+                .sendNotification(8L, notificationHelper.getTopics(),
                         "The game " + play.getGameName() + " is over",
                         "Hope You enjoyed the game!",
                         notificationHelper.getPlayers(),
@@ -382,9 +453,35 @@ public class PlayController extends AbstractController {
                 );
         log.info(String.valueOf(notification));
 
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("response", "The game is over");
+        return ResponseEntity.ok().body(jsonObject);
+    }
+
+    // cancel game due to bad usage of notifications
+    @GetMapping("/{playId}/cancelGame/{playerId}")
+    public ResponseEntity<?> cancelGame(@PathVariable Long playId, @PathVariable Long playerId) {
+        PlayHelper play = playRepository.findPlayById(playId);
+        if (play == null) {
+            return ResponseEntity.notFound().build();
+        }
+
         playRepository.deletePlay(playId);
 
-        return ResponseEntity.ok().body("The game resumed");
+        // notify about game end
+        NotificationHelper notificationHelper = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.FRIENDS);
+        List<String> notification = notificationManager
+                .sendNotification(8L, notificationHelper.getTopics(),
+                        "The game " + play.getGameName() + " is over",
+                        "Due to bad behavior of " + playerRepository.findPlayerById(playerId) + " and Marcin Caputa, the game has to be cancelled!",
+                        notificationHelper.getPlayers(),
+                        play.getPlayId().toString()
+                );
+        log.info(String.valueOf(notification));
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("response", "The game is over");
+        return ResponseEntity.ok().body(jsonObject);
     }
 
 }

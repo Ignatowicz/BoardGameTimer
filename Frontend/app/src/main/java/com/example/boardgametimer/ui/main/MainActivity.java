@@ -1,12 +1,10 @@
 package com.example.boardgametimer.ui.main;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -64,31 +62,22 @@ public class MainActivity extends AppCompatActivity implements Adapter.ItemClick
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, NewGameActivity.class);
-                intent.putExtra("user", user);
-                startActivityForResult(intent, 1);
-            }
+        fab.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, NewGameActivity.class);
+            intent.putExtra("user", user);
+            startActivityForResult(intent, 1);
         });
 
-        settingsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-                intent.putExtra("user", user);
-                startActivityForResult(intent, 1);
-            }
+        settingsButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+            intent.putExtra("user", user);
+            startActivityForResult(intent, 1);
         });
 
-        friendsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, FriendsActivity.class);
-                intent.putExtra("user", user);
-                startActivityForResult(intent, 1);
-            }
+        friendsButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, FriendsActivity.class);
+            intent.putExtra("user", user);
+            startActivityForResult(intent, 1);
         });
     }
 
@@ -120,6 +109,8 @@ public class MainActivity extends AppCompatActivity implements Adapter.ItemClick
             HttpUtils.put(getApplicationContext(), "players/" + user.getId(), entity[0], "application/json", new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    System.out.println(statusCode + response.toString());
+
                     games.remove(adapter.getItem(position));
 //                    deleteGame(adapter.getItem(position));
                     updateRecyclerView();
@@ -146,6 +137,7 @@ public class MainActivity extends AppCompatActivity implements Adapter.ItemClick
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 System.out.println(statusCode + responseString);
+
                 updateRecyclerView();
             }
 

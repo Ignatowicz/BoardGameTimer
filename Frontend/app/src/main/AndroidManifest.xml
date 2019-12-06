@@ -59,13 +59,28 @@
             android:label="@string/title_activity_settings"
             android:parentActivityName=".ui.main.MainActivity" />
 
-        <activity
-            android:name=".ui.game.GameActivity"
-            android:label="@string/title_activity_game"
-            android:parentActivityName=".ui.startgame.StartgameActivity">
+        <activity android:name=".ui.notification.AcceptGameActivity">
+            <intent-filter>
+                <action android:name="Notification" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
 
-        <activity android:name=".ui.notification.AcceptGameActivity">
+        <activity android:name=".ui.gameactualplayer.GameActualPlayerActivity">
+            <intent-filter>
+                <action android:name="Notification" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".ui.gameotherplayer.GameOtherPlayerActivity">
+            <intent-filter>
+                <action android:name="Notification" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".ui.game.GameActivity">
             <intent-filter>
                 <action android:name="Notification" />
                 <category android:name="android.intent.category.DEFAULT" />

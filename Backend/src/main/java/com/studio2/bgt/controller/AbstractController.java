@@ -2,8 +2,8 @@ package com.studio2.bgt.controller;
 
 import com.studio2.bgt.model.entity.Player;
 import com.studio2.bgt.model.enums.SendTo;
-import com.studio2.bgt.model.helpers.PlayHelper;
 import com.studio2.bgt.model.helpers.NotificationHelper;
+import com.studio2.bgt.model.helpers.PlayHelper;
 
 import java.util.*;
 
@@ -52,39 +52,55 @@ public abstract class AbstractController {
         return player;
     }
 
-    protected NotificationHelper preparePlayersToWhomNotificationWillBeSent(PlayHelper play, SendTo sendTo) {
+    protected NotificationHelper prepareNotification(Player player, PlayHelper play, SendTo sendTo) {
         NotificationHelper startGameNotification = new NotificationHelper();
         Map<String, String> players = new HashMap<>();
         Set<String> topics = new HashSet<>();
 
-        switch (sendTo) {
-            case FRIENDS:
-                play.getFriends().forEach(f -> players.put(String.valueOf(f.getId()), f.getName()));
-                play.getFriends().forEach(f -> topics.add("Player_" + f.getId()));
-            case ACCEPTED:
-                play.getAccepted().forEach(f -> players.put(String.valueOf(f.getId()), f.getName()));
-                play.getAccepted().forEach(f -> topics.add("Player_" + f.getId()));
-            case PLAYERS_TOUR_A:
+        if (sendTo.equals(SendTo.FRIENDS)) {
+            play.getFriends().forEach(f -> players.put(String.valueOf(f.getId()), f.getName()));
+            play.getFriends().forEach(f -> topics.add("Player_" + f.getId()));
+        } else if (sendTo.equals(SendTo.ACCEPTED)) {
+            play.getAccepted().forEach(f -> players.put(String.valueOf(f.getId()), f.getName()));
+            play.getAccepted().forEach(f -> topics.add("Player_" + f.getId()));
+        } else if (sendTo.equals(SendTo.PLAYERS_TOUR_A)) {
+            play.getPlayersTourA().forEach(f -> players.put(String.valueOf(f.getId()), f.getName()));
+            play.getPlayersTourA().forEach(f -> topics.add("Player_" + f.getId()));
+        } else if (sendTo.equals(SendTo.PLAYERS_TOUR_B)) {
+            play.getPlayersTourB().forEach(f -> players.put(String.valueOf(f.getId()), f.getName()));
+            play.getPlayersTourB().forEach(f -> topics.add("Player_" + f.getId()));
+        } else if (sendTo.equals(SendTo.FIRST_PLAYER_TOUR_A)) {
+            Player firstPlayerA = play.getPlayersTourA().peek();
+            if (firstPlayerA != null) {
+                players.put(String.valueOf(firstPlayerA.getId()), firstPlayerA.getName());
+                topics.add("Player_" + firstPlayerA.getId());
+            }
+        } else if (sendTo.equals(SendTo.FIRST_PLAYER_TOUR_B)) {
+            Player firstPlayerB = play.getPlayersTourB().peek();
+            if (firstPlayerB != null) {
+                players.put(String.valueOf(firstPlayerB.getId()), firstPlayerB.getName());
+                topics.add("Player_" + firstPlayerB.getId());
+            }
+        } else if (sendTo.equals(SendTo.ALL_EXCEPT_FIRST_PLAYER_A)) {
+            Player fpA = play.getPlayersTourA().remove();
+            if (fpA != null) {
                 play.getPlayersTourA().forEach(f -> players.put(String.valueOf(f.getId()), f.getName()));
                 play.getPlayersTourA().forEach(f -> topics.add("Player_" + f.getId()));
-            case PLAYERS_TOUR_B:
+                players.remove(String.valueOf(fpA.getId()), fpA.getName());
+                topics.add("Player_" + fpA.getId());
+            }
+        } else if (sendTo.equals(SendTo.ALL_EXCEPT_FIRST_PLAYER_B)) {
+            Player fpB = play.getPlayersTourB().remove();
+            if (fpB != null) {
                 play.getPlayersTourB().forEach(f -> players.put(String.valueOf(f.getId()), f.getName()));
                 play.getPlayersTourB().forEach(f -> topics.add("Player_" + f.getId()));
-            case FIRST_PLAYER_TOUR_A:
-                Player firstPlayerA = play.getPlayersTourA().peek();
-                if (firstPlayerA != null) {
-                    players.put(String.valueOf(firstPlayerA.getId()), firstPlayerA.getName());
-                    topics.add("Player_" + firstPlayerA.getId());
-                }
-            case FIRST_PLAYER_TOUR_B:
-                Player firstPlayerB = play.getPlayersTourB().peek();
-                if (firstPlayerB != null) {
-                    players.put(String.valueOf(firstPlayerB.getId()), firstPlayerB.getName());
-                    topics.add("Player_" + firstPlayerB.getId());
-                }
+                players.remove(String.valueOf(fpB.getId()), fpB.getName());
+                topics.add("Player_" + fpB.getId());
+            }
         }
 
-        startGameNotification.setPlayId(play.getPlayId());
+        startGameNotification.setPlayer(player);
+        startGameNotification.setPlay(play);
         startGameNotification.setPlayers(players);
         startGameNotification.setTopics(topics);
 

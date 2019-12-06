@@ -19,6 +19,8 @@ show grants for 'admin'@'localhost';
 	- .gitignore
 - BGT-002
 	- project logic
+- BGT-003
+	- fix
 - BND-000
 	- backend base
 - BND-001
@@ -29,19 +31,24 @@ show grants for 'admin'@'localhost';
 	- backend api
 - BND-004
 	- backend notification
+- BND-005
+	- fix
 - FND-001
 	- login
 - FND-002
 	- logic
+- FND-003
+	- fix
 
 3. Notification id:
-- 1 - start the game
+- 1 - invitation to the game
 - 2 - accept the game
-- 3 - start the turn
-- 4 - reject the game
-- 5 - pause the game
-- 6 - resume the game
-- 7 - end the game
+- 3 - reject the game
+- 4 - start your turn
+- 5 - other's player turn
+- 6 - pause the game
+- 7 - resume the game
+- 8 - end the game
 
 4. Heroku
 - install heroku client: 
