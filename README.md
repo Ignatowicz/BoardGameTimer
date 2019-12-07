@@ -61,3 +61,5 @@ show grants for 'admin'@'localhost';
 	- $ git remote add heroku https://git.heroku.com/secret-falls-72080.git
 - deploy changes:
 	- $ git subtree push --prefix Backend/ heroku master
+- deploy with force
+	- git push heroku git subtree split --prefix Backend/ master:master -f
