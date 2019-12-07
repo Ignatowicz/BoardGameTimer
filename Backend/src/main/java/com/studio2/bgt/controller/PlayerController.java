@@ -61,7 +61,8 @@ public class PlayerController extends AbstractController {
 
             return ResponseEntity.created(new URI("/api/players/" + result.getId()))
                     .body(result);
-        } catch (ConstraintViolationException $e){
+        } catch (Exception $e){
+            System.out.println($e.getClass().getCanonicalName());
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
