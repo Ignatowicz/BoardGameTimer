@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -63,8 +62,7 @@ public class PlayerController extends AbstractController {
 
             return ResponseEntity.created(new URI("/api/players/" + result.getId()))
                     .body(result);
-        } catch (DuplicateKeyException $e){
-            System.out.println("test");
+        } catch (DataIntegrityViolationException $e){
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
