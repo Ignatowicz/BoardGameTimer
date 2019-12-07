@@ -4,6 +4,7 @@ import com.studio2.bgt.model.helpers.Credentials;
 import com.studio2.bgt.model.entity.Player;
 import com.studio2.bgt.model.repository.PlayerRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,10 +55,15 @@ public class PlayerController extends AbstractController {
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Player> createPlayer(@Valid @RequestBody Player player) throws URISyntaxException {
-        Player result = playerRepository.save(player);
-        clearResponse(result);
-        return ResponseEntity.created(new URI("/api/players/" + result.getId()))
-                .body(result);
+        try {
+            Player result = playerRepository.save(player);
+            clearResponse(result);
+
+            return ResponseEntity.created(new URI("/api/players/" + result.getId()))
+                    .body(result);
+        } catch (ConstraintViolationException $e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
     }
 
     @PutMapping("/{id}")
