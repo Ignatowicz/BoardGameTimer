@@ -32,6 +32,15 @@ public class LoginActivity extends AppCompatActivity {
     private LoginViewModel loginViewModel;
 
     @Override
+    protected void onResume() {
+        final EditText usernameEditText = findViewById(R.id.username);
+        final EditText passwordEditText = findViewById(R.id.password);
+        usernameEditText.getText().clear();
+        passwordEditText.getText().clear();
+        super.onResume();
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         context = this.getApplicationContext();
         super.onCreate(savedInstanceState);
@@ -118,7 +127,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(context, usernameEditText.getText().toString(),
+                loginViewModel.login(context, usernameEditText.getText().toString().toLowerCase(),
                         passwordEditText.getText().toString());
 
             }

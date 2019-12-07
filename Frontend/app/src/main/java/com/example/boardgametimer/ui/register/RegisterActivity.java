@@ -7,6 +7,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -94,7 +95,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String name = nameEditText.getText().toString();
-                String email = emailEditText.getText().toString();
+                String email = emailEditText.getText().toString().toLowerCase();
                 String password = passwordEditText.getText().toString();
 
                 LoggedInUser user = new LoggedInUser(name, email, password);
@@ -143,11 +144,25 @@ public class RegisterActivity extends AppCompatActivity {
                     Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                     intent.putExtra("user", addedUser);
                     startActivity(intent);
+                    finish();
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    if(statusCode == 409){
+                        Toast.makeText(getApplicationContext(), "Użytkownik o podanym adresie e-mail istnieje", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Wystąpił błąd", Toast.LENGTH_LONG).show();
+                    }
                 }
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    System.out.println(statusCode + responseString);
+                    if(statusCode == 409){
+                        Toast.makeText(getApplicationContext(), "Użytkownik o podanym adresie e-mail istnieje", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Wystąpił błąd", Toast.LENGTH_LONG).show();
+                    }
                 }
             });
         } catch (UnsupportedEncodingException e) {

@@ -52,7 +52,7 @@ public class RegisterViewModel extends ViewModel {
         if (email.contains("@")) {
             return Patterns.EMAIL_ADDRESS.matcher(email).matches();
         } else {
-            return !email.trim().isEmpty();
+            return email.trim().isEmpty();
         }
     }
 
