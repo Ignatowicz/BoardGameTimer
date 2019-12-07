@@ -23,7 +23,7 @@ public class Player {
     @Column(nullable = false, name = "name")
     private String name;
 
-    @Column(nullable = false, name = "email")
+    @Column(nullable = false, name = "email", unique = true)
     private String email;
 
     @Column(nullable = false, name = "password")
