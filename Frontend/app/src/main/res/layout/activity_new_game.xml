@@ -57,7 +57,8 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="Min ilość graczy"
-                android:inputType="number|textPersonName" />
+                android:digits="0123456789"
+                android:inputType="phone" />
         </LinearLayout>
 
         <LinearLayout
@@ -79,7 +80,8 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="Max ilość graczy"
-                android:inputType="number|textPersonName" />
+                android:digits="0123456789"
+                android:inputType="phone" />
         </LinearLayout>
 
         <LinearLayout
@@ -101,7 +103,8 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="Czas rundy"
-                android:inputType="number|textPersonName" />
+                android:digits="0123456789"
+                android:inputType="phone" />
         </LinearLayout>
 
         <LinearLayout
@@ -123,7 +126,8 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="Czas gry"
-                android:inputType="number|textPersonName" />
+                android:digits="0123456789"
+                android:inputType="phone" />
         </LinearLayout>
 
     </LinearLayout>
@@ -133,6 +137,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
+        android:enabled="false"
         android:text="Dodaj grę"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

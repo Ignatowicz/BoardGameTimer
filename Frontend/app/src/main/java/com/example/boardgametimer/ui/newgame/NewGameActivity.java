@@ -2,6 +2,8 @@ package com.example.boardgametimer.ui.newgame;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +20,7 @@ import com.google.gson.JsonElement;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.UnsupportedEncodingException;
 
@@ -46,6 +49,39 @@ public class NewGameActivity extends AppCompatActivity {
         EditText maxPlayersEditText = findViewById(R.id.maxPlayersEditText);
         EditText timeRoundEditText = findViewById(R.id.timeRoundEditText);
         EditText timeGameEditText = findViewById(R.id.timeGameEditText);
+
+        TextWatcher watcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(
+                        nameEditText.getText().toString().isEmpty() ||
+                        minPlayersEditText.getText().toString().isEmpty() ||
+                        maxPlayersEditText.getText().toString().isEmpty() ||
+                        timeRoundEditText.getText().toString().isEmpty() ||
+                        timeGameEditText.getText().toString().isEmpty() ||
+                        Integer.valueOf(minPlayersEditText.getText().toString()) >  Integer.valueOf(maxPlayersEditText.getText().toString())
+                ) {
+                    startGameButton.setEnabled(false);
+                }
+                else {
+                    startGameButton.setEnabled(true);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        };
+
+        nameEditText.addTextChangedListener(watcher);
+        minPlayersEditText.addTextChangedListener(watcher);
+        maxPlayersEditText.addTextChangedListener(watcher);
+        timeRoundEditText.addTextChangedListener(watcher);
+        timeGameEditText.addTextChangedListener(watcher);
 
         startGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
