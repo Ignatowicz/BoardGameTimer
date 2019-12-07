@@ -1,7 +1,10 @@
 package com.example.boardgametimer.ui.startgame;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -40,6 +43,8 @@ public class StartgameActivity extends AppCompatActivity implements AdapterPlaye
     Set<LoggedInUser> players = new HashSet<>();
     Set<LoggedInUser> friends = new HashSet<>();
     TextView playersNumberTextView;
+    Game currentGame;
+    Button startGameButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +60,7 @@ public class StartgameActivity extends AppCompatActivity implements AdapterPlaye
         playersNumberTextView = findViewById(R.id.playersNumberTextView);
         TextView roundTimeTextView = findViewById(R.id.roundTimeTextView);
         TextView gameTimeTextView = findViewById(R.id.gameTimeTextView);
-        Button startGameButton = findViewById(R.id.startGameButton);
+        startGameButton = findViewById(R.id.startGameButton);
 
         this.user = (LoggedInUser) getIntent().getSerializableExtra("user");
         this.games = (ArrayList<Game>) getIntent().getSerializableExtra("games");
@@ -64,9 +69,9 @@ public class StartgameActivity extends AppCompatActivity implements AdapterPlaye
         friends.addAll(user.getFriend1());
         friends.addAll(user.getFriend2());
 
+        currentGame = games.get(position);
         updateView();
 
-        Game currentGame = games.get(position);
 
         nameTextView.setText(currentGame.getName());
         roundTimeTextView.setText(Integer.toString(currentGame.getTimeRound()));
@@ -186,6 +191,21 @@ public class StartgameActivity extends AppCompatActivity implements AdapterPlaye
         playersNumberTextView.setText(Integer.toString(players.size()));
         updatePlayersRecyclerView();
         updateFriendsRecyclerView();
+
+        System.out.println("T1" + players.size());
+        System.out.println("T2" + currentGame.getMinPlayers());
+
+        if(players.size() < currentGame.getMinPlayers() ||
+                players.size() > currentGame.getMaxPlayers())
+        {
+            startGameButton.setEnabled(false);
+            playersNumberTextView.setTextColor(Color.RED);
+        }
+        else{
+            startGameButton.setEnabled(true);
+            playersNumberTextView.setTextColor(Color.BLACK);
+
+        }
     }
 
 }
