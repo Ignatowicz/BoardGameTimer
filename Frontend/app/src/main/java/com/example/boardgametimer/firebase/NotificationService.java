@@ -70,7 +70,6 @@ public class NotificationService extends FirebaseMessagingService {
             Log.d(TAG, "Message Notification Player Id: " + player_id);
             Log.d(TAG, "Message Notification Play Id: " + play_id);
 
-            System.out.println(play_id + " = playid\nget actoaul play");
             getActualPlayer();
         }
     }
@@ -89,7 +88,9 @@ public class NotificationService extends FirebaseMessagingService {
                 Gson gson = new Gson();
                 JsonElement element = gson.fromJson(response.toString(), JsonElement.class);
                 NotificationService.this.user = gson.fromJson(element, LoggedInUser.class);
+
                 ClearResponseFriends.clearResponse(NotificationService.this.user);
+
                 getActualPlay();
             }
 
@@ -100,8 +101,6 @@ public class NotificationService extends FirebaseMessagingService {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-
-
                 System.out.println(errorResponse.toString());
             }
         });
@@ -116,9 +115,6 @@ public class NotificationService extends FirebaseMessagingService {
                 Gson gson = new Gson();
                 JsonElement element = gson.fromJson(response.toString(), JsonElement.class);
                 NotificationService.this.play = gson.fromJson(element, PlayHelper.class);
-
-                System.out.println("players toru a: ");
-                play.getPlayersTourA().forEach(f -> System.out.println(f.getName()));
 
                 sendNotification();
             }

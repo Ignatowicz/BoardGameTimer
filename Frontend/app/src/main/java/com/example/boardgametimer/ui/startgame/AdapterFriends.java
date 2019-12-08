@@ -60,7 +60,8 @@ public class AdapterFriends extends RecyclerView.Adapter<AdapterFriends.ViewHold
 
         @Override
         public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemFriendClick(view, getAdapterPosition());
+            if (mClickListener != null)
+                mClickListener.onItemFriendClick(view, getAdapterPosition());
         }
     }
 

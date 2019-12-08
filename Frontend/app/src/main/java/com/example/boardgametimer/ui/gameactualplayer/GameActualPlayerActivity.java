@@ -67,8 +67,6 @@ public class GameActualPlayerActivity extends AppCompatActivity {
         gameNameTextView.setText(play.getGameName());
         whoseRoundTextView.setText(user.getName());
 
-        Toast.makeText(getApplicationContext(), "toyrA " + play.isTourA(), Toast.LENGTH_LONG).show();
-
         roundTimerTextView = findViewById(R.id.roundTimerTextView);
         gameTimerTextView = findViewById(R.id.gameTimerTextView);
 
@@ -84,10 +82,7 @@ public class GameActualPlayerActivity extends AppCompatActivity {
                 .setTitle("Exit")
                 .setMessage("Exit this view will provoke cancellation the game")
                 .setNegativeButton(android.R.string.no, null)
-                .setPositiveButton(android.R.string.yes, (arg0, arg1) -> {
-                    endGame();
-                    super.onBackPressed();
-                }).create().show());
+                .setPositiveButton(android.R.string.yes, (arg0, arg1) -> endGame()).create().show());
 
         endTourButton.setOnClickListener(v -> endTour());
 
@@ -136,10 +131,6 @@ public class GameActualPlayerActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     System.out.println(statusCode + response.toString());
-
-                    Gson gson = new Gson();
-                    JsonElement element = gson.fromJson(response.toString(), JsonElement.class);
-                    PlayHelper play = gson.fromJson(element, PlayHelper.class);
 
                     endGameButton.setEnabled(false);
                     endTourButton.setEnabled(false);
@@ -203,6 +194,9 @@ public class GameActualPlayerActivity extends AppCompatActivity {
                 pauseOrResumeGame();
 
                 Toast.makeText(getApplicationContext(), "Bye!", Toast.LENGTH_LONG).show();
+
+                finishAffinity();
+                System.exit(0);
             }
 
             @Override
@@ -312,10 +306,7 @@ public class GameActualPlayerActivity extends AppCompatActivity {
                 .setTitle("Exit")
                 .setMessage("Exit this view will provoke cancellation the game")
                 .setNegativeButton(android.R.string.no, null)
-                .setPositiveButton(android.R.string.yes, (arg0, arg1) -> {
-                    endGame();
-                    super.onBackPressed();
-                }).create().show();
+                .setPositiveButton(android.R.string.yes, (arg0, arg1) -> endGame()).create().show();
     }
 
 }

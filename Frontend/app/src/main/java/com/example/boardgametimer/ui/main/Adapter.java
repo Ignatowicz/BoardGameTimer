@@ -57,24 +57,18 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
             myTextView = itemView.findViewById(R.id.recycler_row);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
-                }
+            itemView.setOnClickListener(view -> {
+                if (mClickListener != null)
+                    mClickListener.onItemClick(view, getAdapterPosition());
             });
 
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    if (mClickListener != null) mClickListener.onLongItemClick(view, getAdapterPosition());
+            itemView.setOnLongClickListener(view -> {
+                if (mClickListener != null)
+                    mClickListener.onLongItemClick(view, getAdapterPosition());
 
-                    return true;
-                }
+                return true;
             });
         }
-
-
     }
 
     // convenience method for getting data at click position
@@ -90,6 +84,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
         void onItemClick(View view, int position);
+
         void onLongItemClick(View view, int position);
     }
 

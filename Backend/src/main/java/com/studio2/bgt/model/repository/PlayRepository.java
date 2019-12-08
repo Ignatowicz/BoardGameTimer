@@ -35,14 +35,7 @@ public class PlayRepository {
 
     public PlayHelper findPlayById(Long id) {
         List<PlayHelper> foundPlay = playRepository.stream().filter(p -> p.getPlayId().equals(id)).collect(Collectors.toList());
-        //todo
         return foundPlay.get(0);
-//        for (PlayHelper play : findAllPlays()) {
-//            if (play.getPlayId().equals(id)) {
-//                return play;
-//            }
-//        }
-//        return null;
     }
 
     public void createPlay(PlayHelper play) {
@@ -50,26 +43,6 @@ public class PlayRepository {
     }
 
     public void updatePlay(PlayHelper updatedPlay) {
-//        PlayHelper play = PlayHelper.builder()
-//                .playId(updatedPlay.getPlayId())
-//                .gameId(updatedPlay.getGameId())
-//                .playerId(updatedPlay.getPlayerId())
-//                .isTourA(updatedPlay.isTourA())
-//                .playerGameStarterId(updatedPlay.getPlayerGameStarterId())
-//                .gameName(updatedPlay.getGameName())
-//                .timeRound(updatedPlay.getTimeRound())
-//                .timeGame(updatedPlay.getTimeGame())
-//                .minPlayers(updatedPlay.getMinPlayers())
-//                .maxPlayers(updatedPlay.getMaxPlayers())
-//                .friends(updatedPlay.getFriends())
-//                .accepted(updatedPlay.getAccepted())
-//                .playersTourA(updatedPlay.getPlayersTourA())
-//                .playersTourB(updatedPlay.getPlayersTourB())
-//                .roundTimePlayers(updatedPlay.getRoundTimePlayers())
-//                .gameTimePlayers(updatedPlay.getGameTimePlayers())
-//                .build();
-//        playRepository.remove(findPlayById(updatedPlay.getPlayId()));
-//        playRepository.add(play);
         findPlayById(updatedPlay.getPlayId()).setGameId(updatedPlay.getGameId());
         findPlayById(updatedPlay.getPlayId()).setGameName(updatedPlay.getGameName());
         findPlayById(updatedPlay.getPlayId()).setTimeRound(updatedPlay.getTimeRound());

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -20,7 +19,6 @@ import com.google.gson.JsonElement;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.UnsupportedEncodingException;
 
@@ -57,17 +55,16 @@ public class NewGameActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(
+                if (
                         nameEditText.getText().toString().isEmpty() ||
-                        minPlayersEditText.getText().toString().isEmpty() ||
-                        maxPlayersEditText.getText().toString().isEmpty() ||
-                        timeRoundEditText.getText().toString().isEmpty() ||
-                        timeGameEditText.getText().toString().isEmpty() ||
-                        Integer.valueOf(minPlayersEditText.getText().toString()) >  Integer.valueOf(maxPlayersEditText.getText().toString())
+                                minPlayersEditText.getText().toString().isEmpty() ||
+                                maxPlayersEditText.getText().toString().isEmpty() ||
+                                timeRoundEditText.getText().toString().isEmpty() ||
+                                timeGameEditText.getText().toString().isEmpty() ||
+                                Integer.valueOf(minPlayersEditText.getText().toString()) > Integer.valueOf(maxPlayersEditText.getText().toString())
                 ) {
                     startGameButton.setEnabled(false);
-                }
-                else {
+                } else {
                     startGameButton.setEnabled(true);
                 }
             }
@@ -91,42 +88,12 @@ public class NewGameActivity extends AppCompatActivity {
             Integer timeGame = Integer.valueOf(timeGameEditText.getText().toString());
 
             Game game = new Game(name, minPlayers, maxPlayers, timeRound, timeGame);
-//            addGame(game);
-            addUser(game);
+            user.getGames().add(game);
+            addGameToUser();
         });
     }
 
-    public void addGame(Game game) {
-        Gson gson = new Gson();
-        String jsonParams = gson.toJson(game);
-        final StringEntity[] entity;
-        try {
-            entity = new StringEntity[]{new StringEntity(jsonParams)};
-            HttpUtils.post(getApplicationContext(), "games/add", entity[0], "application/json", new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    System.out.println(statusCode + response.toString());
-
-                    Gson gson = new Gson();
-                    JsonElement element = gson.fromJson(response.toString(), JsonElement.class);
-                    Game addedGame = gson.fromJson(element, Game.class);
-                    user.addGame(addedGame);
-//                    addUser();
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    System.out.println(statusCode + responseString);
-                }
-            });
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public void addUser(Game addeGame) {
-        user.getGames().add(addeGame);
+    public void addGameToUser() {
         Gson gson = new Gson();
         String jsonParams = gson.toJson(user);
         final StringEntity[] entity;
@@ -165,7 +132,6 @@ public class NewGameActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
         Intent intent = new Intent();
         intent.putExtra("user", user);
         setResult(RESULT_OK, intent);

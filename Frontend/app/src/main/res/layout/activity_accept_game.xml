@@ -35,7 +35,7 @@
             android:layout_below="@+id/textOpenedNotification"
             android:layout_margin="30dp"
             android:layout_toStartOf="@+id/textOpenedNotification"
-            android:text="Odrzuć" />
+            android:text="REJECT" />
 
         <Button
             android:id="@+id/acceptGameButton"
@@ -44,7 +44,7 @@
             android:layout_below="@+id/textOpenedNotification"
             android:layout_margin="30dp"
             android:layout_toEndOf="@+id/textOpenedNotification"
-            android:text="Graj" />
+            android:text="PLAY" />
     </LinearLayout>
 
 

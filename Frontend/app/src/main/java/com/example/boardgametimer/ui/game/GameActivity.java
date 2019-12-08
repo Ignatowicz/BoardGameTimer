@@ -13,7 +13,6 @@ import com.example.boardgametimer.data.model.LoggedInUser;
 
 public class GameActivity extends AppCompatActivity {
 
-    LoggedInUser user;
     String title;
     String description;
 

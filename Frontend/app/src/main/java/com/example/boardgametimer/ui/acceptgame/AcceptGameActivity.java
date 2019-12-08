@@ -46,7 +46,11 @@ public class AcceptGameActivity extends AppCompatActivity {
 
         acceptGameButton.setOnClickListener(v -> acceptGame());
 
-        rejectGameButton.setOnClickListener(v -> rejectGame());
+        rejectGameButton.setOnClickListener(v -> new AlertDialog.Builder(this)
+                .setTitle("Exit")
+                .setMessage("Exit this view will do provoke cancellation the game")
+                .setNegativeButton(android.R.string.no, null)
+                .setPositiveButton(android.R.string.yes, (arg0, arg1) -> rejectGame()).create().show());
     }
 
     private void acceptGame() {
@@ -76,7 +80,8 @@ public class AcceptGameActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 System.out.println(statusCode + response.toString());
 
-                finish();
+                finishAffinity();
+                System.exit(0);
             }
 
             @Override
@@ -97,10 +102,7 @@ public class AcceptGameActivity extends AppCompatActivity {
                 .setTitle("Exit")
                 .setMessage("Exit this view will do provoke cancellation the game")
                 .setNegativeButton(android.R.string.no, null)
-                .setPositiveButton(android.R.string.yes, (arg0, arg1) -> {
-                    rejectGame();
-                    super.onBackPressed();
-                }).create().show();
+                .setPositiveButton(android.R.string.yes, (arg0, arg1) -> rejectGame()).create().show();
     }
 
 }

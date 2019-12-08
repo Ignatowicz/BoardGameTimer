@@ -25,7 +25,7 @@
                 android:layout_width="146dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Nazwa:" />
+                android:text="Name:" />
 
             <EditText
                 android:id="@+id/nameEditText"
@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="Nazwa"
+                android:hint="name"
                 android:inputType="textPersonName" />
 
         </LinearLayout>
@@ -48,7 +48,7 @@
                 android:layout_width="149dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Min ilość graczy:" />
+                android:text="Min players number:" />
 
             <EditText
                 android:id="@+id/minPlayersEditText"
@@ -56,7 +56,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="Min ilość graczy"
+                android:hint="number"
                 android:digits="0123456789"
                 android:inputType="phone" />
         </LinearLayout>
@@ -71,7 +71,7 @@
                 android:layout_width="148dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Max ilość graczy:" />
+                android:text="Max players number" />
 
             <EditText
                 android:id="@+id/maxPlayersEditText"
@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="Max ilość graczy"
+                android:hint="number"
                 android:digits="0123456789"
                 android:inputType="phone" />
         </LinearLayout>
@@ -94,7 +94,7 @@
                 android:layout_width="148dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Czas rundy(s):" />
+                android:text="Time round(s):" />
 
             <EditText
                 android:id="@+id/timeRoundEditText"
@@ -102,7 +102,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="Czas rundy"
+                android:hint="provide time in seconds"
                 android:digits="0123456789"
                 android:inputType="phone" />
         </LinearLayout>
@@ -117,7 +117,7 @@
                 android:layout_width="149dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Czas gry(s):" />
+                android:text="Time game(s):" />
 
             <EditText
                 android:id="@+id/timeGameEditText"
@@ -125,7 +125,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="Czas gry"
+                android:hint="provide time in seconds"
                 android:digits="0123456789"
                 android:inputType="phone" />
         </LinearLayout>
@@ -138,7 +138,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:enabled="false"
-        android:text="Dodaj grę"
+        android:text="ADD GAME"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"

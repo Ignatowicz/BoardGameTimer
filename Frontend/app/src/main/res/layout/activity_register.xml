@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:enabled="false"
-        android:text="Rejestruj"
+        android:text="REGISTER"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:ems="10"
-            android:hint="Nazwa"
+            android:hint="name"
             android:inputType="textPersonName" />
 
         <EditText
@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:ems="10"
-            android:hint="Email"
+            android:hint="email"
             android:inputType="textPersonName|textEmailAddress" />
 
         <EditText
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:ems="10"
-            android:hint="Hasło"
+            android:hint="password"
             android:inputType="textPassword" />
 
         <EditText
@@ -60,7 +60,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:ems="10"
-            android:hint="Powtórz hasło"
+            android:hint="repeat password"
             android:inputType="textPassword" />
     </LinearLayout>
 

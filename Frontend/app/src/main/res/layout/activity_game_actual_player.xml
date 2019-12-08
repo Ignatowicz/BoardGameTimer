@@ -26,7 +26,7 @@
             android:layout_width="136dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Runda gracza:"
+            android:text="Player:"
             android:textSize="15sp" />
 
         <TextView
@@ -34,7 +34,7 @@
             android:layout_width="270dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="runda"
+            android:text="player"
             android:textSize="15sp" />
     </LinearLayout>
 
@@ -57,7 +57,7 @@
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Rezerwa:"
+            android:text="Reserve:"
             android:textSize="15sp" />
 
         <TextView
@@ -86,14 +86,14 @@
                 android:layout_width="125dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:text="Koniec gry" />
+                android:text="END GAME" />
 
             <Button
                 android:id="@+id/endTourButton"
                 android:layout_width="125dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:text="Pas" />
+                android:text="PASS" />
         </LinearLayout>
 
         <LinearLayout
@@ -106,14 +106,14 @@
                 android:layout_width="125dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:text="Pauza" />
+                android:text="PAUSE" />
 
             <Button
                 android:id="@+id/endRoundButton"
                 android:layout_width="125dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:text="Koniec rundy" />
+                android:text="END ROUND" />
         </LinearLayout>
     </LinearLayout>
 

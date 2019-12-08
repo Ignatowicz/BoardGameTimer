@@ -18,7 +18,7 @@
             android:id="@+id/startGameButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Rozpocznij grę"
+            android:text="START GAME"
             android:layout_gravity="center_vertical|center_horizontal"
             android:enabled="false"/>
 
@@ -49,14 +49,14 @@
                     android:layout_width="31dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Czas Gry(s):" />
+                    android:text="Game time(s):" />
 
                 <TextView
                     android:id="@+id/gameTimeTextView"
                     android:layout_width="88dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="Czas gry" />
+                    android:text="game time in seconds" />
             </LinearLayout>
 
             <LinearLayout
@@ -71,14 +71,14 @@
                     android:layout_width="48dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Czas Rundy(s):" />
+                    android:text="Round time(s):" />
 
                 <TextView
                     android:id="@+id/roundTimeTextView"
                     android:layout_width="105dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Czas rundy" />
+                    android:text="round time in seconds" />
             </LinearLayout>
 
             <LinearLayout
@@ -90,17 +90,17 @@
 
                 <TextView
                     android:id="@+id/textView8"
-                    android:layout_width="wrap_content"
+                    android:layout_width="82dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Ilość graczy:" />
+                    android:text="Players number:" />
 
                 <TextView
                     android:id="@+id/playersNumberTextView"
                     android:layout_width="138dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="Ilość graczy" />
+                    android:text="players number" />
             </LinearLayout>
         </LinearLayout>
 

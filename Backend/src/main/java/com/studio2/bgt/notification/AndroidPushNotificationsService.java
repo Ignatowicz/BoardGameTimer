@@ -27,4 +27,5 @@ public class AndroidPushNotificationsService {
 
         return CompletableFuture.completedFuture(firebaseResponse);
     }
+
 }

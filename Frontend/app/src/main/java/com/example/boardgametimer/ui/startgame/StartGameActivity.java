@@ -154,9 +154,6 @@ public class StartGameActivity extends AppCompatActivity implements AdapterPlaye
         updatePlayersRecyclerView();
         updateFriendsRecyclerView();
 
-        System.out.println("T1" + players.size());
-        System.out.println("T2" + currentGame.getMinPlayers());
-
         if (players.size() + 1 < currentGame.getMinPlayers() ||
                 players.size() - 1 > currentGame.getMaxPlayers()) {
             startGameButton.setEnabled(false);
@@ -169,6 +166,7 @@ public class StartGameActivity extends AppCompatActivity implements AdapterPlaye
     }
 
     private void updatePlayersRecyclerView() {
+
         // set up the PlayersRecyclerView
         RecyclerView recyclerView = findViewById(R.id.startgame_players_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -178,6 +176,7 @@ public class StartGameActivity extends AppCompatActivity implements AdapterPlaye
     }
 
     private void updateFriendsRecyclerView() {
+
         // set up the FriendsRecyclerView
         RecyclerView recyclerView = findViewById(R.id.startgame_friends_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -188,7 +187,6 @@ public class StartGameActivity extends AppCompatActivity implements AdapterPlaye
 
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
         Intent intent = new Intent();
         intent.putExtra("user", user);
         setResult(RESULT_OK, intent);

@@ -13,8 +13,8 @@ import cz.msebera.android.httpclient.HttpEntity;
 
 public class HttpUtils {
 
-//    private static final String BASE_URL = "http://secret-falls-72080.herokuapp.com/api/";
-    private static final String BASE_URL = "http://192.168.0.227:8080/api/";
+    private static final String BASE_URL = "http://secret-falls-72080.herokuapp.com/api/";
+//    private static final String BASE_URL = "http://192.168.0.227:8080/api/";
 
     private static AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
     private static AsyncHttpClient syncHttpClient = new SyncHttpClient();
@@ -55,6 +55,7 @@ public class HttpUtils {
      * @return an async client when calling from the main thread, otherwise a sync client.
      */
     private static AsyncHttpClient getClient() {
+
         // Return the synchronous HTTP client when the thread is not prepared
         if (Looper.myLooper() == null)
             return syncHttpClient;

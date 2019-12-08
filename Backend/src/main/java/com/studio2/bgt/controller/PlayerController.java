@@ -1,7 +1,9 @@
 package com.studio2.bgt.controller;
 
+import com.studio2.bgt.model.entity.Game;
 import com.studio2.bgt.model.entity.Player;
 import com.studio2.bgt.model.helpers.Credentials;
+import com.studio2.bgt.model.repository.GameRepository;
 import com.studio2.bgt.model.repository.PlayerRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ public class PlayerController extends AbstractController {
 
     @Autowired
     private PlayerRepository playerRepository;
+
+    @Autowired
+    private GameRepository gameRepository;
 
     @GetMapping("/initFriends")
     public ResponseEntity<?> initFriends() {
@@ -78,13 +83,14 @@ public class PlayerController extends AbstractController {
             player.setFriend1(updatedPlayer.getFriend1());
             player.setFriend2(updatedPlayer.getFriend2());
 
-            player.getGames().forEach(f -> System.out.println(f.getName()));
-
-            System.out.println("playerid: " +player.getId());
-
             playerRepository.save(player);
 
-            playerRepository.findAll().forEach(f ->f.getGames().forEach(g -> System.out.println(g.getName())));
+            // save deleted games if they are
+            for (Game game : gameRepository.findAll()) {
+                if (!updatedPlayer.getGames().contains(game))
+                    gameRepository.delete(game);
+            }
+
             clearResponse(player);
             return ResponseEntity.ok().body(player);
         } else {
@@ -109,4 +115,5 @@ public class PlayerController extends AbstractController {
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("unauthorized");
     }
+
 }

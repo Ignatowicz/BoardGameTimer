@@ -8,9 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.boardgametimer.R;
@@ -114,27 +112,6 @@ public class RegisterActivity extends AppCompatActivity {
 
                     FirebaseMessaging.getInstance().subscribeToTopic(topic);
 
-                    // tokens -> maybe there is no need to have it cause of topic usage instead of tokens (it easier? to have it done)
-//        // TODO??: onCreateAccount
-//        FirebaseInstanceId.getInstance().getInstanceId()
-//                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-//                        if (!task.isSuccessful()) {
-//                            Log.w(TAG, "getInstanceId failed", task.getException());
-//                            return;
-//                        }
-//
-//                        // Get new Instance ID token
-//                        String token = task.getResult().getToken();
-//
-//                        // Log and toast
-//                        String msg = getString(R.string.msg_token_fmt, token);
-//                        Log.d(TAG, msg);
-//                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-
                     Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                     intent.putExtra("user", addedUser);
                     startActivity(intent);
@@ -143,24 +120,24 @@ public class RegisterActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    if (statusCode == 409) {
-                        Toast.makeText(getApplicationContext(), "Użytkownik o podanym adresie e-mail istnieje", Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Wystąpił błąd", Toast.LENGTH_LONG).show();
-                    }
+                    failedCreatingUser(statusCode);
                 }
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    if (statusCode == 409) {
-                        Toast.makeText(getApplicationContext(), "Użytkownik o podanym adresie e-mail istnieje", Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Wystąpił błąd", Toast.LENGTH_LONG).show();
-                    }
+                    failedCreatingUser(statusCode);
                 }
             });
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void failedCreatingUser(int statusCode) {
+        if (statusCode == 409) {
+            Toast.makeText(getApplicationContext(), "The user with provided email already exists", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "The error has occured", Toast.LENGTH_LONG).show();
         }
     }
 

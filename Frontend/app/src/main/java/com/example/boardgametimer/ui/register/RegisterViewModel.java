@@ -39,18 +39,17 @@ public class RegisterViewModel extends ViewModel {
         if (email == null) {
             return false;
         }
-//        if (email.contains("@")) {
-//            return Patterns.EMAIL_ADDRESS.matcher(email).matches();
-//        } else {
-//            return email.trim().isEmpty();
-//        }
-        return true;
+
+        if (email.contains("@")) {
+            return Patterns.EMAIL_ADDRESS.matcher(email).matches();
+        } else {
+            return email.trim().isEmpty();
+        }
     }
 
     // A placeholder password validation check
     private boolean isPasswordValid(String password) {
-        return password != null && password.trim().length() > 0;
-//        return password != null && password.trim().length() > 5;
+        return password != null && password.trim().length() > 5;
     }
 
 }

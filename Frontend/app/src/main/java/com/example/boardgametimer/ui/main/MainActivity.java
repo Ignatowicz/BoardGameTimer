@@ -93,14 +93,11 @@ public class MainActivity extends AppCompatActivity implements Adapter.ItemClick
 
     @Override
     public void onLongItemClick(View view, int position) {
+        user.getGames().remove(adapter.getItem(position));
         removeGame(position);
     }
 
     private void removeGame(int position) {
-        if (MainActivity.this.user.getGames().contains(adapter.getItem(position))) {
-            MainActivity.this.user.getGames().remove(adapter.getItem(position));
-        }
-
         Gson gson = new Gson();
         String jsonParams = gson.toJson(user);
         final StringEntity[] entity;
@@ -112,7 +109,6 @@ public class MainActivity extends AppCompatActivity implements Adapter.ItemClick
                     System.out.println(statusCode + response.toString());
 
                     games.remove(adapter.getItem(position));
-                    deleteGame(adapter.getItem(position));
                     updateRecyclerView();
                 }
 
@@ -132,27 +128,6 @@ public class MainActivity extends AppCompatActivity implements Adapter.ItemClick
         }
     }
 
-    private void deleteGame(Game game) {
-        HttpUtils.delete("games/" + game.getId(), null, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                System.out.println(statusCode + responseString);
-
-                updateRecyclerView();
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                System.out.println(statusCode + responseString);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                System.out.println(errorResponse.toString());
-            }
-        });
-    }
-
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
@@ -165,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements Adapter.ItemClick
     }
 
     private void updateRecyclerView() {
+
         // set up the RecyclerView
         RecyclerView recyclerView = findViewById(R.id.main_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

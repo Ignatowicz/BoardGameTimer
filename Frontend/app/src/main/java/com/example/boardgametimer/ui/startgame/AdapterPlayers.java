@@ -60,7 +60,8 @@ public class AdapterPlayers extends RecyclerView.Adapter<AdapterPlayers.ViewHold
 
         @Override
         public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemPlayerClick(view, getAdapterPosition());
+            if (mClickListener != null)
+                mClickListener.onItemPlayerClick(view, getAdapterPosition());
         }
     }
 

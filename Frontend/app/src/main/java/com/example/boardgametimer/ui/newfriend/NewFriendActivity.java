@@ -83,8 +83,8 @@ public class NewFriendActivity extends AppCompatActivity implements Adapter.Item
                         if (flag) {
                             continue;
                         }
-                        // do not display actual player and his actual friends
 
+                        // do not display actual player and his actual friends
                         friends.add(foundPlayer);
 
                         updateRecyclerView();
@@ -107,6 +107,7 @@ public class NewFriendActivity extends AppCompatActivity implements Adapter.Item
     }
 
     private void updateRecyclerView() {
+
         // set up the RecyclerView
         RecyclerView recyclerView = findViewById(R.id.new_friends_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -164,7 +165,6 @@ public class NewFriendActivity extends AppCompatActivity implements Adapter.Item
 
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
         Intent intent = new Intent();
         intent.putExtra("user", user);
         setResult(RESULT_OK, intent);

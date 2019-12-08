@@ -14,7 +14,6 @@ import com.example.boardgametimer.data.model.LoggedInUser;
 import com.example.boardgametimer.ui.newfriend.NewFriendActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONObject;
@@ -54,13 +53,10 @@ public class FriendsActivity extends AppCompatActivity implements Adapter.ItemCl
         updateRecyclerView();
 
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(FriendsActivity.this, NewFriendActivity.class);
-                intent.putExtra("user", user);
-                startActivityForResult(intent, 1);
-            }
+        fab.setOnClickListener(view -> {
+            Intent intent = new Intent(FriendsActivity.this, NewFriendActivity.class);
+            intent.putExtra("user", user);
+            startActivityForResult(intent, 1);
         });
     }
 
@@ -122,6 +118,7 @@ public class FriendsActivity extends AppCompatActivity implements Adapter.ItemCl
     }
 
     private void updateRecyclerView() {
+
         // set up the RecyclerView
         RecyclerView recyclerView = findViewById(R.id.friends_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -132,7 +129,6 @@ public class FriendsActivity extends AppCompatActivity implements Adapter.ItemCl
 
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
         Intent intent = new Intent();
         intent.putExtra("user", user);
         setResult(RESULT_OK, intent);

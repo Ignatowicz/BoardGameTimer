@@ -43,6 +43,12 @@ public class PlayController extends AbstractController {
         return ++playRepository.playId;
     }
 
+    @GetMapping
+    public Iterable findAll() {
+        playRepository.findAllPlays().forEach(this::clearResponse);
+        return playRepository.findAllPlays();
+    }
+
     @GetMapping("/{playId}")
     public ResponseEntity<?> getActualPlay(@PathVariable Long playId) {
         PlayHelper play = playRepository.findPlayById(playId);
@@ -56,7 +62,6 @@ public class PlayController extends AbstractController {
         play.setGameId(updatedPlay.getGameId());
         play.setPlayerId(updatedPlay.getPlayerId());
         play.setPlayerGameStarterId(updatedPlay.getPlayerGameStarterId());
-//        play.setTourA(updatedPlay.isTourA());
         play.setGameName(updatedPlay.getGameName());
         play.setTimeRound(updatedPlay.getTimeRound());
         play.setTimeGame(updatedPlay.getTimeGame());
@@ -240,7 +245,7 @@ public class PlayController extends AbstractController {
             return ResponseEntity.notFound().build();
         }
 
-//        playRepository.deletePlay(playId);
+        playRepository.deletePlay(playId);
 
         // notify about cancel game start
         NotificationHelper notificationHelper = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.FRIENDS);
@@ -265,11 +270,9 @@ public class PlayController extends AbstractController {
             return ResponseEntity.notFound().build();
         }
 
-        System.out.println("istourA "+play.isTourA());
         Player actualPlayer;
 
         if (play.isTourA()) {
-            System.out.println("tura A");
             actualPlayer = play.getPlayersTourA().remove();
             play.getPlayersTourA().add(actualPlayer);
 
@@ -287,7 +290,6 @@ public class PlayController extends AbstractController {
 //            NotificationHelper notificationHelperAllExceptFirstPlayer = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.ALL_EXCEPT_FIRST_PLAYER_A);
 //            notifyOtherPlayersAboutFirstPlayerTurnStart(notificationHelperAllExceptFirstPlayer);
         } else {
-            System.out.println("tura B");
             actualPlayer = play.getPlayersTourB().remove();
             play.getPlayersTourB().add(actualPlayer);
 
@@ -318,15 +320,10 @@ public class PlayController extends AbstractController {
 
         Player actualPlayer;
 
-        System.out.println("istourA "+play.isTourA());
-
         if (play.isTourA()) {
-            System.out.println("tura A");
             actualPlayer = play.getPlayersTourA().remove();
 
             play.getPlayersTourB().add(actualPlayer);
-
-            play.getPlayersTourB().forEach(f -> System.out.println(f.getName()));
 
             // clear friends' friends
             clearResponse(play);
@@ -343,12 +340,9 @@ public class PlayController extends AbstractController {
             NotificationHelper notificationHelper = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.FIRST_PLAYER_TOUR_A);
             notifyFirstPlayerAboutTurnStart(notificationHelper);
         } else {
-            System.out.println("tura B");
             actualPlayer = play.getPlayersTourB().remove();
 
             play.getPlayersTourA().add(actualPlayer);
-
-            play.getPlayersTourA().forEach(f -> System.out.println(f.getName()));
 
             // clear friends' friends
             clearResponse(play);
@@ -382,15 +376,11 @@ public class PlayController extends AbstractController {
         playRepository.updatePlay(play);
         playRepository.findPlayById(play.getPlayId()).setTourA(isTourA);
 
-        System.out.println("zapisana tura: " + playRepository.findPlayById(play.getPlayId()).isTourA());
-
         // notify first player about his turn
         if (isTourA) {
-            System.out.println("zaczynam do tury A");
             NotificationHelper notificationHelper = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.FIRST_PLAYER_TOUR_A);
             notifyFirstPlayerAboutTurnStart(notificationHelper);
         } else {
-            System.out.println("zaczynam do tury B");
             NotificationHelper notificationHelper = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.FIRST_PLAYER_TOUR_B);
             notifyFirstPlayerAboutTurnStart(notificationHelper);
         }
@@ -430,7 +420,7 @@ public class PlayController extends AbstractController {
             return ResponseEntity.notFound().build();
         }
 
-//        playRepository.deletePlay(playId);
+        playRepository.deletePlay(playId);
 
         // notify about game end
         NotificationHelper notificationHelper = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.FRIENDS);
@@ -443,9 +433,7 @@ public class PlayController extends AbstractController {
                 );
         log.info(String.valueOf(notification));
 
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("response", "The game is over");
-        return ResponseEntity.ok().body(jsonObject);
+        return ResponseEntity.ok().body(play);
     }
 
 }

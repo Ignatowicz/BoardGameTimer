@@ -29,7 +29,7 @@ public class Player {
     @Column(nullable = false, name = "password")
     private String password;
 
-    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
     private Set<Game> games;
 
@@ -66,4 +66,5 @@ public class Player {
     public void addFriend(Player player) {
         this.friend1.add(player);
     }
+
 }
