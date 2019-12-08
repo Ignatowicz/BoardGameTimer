@@ -67,6 +67,7 @@ public abstract class AbstractController {
             play.getPlayersTourA().forEach(f -> players.put(String.valueOf(f.getId()), f.getName()));
             play.getPlayersTourA().forEach(f -> topics.add("Player_" + f.getId()));
         } else if (sendTo.equals(SendTo.PLAYERS_TOUR_B)) {
+            System.out.println("sending tourA:" + play.isTourA());
             play.getPlayersTourB().forEach(f -> players.put(String.valueOf(f.getId()), f.getName()));
             play.getPlayersTourB().forEach(f -> topics.add("Player_" + f.getId()));
         } else if (sendTo.equals(SendTo.FIRST_PLAYER_TOUR_A)) {

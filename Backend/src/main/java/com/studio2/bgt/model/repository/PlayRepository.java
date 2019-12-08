@@ -50,32 +50,38 @@ public class PlayRepository {
     }
 
     public void updatePlay(PlayHelper updatedPlay) {
-        PlayHelper play = PlayHelper.builder()
-                .playId(updatedPlay.getPlayId())
-                .gameId(updatedPlay.getGameId())
-                .playerId(updatedPlay.getPlayerId())
-                .isTourA(updatedPlay.isTourA())
-                .playerGameStarterId(updatedPlay.getPlayerGameStarterId())
-                .gameName(updatedPlay.getGameName())
-                .timeRound(updatedPlay.getTimeRound())
-                .timeGame(updatedPlay.getTimeGame())
-                .minPlayers(updatedPlay.getMinPlayers())
-                .maxPlayers(updatedPlay.getMaxPlayers())
-                .friends(updatedPlay.getFriends())
-                .accepted(updatedPlay.getAccepted())
-                .playersTourA(updatedPlay.getPlayersTourA())
-                .playersTourB(updatedPlay.getPlayersTourB())
-                .roundTimePlayers(updatedPlay.getRoundTimePlayers())
-                .gameTimePlayers(updatedPlay.getGameTimePlayers())
-                .build();
-        System.out.println("\nsize1" + playRepository.size());
-        playRepository.remove(findPlayById(updatedPlay.getPlayId()));
-        System.out.println("\nsize2" + playRepository.size());
-
-        playRepository.add(play);
-
-
-        System.out.println("\nsize3" + playRepository.size());
+//        PlayHelper play = PlayHelper.builder()
+//                .playId(updatedPlay.getPlayId())
+//                .gameId(updatedPlay.getGameId())
+//                .playerId(updatedPlay.getPlayerId())
+//                .isTourA(updatedPlay.isTourA())
+//                .playerGameStarterId(updatedPlay.getPlayerGameStarterId())
+//                .gameName(updatedPlay.getGameName())
+//                .timeRound(updatedPlay.getTimeRound())
+//                .timeGame(updatedPlay.getTimeGame())
+//                .minPlayers(updatedPlay.getMinPlayers())
+//                .maxPlayers(updatedPlay.getMaxPlayers())
+//                .friends(updatedPlay.getFriends())
+//                .accepted(updatedPlay.getAccepted())
+//                .playersTourA(updatedPlay.getPlayersTourA())
+//                .playersTourB(updatedPlay.getPlayersTourB())
+//                .roundTimePlayers(updatedPlay.getRoundTimePlayers())
+//                .gameTimePlayers(updatedPlay.getGameTimePlayers())
+//                .build();
+//        playRepository.remove(findPlayById(updatedPlay.getPlayId()));
+//        playRepository.add(play);
+        findPlayById(updatedPlay.getPlayId()).setGameId(updatedPlay.getGameId());
+        findPlayById(updatedPlay.getPlayId()).setGameName(updatedPlay.getGameName());
+        findPlayById(updatedPlay.getPlayId()).setTimeRound(updatedPlay.getTimeRound());
+        findPlayById(updatedPlay.getPlayId()).setTimeGame(updatedPlay.getTimeGame());
+        findPlayById(updatedPlay.getPlayId()).setMinPlayers(updatedPlay.getMinPlayers());
+        findPlayById(updatedPlay.getPlayId()).setMaxPlayers(updatedPlay.getMaxPlayers());
+        findPlayById(updatedPlay.getPlayId()).setFriends(updatedPlay.getFriends());
+        findPlayById(updatedPlay.getPlayId()).setAccepted(updatedPlay.getAccepted());
+        findPlayById(updatedPlay.getPlayId()).setPlayersTourA(updatedPlay.getPlayersTourA());
+        findPlayById(updatedPlay.getPlayId()).setPlayersTourB(updatedPlay.getPlayersTourB());
+        findPlayById(updatedPlay.getPlayId()).setRoundTimePlayers(updatedPlay.getRoundTimePlayers());
+        findPlayById(updatedPlay.getPlayId()).setGameTimePlayers(updatedPlay.getGameTimePlayers());
     }
 
     public void deletePlay(Long id) {

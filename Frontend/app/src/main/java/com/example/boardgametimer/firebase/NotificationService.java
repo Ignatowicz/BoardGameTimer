@@ -1,6 +1,5 @@
 package com.example.boardgametimer.firebase;
 
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -78,7 +77,7 @@ public class NotificationService extends FirebaseMessagingService {
 
     @Override
     public void onDeletedMessages() {
-//        cancelGame();
+
     }
 
     private void getActualPlayer() {
@@ -202,7 +201,7 @@ public class NotificationService extends FirebaseMessagingService {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel mChannel = new NotificationChannel("id", "NAZWA",NotificationManager.IMPORTANCE_HIGH);
+            NotificationChannel mChannel = new NotificationChannel("id", "NAZWA", NotificationManager.IMPORTANCE_HIGH);
             mChannel.setDescription("DESCRIPTION");
             mChannel.enableLights(true);
             mChannel.setLightColor(Color.RED);
@@ -210,48 +209,7 @@ public class NotificationService extends FirebaseMessagingService {
             notificationManager.createNotificationChannel(mChannel);
         }
 
-        notificationManager.notify(Integer.parseInt(click_action) /* ID of notification */, notificationBuilder.build());
+        notificationManager.notify(Integer.parseInt(click_action), notificationBuilder.build());
     }
 
-    private void cancelGame() {
-        HttpUtils.get("play/" + play_id + "/rejectGame/" + player_id, null, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                Intent intent = new Intent(NotificationService.this, GameActivity.class);
-                intent.putExtra("title", title);
-                intent.putExtra("description", description);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                System.out.println(statusCode + responseString);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                System.out.println(errorResponse.toString());
-            }
-        });
-    }
-
-    // maybe there is noo need to use tokens..
-//    /**
-//     * Called if InstanceID token is updated. This may occur if the security of
-//     * the previous token had been compromised. Note that this is called when the InstanceID token
-//     * is initially generated so this is where you would retrieve the token.
-//     */
-//    @Override
-//    public void onNewToken(String token) {
-//        Log.d(TAG, "Refreshed token: " + token);
-//
-//        // If you want to send messages to this application instance or
-//        // manage this apps subscriptions on the server side, send the
-//        // Instance ID token to your app server.
-//        sendRegistrationToServer(token);
-//    }
-//
-//    private void sendRegistrationToServer(String token) {
-//        // TO DO: Implement this method to send token to your app server.
-//    }
 }

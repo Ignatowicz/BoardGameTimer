@@ -46,7 +46,6 @@ public class GameActualPlayerActivity extends AppCompatActivity {
     Boolean timeRoundHasEnded = false;
 
     TextView gameNameTextView;
-    TextView tourTextView;
     TextView whoseRoundTextView;
 
     @Override
@@ -63,12 +62,12 @@ public class GameActualPlayerActivity extends AppCompatActivity {
         this.play = (PlayHelper) getIntent().getSerializableExtra("play");
 
         gameNameTextView = findViewById(R.id.gameNameTextView);
-        tourTextView = findViewById(R.id.tourTextView);
         whoseRoundTextView = findViewById(R.id.whoseRoundTextView);
 
         gameNameTextView.setText(play.getGameName());
-        tourTextView.setText(play.isTourA() ? "A" : "B");
         whoseRoundTextView.setText(user.getName());
+
+        Toast.makeText(getApplicationContext(), "toyrA " + play.isTourA(), Toast.LENGTH_LONG).show();
 
         roundTimerTextView = findViewById(R.id.roundTimerTextView);
         gameTimerTextView = findViewById(R.id.gameTimerTextView);
@@ -101,7 +100,7 @@ public class GameActualPlayerActivity extends AppCompatActivity {
     }
 
     private void endRound() {
-        HttpUtils.get("play/" + play.getPlayId() + "/tour/" + play.isTourA() + "/endRound/" + user.getId(), null, new JsonHttpResponseHandler() {
+        HttpUtils.get("play/" + play.getPlayId() + "/endRound/" + user.getId(), null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 System.out.println(statusCode + response.toString());
@@ -111,10 +110,8 @@ public class GameActualPlayerActivity extends AppCompatActivity {
                 PlayHelper play = gson.fromJson(element, PlayHelper.class);
 
                 play.getGameTimePlayers().put(user.getId(), gameTimeLeftInMillis / 1000);
-                updatePlay(play);
 
-                pauseOrResumeGame();
-                finish();
+                updatePlay(play);
             }
 
             @Override
@@ -140,11 +137,18 @@ public class GameActualPlayerActivity extends AppCompatActivity {
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     System.out.println(statusCode + response.toString());
 
+                    Gson gson = new Gson();
+                    JsonElement element = gson.fromJson(response.toString(), JsonElement.class);
+                    PlayHelper play = gson.fromJson(element, PlayHelper.class);
+
                     endGameButton.setEnabled(false);
                     endTourButton.setEnabled(false);
                     endRoundButton.setEnabled(false);
                     pauseGameButton.setEnabled(false);
-                    Toast.makeText(getApplicationContext(), "Your turn has ended!", Toast.LENGTH_LONG).show();
+
+                    pauseOrResumeGame();
+
+                    finish();
                 }
 
                 @Override
@@ -164,7 +168,7 @@ public class GameActualPlayerActivity extends AppCompatActivity {
     }
 
     private void endTour() {
-        HttpUtils.get("play/" + play.getPlayId() + "/tour/" + play.isTourA() + "/endTour/" + user.getId(), null, new JsonHttpResponseHandler() {
+        HttpUtils.get("play/" + play.getPlayId() + "/endTour/" + user.getId(), null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 System.out.println(statusCode + response.toString());
@@ -174,10 +178,8 @@ public class GameActualPlayerActivity extends AppCompatActivity {
                 PlayHelper play = gson.fromJson(element, PlayHelper.class);
 
                 play.getGameTimePlayers().put(user.getId(), gameTimeLeftInMillis / 1000);
-                updatePlay(play);
 
-                pauseOrResumeGame();
-                finish();
+                updatePlay(play);
             }
 
             @Override
