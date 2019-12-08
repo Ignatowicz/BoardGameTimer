@@ -110,6 +110,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                     // add user to topic of his notifications
                     String topic = "Player_" + addedUser.getId();
+                    Toast.makeText(getApplicationContext(), "Your id: " + addedUser.getId(), Toast.LENGTH_LONG).show();
 
                     FirebaseMessaging.getInstance().subscribeToTopic(topic);
 

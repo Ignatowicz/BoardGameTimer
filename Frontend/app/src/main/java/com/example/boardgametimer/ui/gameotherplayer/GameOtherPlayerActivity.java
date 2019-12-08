@@ -27,7 +27,7 @@ public class GameOtherPlayerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game_actual_player);
+        setContentView(R.layout.activity_game_other_player);
 
         // hide return home button
         getSupportActionBar().setDisplayShowHomeEnabled(false);
