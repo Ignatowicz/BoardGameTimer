@@ -2,6 +2,7 @@ package com.studio2.bgt.controller;
 
 import com.studio2.bgt.model.entity.Game;
 import com.studio2.bgt.model.repository.GameRepository;
+import com.studio2.bgt.model.repository.PlayerRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,9 @@ public class GameController extends AbstractController {
 
     @Autowired
     private GameRepository gameRepository;
+
+    @Autowired
+    private PlayerRepository playerRepository;
 
     @GetMapping
     public Iterable findAll() {
@@ -65,6 +69,8 @@ public class GameController extends AbstractController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteGame(@PathVariable Long id) {
+
+//        playerRepository.findAll().forEach(f -> f.getGames().stream().filter(game -> game));
         gameRepository.deleteById(id);
         return ResponseEntity.ok().build();
     }

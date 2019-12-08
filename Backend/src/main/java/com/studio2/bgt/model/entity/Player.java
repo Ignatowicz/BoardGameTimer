@@ -29,7 +29,7 @@ public class Player {
     @Column(nullable = false, name = "password")
     private String password;
 
-    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
     private Set<Game> games;
 

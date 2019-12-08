@@ -91,7 +91,8 @@ public class NewGameActivity extends AppCompatActivity {
             Integer timeGame = Integer.valueOf(timeGameEditText.getText().toString());
 
             Game game = new Game(name, minPlayers, maxPlayers, timeRound, timeGame);
-            addGame(game);
+//            addGame(game);
+            addUser(game);
         });
     }
 
@@ -110,7 +111,7 @@ public class NewGameActivity extends AppCompatActivity {
                     JsonElement element = gson.fromJson(response.toString(), JsonElement.class);
                     Game addedGame = gson.fromJson(element, Game.class);
                     user.addGame(addedGame);
-                    addUser();
+//                    addUser();
                 }
 
                 @Override
@@ -124,7 +125,8 @@ public class NewGameActivity extends AppCompatActivity {
 
     }
 
-    public void addUser() {
+    public void addUser(Game addeGame) {
+        user.getGames().add(addeGame);
         Gson gson = new Gson();
         String jsonParams = gson.toJson(user);
         final StringEntity[] entity;

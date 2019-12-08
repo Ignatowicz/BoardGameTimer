@@ -80,6 +80,8 @@ public class PlayerController extends AbstractController {
 
             player.getGames().forEach(f -> System.out.println(f.getName()));
 
+            System.out.println("playerid: " +player.getId());
+
             playerRepository.save(player);
 
             playerRepository.findAll().forEach(f ->f.getGames().forEach(g -> System.out.println(g.getName())));
