@@ -34,8 +34,18 @@ public class PlayRepository {
     }
 
     public PlayHelper findPlayById(Long id) {
-        List<PlayHelper> foundPlay = playRepository.stream().filter(p -> p.getPlayId().equals(id)).collect(Collectors.toList());
-        return foundPlay.get(0);
+//        List<PlayHelper> foundPlay = playRepository.stream().filter(p -> p.getPlayId().equals(id)).collect(Collectors.toList());
+//        //todo
+//        return foundPlay.get(0);
+        for (PlayHelper play: findAllPlays()) {
+            System.out.println("\nfindplay\n");
+            if (play.getPlayId().equals(id)) {
+                System.out.println("found " + play.getPlayId());
+                return play;
+            }
+        }
+        System.out.println("zwracam nulla\n");
+        return null;
     }
 
     public void createPlay(PlayHelper play) {
@@ -61,8 +71,14 @@ public class PlayRepository {
                 .roundTimePlayers(updatedPlay.getRoundTimePlayers())
                 .gameTimePlayers(updatedPlay.getGameTimePlayers())
                 .build();
+        System.out.println("\nsize1" + playRepository.size());
         playRepository.remove(findPlayById(updatedPlay.getPlayId()));
+        System.out.println("\nsize2" + playRepository.size());
+
         playRepository.add(play);
+
+
+        System.out.println("\nsize3" + playRepository.size());
     }
 
     public void deletePlay(Long id) {

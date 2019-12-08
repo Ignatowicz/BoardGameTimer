@@ -71,6 +71,7 @@ public class NotificationService extends FirebaseMessagingService {
             Log.d(TAG, "Message Notification Player Id: " + player_id);
             Log.d(TAG, "Message Notification Play Id: " + play_id);
 
+            System.out.println(play_id + " = playid\nget actoaul play");
             getActualPlayer();
         }
     }
@@ -116,6 +117,9 @@ public class NotificationService extends FirebaseMessagingService {
                 Gson gson = new Gson();
                 JsonElement element = gson.fromJson(response.toString(), JsonElement.class);
                 NotificationService.this.play = gson.fromJson(element, PlayHelper.class);
+
+                System.out.println("players toru a: ");
+                play.getPlayersTourA().forEach(f -> System.out.println(f.getName()));
 
                 sendNotification();
             }
@@ -200,7 +204,7 @@ public class NotificationService extends FirebaseMessagingService {
             notificationManager.createNotificationChannel(mChannel);
         }
 
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+        notificationManager.notify(Integer.parseInt(click_action) /* ID of notification */, notificationBuilder.build());
     }
 
     private void cancelGame() {
