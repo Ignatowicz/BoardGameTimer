@@ -1,10 +1,9 @@
 package com.studio2.bgt.controller;
 
-import com.studio2.bgt.model.helpers.Credentials;
 import com.studio2.bgt.model.entity.Player;
+import com.studio2.bgt.model.helpers.Credentials;
 import com.studio2.bgt.model.repository.PlayerRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -62,7 +61,7 @@ public class PlayerController extends AbstractController {
 
             return ResponseEntity.created(new URI("/api/players/" + result.getId()))
                     .body(result);
-        } catch (DataIntegrityViolationException $e){
+        } catch (DataIntegrityViolationException $e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
@@ -95,14 +94,12 @@ public class PlayerController extends AbstractController {
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> login(@Valid @RequestBody Credentials credentials) throws URISyntaxException {
-        System.out.println(credentials);
         Optional<Player> playerOptional = playerRepository.findPlayerByEmailAndPassword(credentials.getEmail(), credentials.getPassword());
-        if(playerOptional.isPresent())
-            {
-                Player player = playerOptional.get();
-                clearResponse(player);
-                return ResponseEntity.ok().body(player);
-            }
+        if (playerOptional.isPresent()) {
+            Player player = playerOptional.get();
+            clearResponse(player);
+            return ResponseEntity.ok().body(player);
+        }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("unauthorized");
     }
 }

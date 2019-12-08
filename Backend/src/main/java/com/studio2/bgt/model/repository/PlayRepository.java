@@ -34,18 +34,15 @@ public class PlayRepository {
     }
 
     public PlayHelper findPlayById(Long id) {
-//        List<PlayHelper> foundPlay = playRepository.stream().filter(p -> p.getPlayId().equals(id)).collect(Collectors.toList());
-//        //todo
-//        return foundPlay.get(0);
-        for (PlayHelper play: findAllPlays()) {
-            System.out.println("\nfindplay\n");
-            if (play.getPlayId().equals(id)) {
-                System.out.println("found " + play.getPlayId());
-                return play;
-            }
-        }
-        System.out.println("zwracam nulla\n");
-        return null;
+        List<PlayHelper> foundPlay = playRepository.stream().filter(p -> p.getPlayId().equals(id)).collect(Collectors.toList());
+        //todo
+        return foundPlay.get(0);
+//        for (PlayHelper play : findAllPlays()) {
+//            if (play.getPlayId().equals(id)) {
+//                return play;
+//            }
+//        }
+//        return null;
     }
 
     public void createPlay(PlayHelper play) {

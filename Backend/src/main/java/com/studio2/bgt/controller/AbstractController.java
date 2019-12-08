@@ -57,8 +57,6 @@ public abstract class AbstractController {
         Map<String, String> players = new HashMap<>();
         Set<String> topics = new HashSet<>();
 
-        play.getPlayersTourA().forEach(f -> System.out.println(f.getName()));
-
         if (sendTo.equals(SendTo.FRIENDS)) {
             play.getFriends().forEach(f -> players.put(String.valueOf(f.getId()), f.getName()));
             play.getFriends().forEach(f -> topics.add("Player_" + f.getId()));
@@ -96,8 +94,6 @@ public abstract class AbstractController {
                 play.getPlayersTourB().stream().skip(1).forEach(f -> topics.add("Player_" + f.getId()));
             }
         }
-
-        play.getPlayersTourA().forEach(f -> System.out.println(f.getName()));
 
         startGameNotification.setPlayer(player);
         startGameNotification.setPlay(play);

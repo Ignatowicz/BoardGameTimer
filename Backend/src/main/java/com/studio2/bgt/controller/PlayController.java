@@ -45,18 +45,12 @@ public class PlayController extends AbstractController {
 
     @GetMapping("/{playId}")
     public ResponseEntity<?> getActualPlay(@PathVariable Long playId) {
-        log.info("Called: getActualPlay with playId " + playId);
         PlayHelper play = playRepository.findPlayById(playId);
-
-        log.info("found playId "+ playId);
-        play.getPlayersTourA().forEach(f -> log.info("PlayerTourA" + f.getName()));
-
         return ResponseEntity.ok().body(play);
     }
 
     @PutMapping("/{playId}")
     public ResponseEntity<PlayHelper> updatePlay(@PathVariable Long playId, @Valid @RequestBody PlayHelper updatedPlay) {
-        log.info("Called: updatePlay with playId " + playId + " and updatedPlay: " + updatedPlay.toString());
         PlayHelper play = playRepository.findPlayById(playId);
         play.setPlayId(updatedPlay.getPlayId());
         play.setGameId(updatedPlay.getGameId());
@@ -77,7 +71,6 @@ public class PlayController extends AbstractController {
 
         // save
         playRepository.updatePlay(play);
-        play.getPlayersTourA().forEach(f -> log.info("PlayerTourA" + f.getName()));
 
         return ResponseEntity.ok().body(play);
     }
@@ -85,7 +78,6 @@ public class PlayController extends AbstractController {
     // main screen, request onTap the row with game name
     @GetMapping("/game/{gameId}")
     public ResponseEntity<?> play(@PathVariable Long gameId) {
-        log.info("Called: play with gameId " + gameId);
         Optional<Game> gameOptional = gameRepository.findById(gameId);
         if (gameOptional.isPresent()) {
             Game game = gameOptional.get();
@@ -124,13 +116,8 @@ public class PlayController extends AbstractController {
             // clear friends' friends
             clearResponse(play);
 
-            log.info("Created new play");
-
             // save
             playRepository.createPlay(play);
-
-            log.info("playid=" + play.getPlayId());
-            log.info("Saved play with palyid= " + playRepository.findPlayById(play.getPlayId()).getPlayId());
 
             return ResponseEntity.ok().body(play);
         }
@@ -141,7 +128,6 @@ public class PlayController extends AbstractController {
     @PostMapping("/startGame/{playerId}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public ResponseEntity<?> startGame(@Valid @PathVariable Long playerId, @RequestBody StartGameHelper startGame) {
-        log.info("Called: startGame with playerId " + playerId + " with startGame: " + startGame.toString());
         PlayHelper play = playRepository.findPlayById(startGame.getPlayId());
         if (play == null) {
             return ResponseEntity.notFound().build();
@@ -254,7 +240,7 @@ public class PlayController extends AbstractController {
             return ResponseEntity.notFound().build();
         }
 
-        playRepository.deletePlay(playId);
+//        playRepository.deletePlay(playId);
 
         // notify about cancel game start
         NotificationHelper notificationHelper = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.FRIENDS);
@@ -440,7 +426,7 @@ public class PlayController extends AbstractController {
             return ResponseEntity.notFound().build();
         }
 
-        playRepository.deletePlay(playId);
+//        playRepository.deletePlay(playId);
 
         // notify about game end
         NotificationHelper notificationHelper = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.FRIENDS);
