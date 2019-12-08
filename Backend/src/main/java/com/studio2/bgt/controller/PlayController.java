@@ -325,7 +325,7 @@ public class PlayController extends AbstractController {
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("response", "Player: " + actualPlayer.getName() + " has ended the round!");
-        return ResponseEntity.ok().body(jsonObject);
+        return ResponseEntity.ok().body(play);
     }
 
     @GetMapping("/{playId}/tour/{isTourA}/endTour/{playerId}")
@@ -379,7 +379,7 @@ public class PlayController extends AbstractController {
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("response", "Player: " + actualPlayer.getName() + " has ended the tour!");
-        return ResponseEntity.ok().body(jsonObject);
+        return ResponseEntity.ok().body(play);
     }
 
     private ResponseEntity<?> nextTour(PlayHelper play, Boolean isTourA, Long playerId) {

@@ -14,6 +14,7 @@ import com.example.boardgametimer.api.HttpUtils;
 import com.example.boardgametimer.data.model.LoggedInUser;
 import com.example.boardgametimer.data.model.PlayHelper;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONObject;
@@ -101,8 +102,12 @@ public class GameActualPlayerActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 System.out.println(statusCode + response.toString());
 
-                GameActualPlayerActivity.this.play.getGameTimePlayers().put(user.getId(), gameTimeLeftInMillis / 1000);
-                updatePlay(GameActualPlayerActivity.this.play);
+                Gson gson = new Gson();
+                JsonElement element = gson.fromJson(response.toString(), JsonElement.class);
+                PlayHelper play = gson.fromJson(element, PlayHelper.class);
+
+                play.getGameTimePlayers().put(user.getId(), gameTimeLeftInMillis / 1000);
+                updatePlay(play);
 
                 pauseOrResumeGame();
                 finish();
@@ -160,7 +165,12 @@ public class GameActualPlayerActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 System.out.println(statusCode + response.toString());
 
-                updatePlay(GameActualPlayerActivity.this.play);
+                Gson gson = new Gson();
+                JsonElement element = gson.fromJson(response.toString(), JsonElement.class);
+                PlayHelper play = gson.fromJson(element, PlayHelper.class);
+
+                play.getGameTimePlayers().put(user.getId(), gameTimeLeftInMillis / 1000);
+                updatePlay(play);
 
                 pauseOrResumeGame();
                 finish();
