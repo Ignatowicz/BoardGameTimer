@@ -66,17 +66,4 @@ public class Player {
     public void addFriend(Player player) {
         this.friend1.add(player);
     }
-
-    @Override
-    public String toString() {
-        return "Player{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", games=" + games +
-                ", friend1=" + friend1 +
-                ", friend2=" + friend2 +
-                '}';
-    }
 }

@@ -38,16 +38,4 @@ public class Game {
     @JsonBackReference
     private Player player;
 
-    @Override
-    public String toString() {
-        return "Game{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", timeRound=" + timeRound +
-                ", timeGame=" + timeGame +
-                ", minPlayers=" + minPlayers +
-                ", maxPlayers=" + maxPlayers +
-                ", player=" + player +
-                '}';
-    }
 }
