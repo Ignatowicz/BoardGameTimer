@@ -52,14 +52,27 @@ show grants for 'admin'@'localhost';
 
 4. Heroku
 - install heroku client: 
-	- $ sudo snap install --classic heroku
+```
+$ sudo snap install --classic heroku
+```
 - login to heroku
-	- $ heroku login
+```
+$ heroku login
+```
 - see actual logs
-	- $ heroku logs -a secret-falls-72080
+```
+$ heroku logs -a secret-falls-72080
+```
 - add remote repository
-	- $ git remote add heroku https://git.heroku.com/secret-falls-72080.git
+```
+$ git remote add heroku https://git.heroku.com/secret-falls-72080.git
+```
 - deploy changes:
-	- $ git subtree push --prefix Backend/ heroku master
+```
+$ git subtree push --prefix Backend/ heroku master
+```
 - deploy with force
-	- $ git push heroku \`git subtree split --prefix Backend/ master\`:master -f
+```
+$ git push heroku \`git subtree split --prefix Backend/ master\`:master -f
+```
+
