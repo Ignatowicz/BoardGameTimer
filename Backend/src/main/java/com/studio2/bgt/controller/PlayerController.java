@@ -81,6 +81,8 @@ public class PlayerController extends AbstractController {
             player.getGames().forEach(f -> System.out.println(f.getName()));
 
             playerRepository.save(player);
+
+            playerRepository.findAll().forEach(f ->f.getGames().forEach(g -> System.out.println(g.getName())));
             clearResponse(player);
             return ResponseEntity.ok().body(player);
         } else {
