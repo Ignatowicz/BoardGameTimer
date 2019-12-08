@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -91,16 +90,13 @@ public class RegisterActivity extends AppCompatActivity {
         passwordEditText.addTextChangedListener(afterTextChangedListener);
         repeatPasswordEditText.addTextChangedListener(afterTextChangedListener);
 
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String name = nameEditText.getText().toString();
-                String email = emailEditText.getText().toString().toLowerCase();
-                String password = passwordEditText.getText().toString();
+        registerButton.setOnClickListener(v -> {
+            String name = nameEditText.getText().toString();
+            String email = emailEditText.getText().toString().toLowerCase();
+            String password = passwordEditText.getText().toString();
 
-                LoggedInUser user = new LoggedInUser(name, email, password);
-                createUser(user);
-            }
+            LoggedInUser user = new LoggedInUser(name, email, password);
+            createUser(user);
         });
     }
 
@@ -149,7 +145,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    if(statusCode == 409){
+                    if (statusCode == 409) {
                         Toast.makeText(getApplicationContext(), "Użytkownik o podanym adresie e-mail istnieje", Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(getApplicationContext(), "Wystąpił błąd", Toast.LENGTH_LONG).show();
@@ -158,7 +154,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    if(statusCode == 409){
+                    if (statusCode == 409) {
                         Toast.makeText(getApplicationContext(), "Użytkownik o podanym adresie e-mail istnieje", Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(getApplicationContext(), "Wystąpił błąd", Toast.LENGTH_LONG).show();
