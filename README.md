@@ -62,4 +62,4 @@ show grants for 'admin'@'localhost';
 - deploy changes:
 	- $ git subtree push --prefix Backend/ heroku master
 - deploy with force
-	- $git push heroku ```git subtree split --prefix Backend/ master```:master -f
+	- $ git push heroku \`git subtree split --prefix Backend/ master\`:master -f
