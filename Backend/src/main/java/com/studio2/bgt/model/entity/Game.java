@@ -11,6 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder
 @Entity
+@ToString
 public class Game {
 
     @Id

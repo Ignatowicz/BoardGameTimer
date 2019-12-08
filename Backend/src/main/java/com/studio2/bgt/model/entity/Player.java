@@ -13,6 +13,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 @Entity
+@ToString
 public class Player {
 
     @Id
