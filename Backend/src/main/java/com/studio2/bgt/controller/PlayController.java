@@ -193,7 +193,7 @@ public class PlayController extends AbstractController {
             return ResponseEntity.ok().body(jsonObject);
         } else {
             // send notification to all players about game start
-            NotificationHelper notificationHelper = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.FRIENDS);
+            NotificationHelper notificationHelper = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.ACCEPTED);
             List<String> notification = notificationManager
                     .sendNotification(2L, notificationHelper.getTopics(),
                             playerRepository.findPlayerById(playerId) + " has accepted the game!",
