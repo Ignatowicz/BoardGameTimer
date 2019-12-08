@@ -22,16 +22,6 @@ public class RegisterViewModel extends ViewModel {
         return registerFormState;
     }
 
-    void registerDataChanged(String email, String password) {
-        if (!isEmailValid(email)) {
-            registerFormState.setValue(new RegisterFormState(R.string.invalid_email, null, null));
-        } else if (!isPasswordValid(password)) {
-            registerFormState.setValue(new RegisterFormState(null, R.string.invalid_password, null));
-        } else {
-            registerFormState.setValue(new RegisterFormState(true));
-        }
-    }
-
     void registerDataChanged(String email, String password, String repeatedPassword) {
         if (!isEmailValid(email)) {
             registerFormState.setValue(new RegisterFormState(R.string.invalid_email, null, null));
@@ -49,11 +39,12 @@ public class RegisterViewModel extends ViewModel {
         if (email == null) {
             return false;
         }
-        if (email.contains("@")) {
-            return Patterns.EMAIL_ADDRESS.matcher(email).matches();
-        } else {
-            return email.trim().isEmpty();
-        }
+//        if (email.contains("@")) {
+//            return Patterns.EMAIL_ADDRESS.matcher(email).matches();
+//        } else {
+//            return email.trim().isEmpty();
+//        }
+        return true;
     }
 
     // A placeholder password validation check

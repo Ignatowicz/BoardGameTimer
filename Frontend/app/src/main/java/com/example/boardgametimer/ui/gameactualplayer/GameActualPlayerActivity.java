@@ -6,6 +6,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.boardgametimer.R;
@@ -75,42 +76,20 @@ public class GameActualPlayerActivity extends AppCompatActivity {
         endRoundButton = findViewById(R.id.endRoundButton);
         pauseGameButton = findViewById(R.id.pauseGameButton);
 
-        endGameButton.setOnClickListener(v -> endGame());
+        endGameButton.setOnClickListener(v -> new AlertDialog.Builder(this)
+                .setTitle("Exit")
+                .setMessage("Exit this view will provoke cancellation the game")
+                .setNegativeButton(android.R.string.no, null)
+                .setPositiveButton(android.R.string.yes, (arg0, arg1) -> {
+                    endGame();
+                    super.onBackPressed();
+                }).create().show());
 
         endTourButton.setOnClickListener(v -> endTour());
 
         endRoundButton.setOnClickListener(v -> endRound());
 
-        pauseGameButton.setOnClickListener(v -> {
-            isPaused = !isPaused;
-
-            String pauseOrResume;
-            if (isPaused) {
-                pauseOrResume = "pause";
-                pauseGameButton.setText("Wznów");
-                endGameButton.setEnabled(false);
-                endTourButton.setEnabled(false);
-                endRoundButton.setEnabled(false);
-                if (timeRoundHasEnded) {
-                    pauseGameTimer();
-                } else {
-                    pauseRoundTimer();
-                }
-            } else {
-                pauseOrResume = "resume";
-                pauseGameButton.setText("Pauza");
-                endGameButton.setEnabled(true);
-                endTourButton.setEnabled(true);
-                endRoundButton.setEnabled(true);
-                if (timeRoundHasEnded) {
-                    startGameTimer();
-                } else {
-                    startRoundTimer();
-                }
-            }
-
-            pauseOrResumeGame(pauseOrResume);
-        });
+        pauseGameButton.setOnClickListener(v -> pauseOrResumeGame());
 
         startRoundTimer();
         updateGameCountDownText();
@@ -124,6 +103,9 @@ public class GameActualPlayerActivity extends AppCompatActivity {
 
                 GameActualPlayerActivity.this.play.getGameTimePlayers().put(user.getId(), gameTimeLeftInMillis / 1000);
                 updatePlay(GameActualPlayerActivity.this.play);
+
+                pauseOrResumeGame();
+                finish();
             }
 
             @Override
@@ -179,6 +161,9 @@ public class GameActualPlayerActivity extends AppCompatActivity {
                 System.out.println(statusCode + response.toString());
 
                 updatePlay(GameActualPlayerActivity.this.play);
+
+                pauseOrResumeGame();
+                finish();
             }
 
             @Override
@@ -199,9 +184,9 @@ public class GameActualPlayerActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 System.out.println(statusCode + response.toString());
 
+                pauseOrResumeGame();
+
                 Toast.makeText(getApplicationContext(), "Bye!", Toast.LENGTH_LONG).show();
-                finishAffinity();
-                System.exit(0);
             }
 
             @Override
@@ -216,23 +201,30 @@ public class GameActualPlayerActivity extends AppCompatActivity {
         });
     }
 
-    private void pauseOrResumeGame(String pauseOrResume) {
-        HttpUtils.get("play/" + play.getPlayId() + "/" + pauseOrResume + "/" + user.getId(), null, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                System.out.println(statusCode + response.toString());
-            }
+    private void pauseOrResumeGame() {
+        isPaused = !isPaused;
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                System.out.println(statusCode + responseString);
+        if (isPaused) {
+            pauseGameButton.setText("Resume");
+            endGameButton.setEnabled(false);
+            endTourButton.setEnabled(false);
+            endRoundButton.setEnabled(false);
+            if (timeRoundHasEnded) {
+                pauseGameTimer();
+            } else {
+                pauseRoundTimer();
             }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                System.out.println(errorResponse.toString());
+        } else {
+            pauseGameButton.setText("Pause");
+            endGameButton.setEnabled(true);
+            endTourButton.setEnabled(true);
+            endRoundButton.setEnabled(true);
+            if (timeRoundHasEnded) {
+                startGameTimer();
+            } else {
+                startRoundTimer();
             }
-        });
+        }
     }
 
     private void startRoundTimer() {
@@ -269,13 +261,19 @@ public class GameActualPlayerActivity extends AppCompatActivity {
             @Override
             public void onTick(long millisUntilFinished) {
                 gameTimeLeftInMillis = millisUntilFinished;
+
                 updateGameCountDownText();
             }
 
             @Override
             public void onFinish() {
                 updateGameCountDownText();
-                endRound();
+                new AlertDialog.Builder(GameActualPlayerActivity.this)
+                        .setTitle("Exit")
+                        .setMessage("Exit this view will provoke cancellation the game")
+                        .setNegativeButton("End Round", (arg0, arg1) -> endRound())
+                        .setPositiveButton("End Tour", (arg0, arg1) -> endTour())
+                        .create().show();
             }
         }.start();
     }
@@ -290,6 +288,18 @@ public class GameActualPlayerActivity extends AppCompatActivity {
 
     private void pauseGameTimer() {
         gameCountDownTimer.cancel();
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle("Exit")
+                .setMessage("Exit this view will provoke cancellation the game")
+                .setNegativeButton(android.R.string.no, null)
+                .setPositiveButton(android.R.string.yes, (arg0, arg1) -> {
+                    endGame();
+                    super.onBackPressed();
+                }).create().show();
     }
 
 }

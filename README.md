@@ -46,9 +46,7 @@ show grants for 'admin'@'localhost';
 - 3 - reject the game
 - 4 - start your turn
 - 5 - other's player turn
-- 6 - pause the game
-- 7 - resume the game
-- 8 - end the game
+- 6 - end the game
 
 4. Heroku
 - install heroku client: 

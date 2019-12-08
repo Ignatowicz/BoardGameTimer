@@ -82,20 +82,16 @@ public abstract class AbstractController {
                 topics.add("Player_" + firstPlayerB.getId());
             }
         } else if (sendTo.equals(SendTo.ALL_EXCEPT_FIRST_PLAYER_A)) {
-            Player fpA = play.getPlayersTourA().remove();
-            if (fpA != null) {
-                play.getPlayersTourA().forEach(f -> players.put(String.valueOf(f.getId()), f.getName()));
-                play.getPlayersTourA().forEach(f -> topics.add("Player_" + f.getId()));
-                players.remove(String.valueOf(fpA.getId()), fpA.getName());
-                topics.add("Player_" + fpA.getId());
+            Player firstPlayerA = play.getPlayersTourA().peek();
+            if (firstPlayerA != null) {
+                play.getPlayersTourA().stream().skip(1).forEach(f -> players.put(String.valueOf(f.getId()), f.getName()));
+                play.getPlayersTourA().stream().skip(1).forEach(f -> topics.add("Player_" + f.getId()));
             }
         } else if (sendTo.equals(SendTo.ALL_EXCEPT_FIRST_PLAYER_B)) {
-            Player fpB = play.getPlayersTourB().remove();
-            if (fpB != null) {
-                play.getPlayersTourB().forEach(f -> players.put(String.valueOf(f.getId()), f.getName()));
-                play.getPlayersTourB().forEach(f -> topics.add("Player_" + f.getId()));
-                players.remove(String.valueOf(fpB.getId()), fpB.getName());
-                topics.add("Player_" + fpB.getId());
+            Player firstPlayerB = play.getPlayersTourB().peek();
+            if (firstPlayerB != null) {
+                play.getPlayersTourB().stream().skip(1).forEach(f -> players.put(String.valueOf(f.getId()), f.getName()));
+                play.getPlayersTourB().stream().skip(1).forEach(f -> topics.add("Player_" + f.getId()));
             }
         }
 

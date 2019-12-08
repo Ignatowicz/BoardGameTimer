@@ -32,7 +32,7 @@ import java.util.Set;
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
 
-public class StartgameActivity extends AppCompatActivity implements AdapterPlayers.ItemClickListener, AdapterFriends.ItemClickListener {
+public class StartGameActivity extends AppCompatActivity implements AdapterPlayers.ItemClickListener, AdapterFriends.ItemClickListener {
 
     AdapterPlayers adapterPlayers;
     AdapterFriends adapterFriends;
@@ -86,7 +86,7 @@ public class StartgameActivity extends AppCompatActivity implements AdapterPlaye
                 Gson gson = new Gson();
                 JsonElement element = gson.fromJson(response.toString(), JsonElement.class);
                 PlayHelper play = gson.fromJson(element, PlayHelper.class);
-                startGame(play, currentGame);
+                startGame(play);
             }
 
             @Override
@@ -101,7 +101,7 @@ public class StartgameActivity extends AppCompatActivity implements AdapterPlaye
         });
     }
 
-    private void startGame(PlayHelper play, Game currentGame) {
+    private void startGame(PlayHelper play) {
         StartGameHelper startGameHelper = new StartGameHelper();
         startGameHelper.setPlayId(play.getPlayId());
         players.add(user);
@@ -117,9 +117,6 @@ public class StartgameActivity extends AppCompatActivity implements AdapterPlaye
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     System.out.println(statusCode + response.toString());
 
-//                    Intent intent = new Intent(StartgameActivity.this, GameActivity.class);
-//                    intent.putExtra("user", user);
-//                    setResult(RESULT_OK, intent);
                     finish();
                 }
 
@@ -136,33 +133,6 @@ public class StartgameActivity extends AppCompatActivity implements AdapterPlaye
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-    }
-
-    private void updatePlayersRecyclerView() {
-        // set up the PlayersRecyclerView
-        RecyclerView recyclerView = findViewById(R.id.startgame_players_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapterPlayers = new AdapterPlayers(this, players);
-        adapterPlayers.setClickListener(this);
-        recyclerView.setAdapter(adapterPlayers);
-    }
-
-    private void updateFriendsRecyclerView() {
-        // set up the FriendsRecyclerView
-        RecyclerView recyclerView = findViewById(R.id.startgame_friends_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapterFriends = new AdapterFriends(this, friends);
-        adapterFriends.setClickListener(this);
-        recyclerView.setAdapter(adapterFriends);
-    }
-
-    @Override
-    public void onBackPressed() {
-        //super.onBackPressed();
-        Intent intent = new Intent();
-        intent.putExtra("user", user);
-        setResult(RESULT_OK, intent);
-        finish();
     }
 
     @Override
@@ -196,6 +166,33 @@ public class StartgameActivity extends AppCompatActivity implements AdapterPlaye
             playersNumberTextView.setTextColor(Color.BLACK);
 
         }
+    }
+
+    private void updatePlayersRecyclerView() {
+        // set up the PlayersRecyclerView
+        RecyclerView recyclerView = findViewById(R.id.startgame_players_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapterPlayers = new AdapterPlayers(this, players);
+        adapterPlayers.setClickListener(this);
+        recyclerView.setAdapter(adapterPlayers);
+    }
+
+    private void updateFriendsRecyclerView() {
+        // set up the FriendsRecyclerView
+        RecyclerView recyclerView = findViewById(R.id.startgame_friends_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapterFriends = new AdapterFriends(this, friends);
+        adapterFriends.setClickListener(this);
+        recyclerView.setAdapter(adapterFriends);
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        Intent intent = new Intent();
+        intent.putExtra("user", user);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
 }

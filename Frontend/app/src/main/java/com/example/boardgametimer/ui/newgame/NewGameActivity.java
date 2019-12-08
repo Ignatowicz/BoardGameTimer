@@ -83,18 +83,15 @@ public class NewGameActivity extends AppCompatActivity {
         timeRoundEditText.addTextChangedListener(watcher);
         timeGameEditText.addTextChangedListener(watcher);
 
-        startGameButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String name = nameEditText.getText().toString();
-                Integer minPlayers = Integer.valueOf(minPlayersEditText.getText().toString());
-                Integer maxPlayers = Integer.valueOf(maxPlayersEditText.getText().toString());
-                Integer timeRound = Integer.valueOf(timeRoundEditText.getText().toString());
-                Integer timeGame = Integer.valueOf(timeGameEditText.getText().toString());
+        startGameButton.setOnClickListener(v -> {
+            String name = nameEditText.getText().toString();
+            Integer minPlayers = Integer.valueOf(minPlayersEditText.getText().toString());
+            Integer maxPlayers = Integer.valueOf(maxPlayersEditText.getText().toString());
+            Integer timeRound = Integer.valueOf(timeRoundEditText.getText().toString());
+            Integer timeGame = Integer.valueOf(timeGameEditText.getText().toString());
 
-                Game game = new Game(name, minPlayers, maxPlayers, timeRound, timeGame);
-                addGame(game);
-            }
+            Game game = new Game(name, minPlayers, maxPlayers, timeRound, timeGame);
+            addGame(game);
         });
     }
 

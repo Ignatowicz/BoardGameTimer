@@ -1,10 +1,11 @@
-package com.example.boardgametimer.ui.notification;
+package com.example.boardgametimer.ui.acceptgame;
 
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.boardgametimer.R;
@@ -75,8 +76,7 @@ public class AcceptGameActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 System.out.println(statusCode + response.toString());
 
-                finishAffinity();
-                System.exit(0);
+                finish();
             }
 
             @Override
@@ -89,6 +89,18 @@ public class AcceptGameActivity extends AppCompatActivity {
                 System.out.println(errorResponse.toString());
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle("Exit")
+                .setMessage("Exit this view will do provoke cancellation the game")
+                .setNegativeButton(android.R.string.no, null)
+                .setPositiveButton(android.R.string.yes, (arg0, arg1) -> {
+                    rejectGame();
+                    super.onBackPressed();
+                }).create().show();
     }
 
 }

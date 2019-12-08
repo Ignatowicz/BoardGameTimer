@@ -17,7 +17,7 @@ import com.example.boardgametimer.data.model.LoggedInUser;
 import com.example.boardgametimer.ui.friends.FriendsActivity;
 import com.example.boardgametimer.ui.newgame.NewGameActivity;
 import com.example.boardgametimer.ui.settings.SettingsActivity;
-import com.example.boardgametimer.ui.startgame.StartgameActivity;
+import com.example.boardgametimer.ui.startgame.StartGameActivity;
 import com.example.boardgametimer.utils.ClearResponseFriends;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements Adapter.ItemClick
 
     @Override
     public void onItemClick(View view, int position) {
-        Intent intent = new Intent(MainActivity.this, StartgameActivity.class);
+        Intent intent = new Intent(MainActivity.this, StartGameActivity.class);
         intent.putExtra("user", user);
         intent.putExtra("position", position);
         intent.putExtra("games", new ArrayList<>(games));
@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements Adapter.ItemClick
                     System.out.println(statusCode + response.toString());
 
                     games.remove(adapter.getItem(position));
-//                    deleteGame(adapter.getItem(position));
+                    deleteGame(adapter.getItem(position));
                     updateRecyclerView();
                 }
 

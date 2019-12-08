@@ -180,28 +180,28 @@ public class PlayController extends AbstractController {
             // set player for tour A & save
             play.getFriends().forEach(f -> playRepository.findPlayById(playId).getPlayersTourA().add(f));
 
-            // send notification to all players about game start
-//            NotificationHelper notificationHelper = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.PLAYERS_TOUR_A);
-//            List<String> notification = notificationManager
-//                    .sendNotification(2L, notificationHelper.getTopics(),
-//                            "The game has started!",
-//                            "All the players have accepted the invitation.\nIt's " + play.getPlayersTourA().peek().getName() + " turn!",
-//                            notificationHelper.getPlayers(),
-//                            play.getPlayId().toString()
-//                    );
-//            log.info(String.valueOf(notification));
-
             // notify first player about his turn
             NotificationHelper notificationHelperFirstPlayer = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.FIRST_PLAYER_TOUR_A);
             notifyFirstPlayerAboutTurnStart(notificationHelperFirstPlayer);
 
-//            // notify other players about next player turn
+            // notify other players about next player turn
             NotificationHelper notificationHelperAllExceptFirstPlayer = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.ALL_EXCEPT_FIRST_PLAYER_A);
             notifyOtherPlayersAboutFirstPlayerTurnStart(notificationHelperAllExceptFirstPlayer);
 
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("response", "All players have accepted the game!");
             return ResponseEntity.ok().body(jsonObject);
+        } else {
+            // send notification to all players about game start
+            NotificationHelper notificationHelper = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.FRIENDS);
+            List<String> notification = notificationManager
+                    .sendNotification(2L, notificationHelper.getTopics(),
+                            playerRepository.findPlayerById(playerId) + " has accepted the game!",
+                            "Wait till all players accept the invitation.",
+                            notificationHelper.getPlayers(),
+                            play.getPlayId().toString()
+                    );
+            log.info(String.valueOf(notification));
         }
 
         JSONObject jsonObject = new JSONObject();
@@ -224,7 +224,7 @@ public class PlayController extends AbstractController {
         List<String> notification = notificationManager
                 .sendNotification(5L, notificationHelper.getTopics(),
                         "It's " + notificationHelper.getPlayer().getName() + " turn!",
-                        "His round time has just begun!",
+                        notificationHelper.getPlayer().getName() + "'s round time has just begun!",
                         notificationHelper.getPlayers(),
                         notificationHelper.getPlay().getPlayId().toString()
                 );
@@ -238,7 +238,7 @@ public class PlayController extends AbstractController {
             return ResponseEntity.notFound().build();
         }
 
-        playRepository.deletePlay(playId);
+//        playRepository.deletePlay(playId);
 
         // notify about cancel game start
         NotificationHelper notificationHelper = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.FRIENDS);
@@ -393,17 +393,6 @@ public class PlayController extends AbstractController {
             return ResponseEntity.notFound().build();
         }
 
-        // notify about game pause
-//        NotificationHelper notificationHelper = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.FRIENDS);
-//        List<String> notification = notificationManager
-//                .sendNotification(6L, notificationHelper.getTopics(),
-//                        "The game " + play.getGameName() + " has been paused",
-//                        "Wait to the game resume.",
-//                        notificationHelper.getPlayers(),
-//                        play.getPlayId().toString()
-//                );
-//        log.info(String.valueOf(notification));
-
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("response", "The game paused");
         return ResponseEntity.ok().body(jsonObject);
@@ -415,17 +404,6 @@ public class PlayController extends AbstractController {
         if (play == null) {
             return ResponseEntity.notFound().build();
         }
-
-        // notify about game resume
-//        NotificationHelper notificationHelper = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.FRIENDS);
-//        List<String> notification = notificationManager
-//                .sendNotification(7L, notificationHelper.getTopics(),
-//                        "The game " + play.getGameName() + " has been resumed",
-//                        "Actual player has started his resumed the round.",
-//                        notificationHelper.getPlayers(),
-//                        play.getPlayId().toString()
-//                );
-//        log.info(String.valueOf(notification));
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("response", "The game resumed");
@@ -440,40 +418,14 @@ public class PlayController extends AbstractController {
             return ResponseEntity.notFound().build();
         }
 
-        playRepository.deletePlay(playId);
+//        playRepository.deletePlay(playId);
 
         // notify about game end
         NotificationHelper notificationHelper = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.FRIENDS);
         List<String> notification = notificationManager
-                .sendNotification(8L, notificationHelper.getTopics(),
+                .sendNotification(6L, notificationHelper.getTopics(),
                         "The game " + play.getGameName() + " is over",
                         "Hope You enjoyed the game!",
-                        notificationHelper.getPlayers(),
-                        play.getPlayId().toString()
-                );
-        log.info(String.valueOf(notification));
-
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("response", "The game is over");
-        return ResponseEntity.ok().body(jsonObject);
-    }
-
-    // cancel game due to bad usage of notifications
-    @GetMapping("/{playId}/cancelGame/{playerId}")
-    public ResponseEntity<?> cancelGame(@PathVariable Long playId, @PathVariable Long playerId) {
-        PlayHelper play = playRepository.findPlayById(playId);
-        if (play == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        playRepository.deletePlay(playId);
-
-        // notify about game end
-        NotificationHelper notificationHelper = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.FRIENDS);
-        List<String> notification = notificationManager
-                .sendNotification(8L, notificationHelper.getTopics(),
-                        "The game " + play.getGameName() + " is over",
-                        "Due to bad behavior of " + playerRepository.findPlayerById(playerId) + " and Marcin Caputa, the game has to be cancelled!",
                         notificationHelper.getPlayers(),
                         play.getPlayId().toString()
                 );

@@ -14,10 +14,10 @@ import com.example.boardgametimer.R;
 import com.example.boardgametimer.api.HttpUtils;
 import com.example.boardgametimer.data.model.LoggedInUser;
 import com.example.boardgametimer.data.model.PlayHelper;
+import com.example.boardgametimer.ui.acceptgame.AcceptGameActivity;
 import com.example.boardgametimer.ui.game.GameActivity;
 import com.example.boardgametimer.ui.gameactualplayer.GameActualPlayerActivity;
 import com.example.boardgametimer.ui.gameotherplayer.GameOtherPlayerActivity;
-import com.example.boardgametimer.ui.notification.AcceptGameActivity;
 import com.example.boardgametimer.utils.ClearResponseFriends;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -129,39 +129,45 @@ public class NotificationService extends FirebaseMessagingService {
 
     private void sendNotification() {
         Intent intent;
-        if (click_action.equals("1")) { // invitation to the game
-            intent = new Intent(this, AcceptGameActivity.class);
-            intent.putExtra("user", user);
-            intent.putExtra("play", play);
-            intent.putExtra("title", title);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        }
-//        else if (click_action.equals("2")) { // all the players have accepted the game
-//            System.out.println("ok");
-//        } else if (click_action.equals("3")) { // one of the player has rejected the game, the game has been cancelled
-//            System.out.println("ok");
-//        }
-        else if (click_action.equals("4")) { // start turn of the player that received this message
-            intent = new Intent(this, GameActualPlayerActivity.class);
-            intent.putExtra("user", user);
-            intent.putExtra("play", play);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        } else if (click_action.equals("5")) { // start turn of the not actual player
-            intent = new Intent(this, GameOtherPlayerActivity.class);
-            intent.putExtra("user", user);
-            intent.putExtra("play", play);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        }
-//        else if (click_action.equals("6")) { // pause game
-//            System.out.println("ok");
-//        } else if (click_action.equals("7")) { // resume game
-//            System.out.println("ok");
-//        }
-        else { // other notifications that only inform
-            intent = new Intent(this, GameActivity.class);
-            intent.putExtra("title", title);
-            intent.putExtra("description", description);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        switch (click_action) {
+            case "1":  // invitation to the game
+                intent = new Intent(this, AcceptGameActivity.class);
+                intent.putExtra("user", user);
+                intent.putExtra("play", play);
+                intent.putExtra("title", title);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                break;
+            case "2":  // all the players have accepted the game
+                intent = new Intent(this, GameActivity.class);
+                intent.putExtra("title", title);
+                intent.putExtra("description", description);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                break;
+            case "3":  // one player has rejected the game
+                intent = new Intent(this, GameActivity.class);
+                intent.putExtra("title", title);
+                intent.putExtra("description", description);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                break;
+            case "4":  // start turn of the player that received this message
+                intent = new Intent(this, GameActualPlayerActivity.class);
+                intent.putExtra("user", user);
+                intent.putExtra("play", play);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                break;
+            case "5":  // start turn of the not actual player
+                intent = new Intent(this, GameOtherPlayerActivity.class);
+                intent.putExtra("user", user);
+                intent.putExtra("play", play);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                break;
+            // all the players have accepted/one of them has rejected - the game
+            default:  // other notifications that only inform
+                intent = new Intent(this, GameActivity.class);
+                intent.putExtra("title", title);
+                intent.putExtra("description", description);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                break;
         }
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
@@ -183,7 +189,7 @@ public class NotificationService extends FirebaseMessagingService {
     }
 
     private void cancelGame() {
-        HttpUtils.get("play/" + play_id + "/cancelGame/" + player_id, null, new JsonHttpResponseHandler() {
+        HttpUtils.get("play/" + play_id + "/rejectGame/" + player_id, null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Intent intent = new Intent(NotificationService.this, GameActivity.class);

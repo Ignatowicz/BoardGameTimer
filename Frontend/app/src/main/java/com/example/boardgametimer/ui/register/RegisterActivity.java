@@ -47,23 +47,19 @@ public class RegisterActivity extends AppCompatActivity {
         EditText repeatPasswordEditText = findViewById(R.id.repeatPasswordEditText);
         Button registerButton = findViewById(R.id.registerButton);
 
-
-        registerViewModel.getRegisterFormState().observe(this, new Observer<RegisterFormState>() {
-            @Override
-            public void onChanged(@Nullable RegisterFormState registerFormState) {
-                if (registerFormState == null) {
-                    return;
-                }
-                registerButton.setEnabled(registerFormState.isDataValid());
-                if (registerFormState.getEmailError() != null) {
-                    emailEditText.setError(getString(registerFormState.getEmailError()));
-                }
-                if (registerFormState.getPasswordError() != null) {
-                    passwordEditText.setError(getString(registerFormState.getPasswordError()));
-                }
-                if (registerFormState.getRepeatedPasswordError() != null) {
-                    repeatPasswordEditText.setError(getString(registerFormState.getRepeatedPasswordError()));
-                }
+        registerViewModel.getRegisterFormState().observe(this, registerFormState -> {
+            if (registerFormState == null) {
+                return;
+            }
+            registerButton.setEnabled(registerFormState.isDataValid());
+            if (registerFormState.getEmailError() != null) {
+                emailEditText.setError(getString(registerFormState.getEmailError()));
+            }
+            if (registerFormState.getPasswordError() != null) {
+                passwordEditText.setError(getString(registerFormState.getPasswordError()));
+            }
+            if (registerFormState.getRepeatedPasswordError() != null) {
+                repeatPasswordEditText.setError(getString(registerFormState.getRepeatedPasswordError()));
             }
         });
 
@@ -113,8 +109,9 @@ public class RegisterActivity extends AppCompatActivity {
                     LoggedInUser addedUser = gson.fromJson(element, LoggedInUser.class);
 
                     // add user to topic of his notifications
-                    String TOPIC = "Player_" + addedUser.getId();
-                    FirebaseMessaging.getInstance().subscribeToTopic(TOPIC);
+                    String topic = "Player_" + addedUser.getId();
+
+                    FirebaseMessaging.getInstance().subscribeToTopic(topic);
 
                     // tokens -> maybe there is no need to have it cause of topic usage instead of tokens (it easier? to have it done)
 //        // TODO??: onCreateAccount

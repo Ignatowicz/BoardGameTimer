@@ -8,17 +8,19 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.boardgametimer.R;
+import com.example.boardgametimer.data.model.LoggedInUser;
 
 
 public class GameActivity extends AppCompatActivity {
 
+    LoggedInUser user;
     String title;
     String description;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game_actual_player);
+        setContentView(R.layout.activity_game);
 
         // hide return home button
         getSupportActionBar().setDisplayShowHomeEnabled(false);

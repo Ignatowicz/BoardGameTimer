@@ -43,7 +43,7 @@
             android:parentActivityName=".ui.main.MainActivity" />
 
         <activity
-            android:name=".ui.startgame.StartgameActivity"
+            android:name=".ui.startgame.StartGameActivity"
             android:parentActivityName=".ui.main.MainActivity" />
 
         <activity
@@ -59,7 +59,7 @@
             android:label="@string/title_activity_settings"
             android:parentActivityName=".ui.main.MainActivity" />
 
-        <activity android:name=".ui.notification.AcceptGameActivity">
+        <activity android:name=".ui.acceptgame.AcceptGameActivity">
             <intent-filter>
                 <action android:name="Notification" />
                 <category android:name="android.intent.category.DEFAULT" />
