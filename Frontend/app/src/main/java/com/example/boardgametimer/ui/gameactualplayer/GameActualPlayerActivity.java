@@ -45,6 +45,10 @@ public class GameActualPlayerActivity extends AppCompatActivity {
     Boolean isPaused = false;
     Boolean timeRoundHasEnded = false;
 
+    TextView gameNameTextView;
+    TextView tourTextView;
+    TextView whoseRoundTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,9 +62,9 @@ public class GameActualPlayerActivity extends AppCompatActivity {
         this.user = (LoggedInUser) getIntent().getSerializableExtra("user");
         this.play = (PlayHelper) getIntent().getSerializableExtra("play");
 
-        TextView gameNameTextView = findViewById(R.id.gameNameTextView);
-        TextView tourTextView = findViewById(R.id.tourTextView);
-        TextView whoseRoundTextView = findViewById(R.id.whoseRoundTextView);
+        gameNameTextView = findViewById(R.id.gameNameTextView);
+        tourTextView = findViewById(R.id.tourTextView);
+        whoseRoundTextView = findViewById(R.id.whoseRoundTextView);
 
         gameNameTextView.setText(play.getGameName());
         tourTextView.setText(play.isTourA() ? "A" : "B");

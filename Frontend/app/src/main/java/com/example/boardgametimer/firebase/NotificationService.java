@@ -170,12 +170,13 @@ public class NotificationService extends FirebaseMessagingService {
                 intent.putExtra("play", play);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 break;
-            case "6":  // all the players have accepted/one of them has rejected - the game
+            case "6":  // the game was ended/cancelled
                 intent = new Intent(this, GameActivity.class);
-                intent.putExtra("user", user);
-                intent.putExtra("play", play);
+                intent.putExtra("title", title);
+                intent.putExtra("description", description);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 break;
+            // all the players have accepted/one of them has rejected - the game
             default:  // other notifications that only inform
                 intent = new Intent(this, GameActivity.class);
                 intent.putExtra("title", title);
