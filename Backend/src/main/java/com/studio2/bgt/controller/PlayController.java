@@ -184,9 +184,9 @@ public class PlayController extends AbstractController {
             NotificationHelper notificationHelperFirstPlayer = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.FIRST_PLAYER_TOUR_A);
             notifyFirstPlayerAboutTurnStart(notificationHelperFirstPlayer);
 
-            // notify other players about next player turn
-            NotificationHelper notificationHelperAllExceptFirstPlayer = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.ALL_EXCEPT_FIRST_PLAYER_A);
-            notifyOtherPlayersAboutFirstPlayerTurnStart(notificationHelperAllExceptFirstPlayer);
+//            // notify other players about next player turn
+//            NotificationHelper notificationHelperAllExceptFirstPlayer = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.ALL_EXCEPT_FIRST_PLAYER_A);
+//            notifyOtherPlayersAboutFirstPlayerTurnStart(notificationHelperAllExceptFirstPlayer);
 
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("response", "All players have accepted the game!");
@@ -279,9 +279,9 @@ public class PlayController extends AbstractController {
             // save
             playRepository.updatePlay(play);
 
-            // notify other players about next player turn
-            NotificationHelper notificationHelperAllExceptFirstPlayer = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.ALL_EXCEPT_FIRST_PLAYER_A);
-            notifyOtherPlayersAboutFirstPlayerTurnStart(notificationHelperAllExceptFirstPlayer);
+//            // notify other players about next player turn
+//            NotificationHelper notificationHelperAllExceptFirstPlayer = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.ALL_EXCEPT_FIRST_PLAYER_A);
+//            notifyOtherPlayersAboutFirstPlayerTurnStart(notificationHelperAllExceptFirstPlayer);
         } else {
             // notify next player about his turn
             NotificationHelper notificationHelperFirstPlayer = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.FIRST_PLAYER_TOUR_B);
@@ -296,9 +296,9 @@ public class PlayController extends AbstractController {
             // save
             playRepository.updatePlay(play);
 
-            // notify other players about next player turn
-            NotificationHelper notificationHelperAllExceptFirstPlayer = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.ALL_EXCEPT_FIRST_PLAYER_B);
-            notifyOtherPlayersAboutFirstPlayerTurnStart(notificationHelperAllExceptFirstPlayer);
+//            // notify other players about next player turn
+//            NotificationHelper notificationHelperAllExceptFirstPlayer = prepareNotification(playerRepository.findPlayerById(playerId), play, SendTo.ALL_EXCEPT_FIRST_PLAYER_B);
+//            notifyOtherPlayersAboutFirstPlayerTurnStart(notificationHelperAllExceptFirstPlayer);
         }
 
         JSONObject jsonObject = new JSONObject();
