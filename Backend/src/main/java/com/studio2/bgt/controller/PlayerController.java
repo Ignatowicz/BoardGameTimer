@@ -77,6 +77,9 @@ public class PlayerController extends AbstractController {
             player.setGames(updatedPlayer.getGames());
             player.setFriend1(updatedPlayer.getFriend1());
             player.setFriend2(updatedPlayer.getFriend2());
+
+            player.getGames().forEach(f -> System.out.println(f.getName()));
+
             playerRepository.save(player);
             clearResponse(player);
             return ResponseEntity.ok().body(player);
