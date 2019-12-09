@@ -74,3 +74,5 @@ $ git subtree push --prefix Backend/ heroku master
 $ git push heroku `git subtree split --prefix Backend/ master`:master -f
 ```
 
+Documentation:
+https://documenter.getpostman.com/view/9729849/SWE6Zczj?version=latest
